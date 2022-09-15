@@ -1,6 +1,6 @@
 namespace awl_raumreservierung;
 
-public class Admin
+public class User
 {
     public DateTime Date { get; set; }
 
