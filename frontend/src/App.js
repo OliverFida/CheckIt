@@ -1,7 +1,8 @@
 // Component imports
+import React from 'react';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 // Style imports
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.less';
 // Page imports
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';

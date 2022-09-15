@@ -1,4 +1,5 @@
 // Component imports
+import React from 'react';
 import {Layout, Space, Button} from 'antd';
 // Style imports
 import '../css/pages/HomePage.css';

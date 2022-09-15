@@ -1,5 +1,6 @@
-import { Button, Form, Input, Col, Row } from 'antd';
+// Component imports
 import React from 'react';
+import { Button, Form, Input, Col, Row } from 'antd';
 
 export default function LoginPage(){
     
