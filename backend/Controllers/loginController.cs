@@ -14,9 +14,8 @@ public class loginController : ControllerBase
     }
 
     [HttpPost(Name = "login")]
-    public test Post(string username, string password){
-        
-        return test.a; //ohne pw und logondaten
+    public Login.LoginMessage Post(string username, string password){
+        return Login.CheckLogin(username, password);
     }
 
     public enum test
