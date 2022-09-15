@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,13 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="bcrypt" Version="1.0.0" />
+    <PackageReference Include="BCrypt.Net-Next.StrongName" Version="4.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="newtonsoft.json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.4.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
   </ItemGroup>
-
+    <ItemGroup>
+        <!-- emits global using BcryptNet = global::BCrypt.Net.BCrypt; -->
+        <Using Include="BCrypt.Net.BCrypt" Alias="BC" />
+    </ItemGroup>
 </Project>
