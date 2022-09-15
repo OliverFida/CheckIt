@@ -3,7 +3,7 @@ namespace awl_raumreservierung{
 		public static LoginMessage CheckLogin(string username, string password){
 			var user = new checkITContext()
 							.Users
-							.Where(u => u.Username == username)
+							.Where(u => u.Username.ToLower() == username.ToLower())
 							.FirstOrDefault();
 
 			 // User mit username holen
