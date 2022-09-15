@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace awl_raumreservierung.Controllers;
@@ -19,6 +20,7 @@ public class adminController : ControllerBase
     }
 
     [HttpGet("users")]
+    [Authorize]
     public PublicUser[] Get(){
         return new awl_raumreservierung.checkITContext().Users.Select(u => new PublicUser(u)).ToArray();
     }
