@@ -1,5 +1,5 @@
 // Component imports
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 // Style imports
 import 'antd/dist/antd.css';
 // Page imports
@@ -11,7 +11,8 @@ export default function App() {
     <div id="App">
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LoginPage />} />
+          <Route exact path='/' element={<Navigate to='/login' />} />
+          <Route path='/login' element={<LoginPage />} />
           <Route path='/home' element={<HomePage />} />
         </Routes>
       </BrowserRouter>
