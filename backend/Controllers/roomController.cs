@@ -15,6 +15,13 @@ public class roomController : ControllerBase
         _logger = logger;
     }
 
+	[HttpGet("get")]
+	[Authorize]
+	public Room[] getRooms()
+	{
+		var db = new checkITContext();
+		return db.Rooms.ToArray();
+	}
 	[HttpPut("add")]
 	[Authorize(Roles = "Adminstrator")]
 	public StatusCodeResult add(string roomNr, string roomName)
@@ -28,7 +35,7 @@ public class roomController : ControllerBase
 	}
 
 	//(Roles = "Adminstrator")
-	[HttpPut("remove")]
+	[HttpDelete("remove")]
 	[Authorize(Roles = "Adminstrator")]
 	public StatusCodeResult Put(int roomId)
 	{
@@ -41,7 +48,7 @@ public class roomController : ControllerBase
 		}
 		return StatusCode(StatusCodes.Status200OK);
 	}
-	[HttpPut("edit")]
+	[HttpPost("edit")]
 	[Authorize(Roles = "Adminstrator")]
 	public StatusCodeResult edit(int roomId, string newNr, string newName)
 	{
