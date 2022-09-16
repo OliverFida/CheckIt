@@ -1,6 +1,7 @@
 // Component imports
 import React from 'react';
 import { Button, Form, Input, Col, Row } from 'antd';
+import {CheckCircleOutlined} from '@ant-design/icons'
 
 export default function LoginPage(){
     
@@ -14,8 +15,14 @@ export default function LoginPage(){
         
       
         return (
-        <Row type="flex" justify="center" align="center">
-            <Col span={12} >
+            <>
+        <Row type="flex" justify="center" align="middle" style={{ height: '100px' }}>
+            <Col span={1}>
+                <CheckCircleOutlined style={{ fontSize: '50px' }}/>
+            </Col>
+        </Row>
+        <Row type="flex" justify="center" align="middle">
+            <Col span={12} >           
                 <Form
                     name="basic"
                     labelCol={{
@@ -24,9 +31,7 @@ export default function LoginPage(){
                     wrapperCol={{
                     span: 8,
                     }}
-                    initialValues={{
-                    remember: true,
-                    }}
+                    
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
@@ -71,6 +76,7 @@ export default function LoginPage(){
                 </Form>
             </Col>
         </Row>
+        </>
     );
 };
 
