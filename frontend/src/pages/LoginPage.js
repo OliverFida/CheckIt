@@ -22,7 +22,7 @@ export default function LoginPage(){
                             <Form.Label>Passwort</Form.Label>
                             <Form.Control type="password"/>
                         </Form.Group>                
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" type="submit" className="mx-auto d-block">
                             Einloggen
                         </Button>
                     </Form>
