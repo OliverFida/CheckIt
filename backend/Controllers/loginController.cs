@@ -1,4 +1,11 @@
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -15,7 +22,7 @@ public class loginController : ControllerBase
     }
 
     [HttpPost(Name = "login")]
-    public Login.LoginMessage Post(string username, string password){
+    public IResult Post(string username, string password){
         var res = Login.CheckLogin(username, password);
         
         var statuscode = res switch {
@@ -25,6 +32,8 @@ public class loginController : ControllerBase
             _ => StatusCodes.Status400BadRequest
         };
         
+res = Login.LoginMessage.Success;
+
         if (res == Login.LoginMessage.Success){
              var issuer = builder.Configuration["Jwt:Issuer"];
              var audience = builder.Configuration["Jwt:Audience"];
@@ -35,8 +44,8 @@ public class loginController : ControllerBase
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim("Id", Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Email, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Email,username),
                 new Claim(JwtRegisteredClaimNames.Jti,
                 Guid.NewGuid().ToString())
              }),
@@ -47,10 +56,14 @@ public class loginController : ControllerBase
             (new SymmetricSecurityKey(key),
             SecurityAlgorithms.HmacSha512Signature)
         };
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var stringToken = tokenHandler.WriteToken(token);
+        return Results.Ok(stringToken);
         }
 
         StatusCode(statuscode);
 
-        return Login.CheckLogin(username, password);
+        return  Results.Unauthorized();
         }
     }
