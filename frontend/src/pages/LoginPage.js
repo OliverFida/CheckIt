@@ -14,12 +14,12 @@ export default function LoginPage(){
             <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
                 <Col xs={6} lg={3}>
                     <Form>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Group className="mb-3" controlId="formEmail">
                             <Form.Label>Benutzername</Form.Label>
                             <Form.Control type="text"/>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="formBasicPassword">
+                        <Form.Group className="mb-3" controlId="formPassword">
                             <Form.Label>Passwort</Form.Label>
                             <Form.Control type="password"/>
                         </Form.Group>                
