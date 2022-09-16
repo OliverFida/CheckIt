@@ -16,7 +16,7 @@ public class adminController : ControllerBase
     }
 
     [HttpPut("user")]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public void Put(string username, string firstname, string lastname, UserRole rolle, string password){
         var context = new checkITContext();
 
@@ -37,7 +37,7 @@ public class adminController : ControllerBase
     }
 
     [HttpDelete("user")]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public void Delete(string username){
         var context = new checkITContext();
 
@@ -50,7 +50,7 @@ public class adminController : ControllerBase
     }
 
     [HttpGet("users")]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public PublicUser[] Get(){
         var users  = new checkITContext().Users.Select(u => new PublicUser(u)).ToArray();
         return users;
