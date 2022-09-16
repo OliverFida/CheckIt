@@ -3,6 +3,7 @@ import React from 'react';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 // Style imports
 import 'antd/dist/antd.less';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // Page imports
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
