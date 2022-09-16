@@ -9,7 +9,7 @@ namespace awl_raumreservierung{
 			 // User mit username holen
 			return user switch 
 			{
-				{Active: true} => LoginMessage.InactiveUser,
+				{Active: false} => LoginMessage.InactiveUser,
 				{Passwd: var pw} when BC.Verify(password, pw) => LoginMessage.Success,
 				_ => LoginMessage.InvalidCredentials
 			};
