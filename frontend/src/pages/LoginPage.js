@@ -8,7 +8,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 export default function LoginPage(){
-    
     return(
         <Container>
             <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
