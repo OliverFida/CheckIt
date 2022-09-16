@@ -15,7 +15,7 @@ public class adminController : ControllerBase
         _logger = logger;
     }
 
-    [HttpPut("user")]
+    [HttpPut("users/{username}")]
     [Authorize(Roles = "Administrator")]
     public void Put(string username, string firstname, string lastname, UserRole rolle, string password){
         var context = new checkITContext();
@@ -36,9 +36,22 @@ public class adminController : ControllerBase
         StatusCode(StatusCodes.Status201Created);
     }
 
-    [HttpDelete("user")]
+    [HttpDelete("users/{username}")]
     [Authorize(Roles = "Administrator")]
     public void Delete(string username){
+        var context = new checkITContext();
+
+        var user = context.Users.Where(u => u.Username == username);
+
+        context.Add(user);
+        context.SaveChanges();
+
+        StatusCode(StatusCodes.Status201Created);
+    }
+
+    [HttpPost("users/{username}/activate")]
+    [Authorize(Roles = "Administrator")]
+    public void Post(string username){
         var context = new checkITContext();
 
         var user = context.Users.Where(u => u.Username == username);
@@ -56,7 +69,7 @@ public class adminController : ControllerBase
         return users;
     }
 
-    [HttpPost("user/{username}/password")]
+    [HttpPost("users/{username}/password")]
     [Authorize]
     public void PostChangePassword(string username, string password){
         var context = new checkITContext();
@@ -69,18 +82,5 @@ public class adminController : ControllerBase
 
         context.Add(user);
         context.SaveChanges();
-    }
-
-    public class PublicUser {
-        string Username;
-        string? FirstName;
-        string? Lastname;
-        DateTime? LastLogon;
-        public PublicUser(awl_raumreservierung.User user) {
-            Username = user.Username;
-            FirstName = user.Firstname;
-            Lastname = user.Lastname;
-            LastLogon = user.Lastlogon;
-         }
     }
 }
