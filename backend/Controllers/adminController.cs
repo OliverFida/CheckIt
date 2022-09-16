@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,14 +16,59 @@ public class adminController : ControllerBase
     }
 
     [HttpPut("user")]
-    public void Post(string username,string firstname,string lastname, UserRole rolle){
+    [Authorize(Roles = "Administrator")]
+    public void Put(string username, string firstname, string lastname, UserRole rolle, string password){
+        var context = new checkITContext();
+
+        var newUser = new User() {
+            Username = username,
+            Firstname = firstname,
+            Lastname = lastname,
+            Passwd = password,
+            Lastchange = DateTime.Now,
+            Role = rolle,
+            Active = true
+        };
+
+        context.Add(newUser);
+        context.SaveChanges();
+
+        StatusCode(StatusCodes.Status201Created);
+    }
+
+    [HttpDelete("user")]
+    [Authorize(Roles = "Administrator")]
+    public void Delete(string username){
+        var context = new checkITContext();
+
+        var user = context.Users.Where(u => u.Username == username);
+
+        context.Add(user);
+        context.SaveChanges();
+
         StatusCode(StatusCodes.Status201Created);
     }
 
     [HttpGet("users")]
-    [Authorize]
+    [Authorize(Roles = "Administrator")]
     public PublicUser[] Get(){
-        return new awl_raumreservierung.checkITContext().Users.Select(u => new PublicUser(u)).ToArray();
+        var users  = new checkITContext().Users.Select(u => new PublicUser(u)).ToArray();
+        return users;
+    }
+
+    [HttpPost("user/{username}/password")]
+    [Authorize]
+    public void PostChangePassword(string username, string password){
+        var context = new checkITContext();
+        var isAdmin = User.FindAll(ClaimTypes.Role).Any(c => c is {Type: ClaimTypes.Role} and  {Value: "Admin"});
+        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var actualUsername = isAdmin?username: authUsername;
+
+        var user = context.Users.Where(u => u.Username == username).First();
+        user.Passwd = password;
+
+        context.Add(user);
+        context.SaveChanges();
     }
 
     public class PublicUser {
