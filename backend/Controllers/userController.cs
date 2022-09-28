@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,15 +16,31 @@ public class userController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{idOrUsername}")]
     [Authorize()]
-    public PublicUser GetByID(int id){
-        return new PublicUser(new checkITContext().Users.Where(u => u.Id == id).First());
+    public PublicUser GetByID(string idOrUsername){
+        int x = 0;
+        var user = new checkITContext().Users.Where(u => int.TryParse(idOrUsername, out x) ? u.Id.ToString() == idOrUsername : u.Username == idOrUsername).First();
+        var publicUser = new PublicUser(user);
+        return publicUser;
     }
 
-    [HttpGet("{username}")]
-    [Authorize()]
-    public PublicUser GetByName(string username){
-        return new PublicUser(new checkITContext().Users.Where(u => u.Username == username).First());
+    [HttpPost("password")]
+    [Authorize]
+    public void PostChangePassword(string password){
+        var context = new checkITContext();
+        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = context.Users.Where(u => u.Username == authUsername).FirstOrDefault();
+
+        if (user is null) {
+            StatusCode(StatusCodes.Status404NotFound);
+            return;
+        }
+
+        user.Passwd = password;
+
+        context.SaveChanges();
+        StatusCode(StatusCodes.Status200OK);
     }
 }
