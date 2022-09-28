@@ -5,9 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
 
 export default function UserPage(){
 
@@ -31,8 +29,11 @@ export default function UserPage(){
                         <td valign='middle'>Name</td>
                         <td valign='middle'>Nachname</td>
                         <td>
-                            <Button onClick={editUserShow}>
-                                Ändern
+                            <Button onClick={editUserShow} className="me-2 my-1">
+                                Name Ändern
+                            </Button>
+                            <Button className="my-1">
+                                Passwort zurücksetzen
                             </Button>
                         </td>
                     </tr>
