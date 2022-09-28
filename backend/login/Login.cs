@@ -1,19 +1,20 @@
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.Extensions.Http.Logging;
+using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Identity;
 
 namespace awl_raumreservierung{
 	public static class Login{
-		public static async LoginMessage CheckLogin(string username, string password){
-			var user = new Class()
-							.User
-							.Where(u => u.Username == username)
+		public static LoginMessage CheckLogin(string username, string password){
+			var user = new checkITContext()
+							.Users
+							.Where(u => u.Username.ToLower() == username.ToLower())
 							.FirstOrDefault();
 
 			 // User mit username holen
 			return user switch 
 			{
-				{Active: 1} => LoginMessage.InactiveUser,
-				{Passwd: var pw} when BC.Verify(password, pw) => LoginMessage.Success,
+				{Active: false} => LoginMessage.InactiveUser,
+				{Passwd: var pw, Role: var role} when pw == password => (role == UserRole.Admin)?LoginMessage.SuccessAsAdmin:LoginMessage.Success,
+				{Passwd: var pw} when pw == password=> LoginMessage.Success,
 				_ => LoginMessage.InvalidCredentials
 			};
 		}
@@ -21,8 +22,8 @@ namespace awl_raumreservierung{
 		public enum LoginMessage {
 			InvalidCredentials,
 			Success,
-			InactiveUser
-
+			InactiveUser,
+			SuccessAsAdmin
 		}
 	}
 }
