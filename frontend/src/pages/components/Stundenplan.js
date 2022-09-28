@@ -2,13 +2,14 @@
 import React, {useState, useEffect} from 'react';
 import {Table} from 'react-bootstrap';
 import timesMap from '../../api/timesMap.json';
+import moment from 'moment';
 // API imports
 import BookingsAPI from '../../api/bookings';
 
 export default function Stundenplan(){
-    const [tableHead, setTableHead] = useState([]);
+    const [tableHeadElements, setTableHeadElements] = useState([]);
     const [bookings, setBookings] = useState([]);
-    const [tableBody, setTableBody] = useState([]);
+    const [tableBodyElements, setTableBodyElements] = useState([]);
     
     useEffect(() => {
         generateTableHead();
@@ -25,21 +26,19 @@ export default function Stundenplan(){
 
     function generateTableHead(){
         var weekOffset = 0;
-        var dateToday = new Date();
-        dateToday.setDate(dateToday.getDate() + (7 * weekOffset));
-        
-        var weekDayToday = dateToday.getDay();
-        var dateMonday = new Date(dateToday);
-        dateMonday.setDate(dateToday.getDate() - (weekDayToday - 1));
+        var dateToday = moment();
+        dateToday.add(weekOffset, 'weeks');
 
-        var newTableHead = [];
-        newTableHead.push(<th key="th0"></th>);
-        for(var i = 0; i < 5; i++){            
-            var useDate = new Date(dateMonday);
-            useDate.setDate(useDate.getDate() + i);
-            newTableHead.push(<th key={`th${i + 1}`}>{useDate.getDate()}.{useDate.getMonth() + 1}.{useDate.getFullYear()}</th>);
+        var dateMonday = moment().isoWeekday(1);
+
+        var newTableHeadElements = [];
+        newTableHeadElements.push(<th key="th_0"></th>);
+        for(var day = 1; day <= 5; day++){
+            var tempDate = moment(dateMonday).add(day - 1, 'days');
+            newTableHeadElements.push(<th key={`th_${day}`}>{tempDate.format("DD.MM.YYYY")}</th>);
         }
-        setTableHead(newTableHead);
+
+        setTableHeadElements(newTableHeadElements);
     }
 
     function generateTableBody(){
@@ -49,7 +48,7 @@ export default function Stundenplan(){
             newTableBody.push(generateRow(lesson));
         });
 
-        setTableBody(newTableBody);
+        setTableBodyElements(newTableBody);
     }
 
     function generateRow(lesson){
@@ -75,17 +74,11 @@ export default function Stundenplan(){
     }
 
     function generateBooking(day, lesson){
-        var targetDateFrom = new Date();
-        targetDateFrom.setDate(targetDateFrom.getDate() + (0 - targetDateFrom.getDay()) + day);
-        
-        var targetHourFrom = lesson.start.substring(0, 2);
-        var targetMinuteFrom = lesson.start.substring(3, 5);
+        var targetHour = lesson.start.substring(0, 2);
+        var targetMinute = lesson.start.substring(3, 5);
 
-        targetDateFrom.setHours(parseInt(targetHourFrom));
-        targetDateFrom.setMinutes(parseInt(targetMinuteFrom));
-        targetDateFrom.setSeconds(0);
-        targetDateFrom.setMilliseconds(0);
-        
+        var targetDateFrom = moment().isoWeekday(1).add((day - 1), 'days').set('hours', targetHour).set('minutes', targetMinute).set('seconds', 0).set('milliseconds', 0);
+
         var foundBooking = bookings.find(booking => booking.startTime === targetDateFrom.toJSON());
         
         if(foundBooking) return <td key={`booking_${day}_${lesson.key}`}>Gebucht</td>;
@@ -96,11 +89,11 @@ export default function Stundenplan(){
         <Table>
             <thead>
                 <tr>
-                    {tableHead}
+                    {tableHeadElements}
                 </tr>
             </thead>
             <tbody>
-                {tableBody}
+                {tableBodyElements}
             </tbody>
         </Table>
     );
