@@ -8,79 +8,254 @@ namespace awl_raumreservierung.Controllers;
 [Route("[controller]")]
 public class adminController : ControllerBase
 {
-    private readonly ILogger<adminController> _logger;
+	private readonly ILogger<adminController> _logger;
 
-    public adminController(ILogger<adminController> logger)
-    {
-        _logger = logger;
-    }
+    private checkITContext ctx;
 
-    [HttpPut("users/{username}")]
-    [Authorize(Roles = "Administrator")]
-    public void Put(string username, string firstname, string lastname, UserRole rolle, string password){
-        var context = new checkITContext();
+	public adminController(ILogger<adminController> logger)
+	{
+		_logger = logger;
+        ctx = new checkITContext();
+	}
 
-        var newUser = new User() {
-            Username = username,
-            Firstname = firstname,
-            Lastname = lastname,
-            Passwd = password,
-            Lastchange = DateTime.Now,
-            Role = rolle,
-            Active = true
-        };
+	[HttpPut("user")]
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Put(CreateUserModel model)
+	{
+		try
+		{
+			if (String.IsNullOrWhiteSpace(model.username))
+			{
+				StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel()
+				{
+					status = 400,
+					statusMessage = "error",
+					message = "Das Feld Benutzername darf nicht leer sein!"
+				};
+			}
 
-        context.Add(newUser);
-        context.SaveChanges();
+			var existingUser = UserHelpers.GetUser(model.username);
 
-        StatusCode(StatusCodes.Status201Created);
-    }
+			if (existingUser != null)
+			{
+				StatusCode(StatusCodes.Status400BadRequest);
+				return new ReturnModel()
+				{
+					status = 400,
+					statusMessage = "error",
+					message = "Ein Benutzer mit diesem Benutzernamen existiert bereits!"
+				};
+			}
 
-    [HttpDelete("users/{username}")]
-    [Authorize(Roles = "Administrator")]
-    public void Delete(string username){
-        var context = new checkITContext();
 
-        var user = context.Users.Where(u => u.Username == username);
+			ctx.Add(new User {
+				Username = model.username,
+				Firstname = model.firstname,
+				Lastname = model.lastname,
+				Passwd = model.password,
+				Lastchange = DateTime.Now,
+				Role = model.rolle,
+				Active = true
+			});
+			ctx.SaveChanges();
+			StatusCode(StatusCodes.Status201Created);
 
-        context.Add(user);
-        context.SaveChanges();
+			return new ReturnModel()
+			{
+				message = $"Benutzer {model.username} erfolgreich angelegt!"
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
 
-        StatusCode(StatusCodes.Status201Created);
-    }
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
+			{
+				status = 400,
+				statusMessage = "error",
+				message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
 
-    [HttpPost("users/{username}/activate")]
-    [Authorize(Roles = "Administrator")]
-    public void Post(string username){
-        var context = new checkITContext();
+	[HttpPost("users/{username}")]
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Post(string username, string firstname, string lastname, UserRole rolle)
+	{
+		try
+		{
+			var context = new checkITContext();
 
-        var user = context.Users.Where(u => u.Username == username);
+			var user = context.Users.Where(u => u.Username == username).First();
 
-        context.Add(user);
-        context.SaveChanges();
+			user.Firstname = firstname;
+			user.Lastname = lastname;
+			user.Role = rolle;
+			user.Lastchange = DateTime.Now;
 
-        StatusCode(StatusCodes.Status201Created);
-    }
+			context.SaveChanges();
 
-    [HttpGet("users")]
-    [Authorize(Roles = "Administrator")]
-    public PublicUser[] Get(){
-        var users  = new checkITContext().Users.Select(u => new PublicUser(u)).ToArray();
-        return users;
-    }
+			StatusCode(StatusCodes.Status200OK);
+			return new ReturnModel()
+			{
+				message = $"Benutzer {username} erfolgreich bearbeitet!"
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
 
-    [HttpPost("users/{username}/password")]
-    [Authorize]
-    public void PostChangePassword(string username, string password){
-        var context = new checkITContext();
-        var isAdmin = User.FindAll(ClaimTypes.Role).Any(c => c is {Type: ClaimTypes.Role} and  {Value: "Admin"});
-        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var actualUsername = isAdmin?username: authUsername;
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
+			{
+				status = 400,
+				statusMessage = "error",
+				message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
 
-        var user = context.Users.Where(u => u.Username == username).First();
-        user.Passwd = password;
+	[HttpDelete("users/{username}")]
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Delete(string username)
+	{
+		try
+		{
+			var user = UserHelpers.GetUser(username);
 
-        context.Add(user);
-        context.SaveChanges();
-    }
+			if (user is null)
+			{
+				StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel()
+				{
+                    status = 404,
+					message = $"Benutzer {username} wurde nicht gefunden!"
+				};
+			}
+
+            ctx.Users.Remove(user);
+			ctx.SaveChanges();
+
+			StatusCode(StatusCodes.Status200OK);
+			return new ReturnModel()
+			{
+				message = $"Benutzer {username} erfolgreich gelöscht!"
+			};
+
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
+
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
+			{
+				status = 400,
+				statusMessage = "error",
+				message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+
+	}
+
+	[HttpPost("users/{username}/activate")]
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Post(string username)
+	{
+		try
+		{
+			var user = ctx.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
+
+			if (user is null)
+			{
+				StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel()
+				{
+					status = 404,
+					statusMessage = "error",
+					message = $"Benutzer {username} wurde nicht gefunden!"
+				};
+			}
+
+            bool newStatus = !user.Active;
+            user.Active = newStatus;
+			ctx.SaveChanges();
+
+			StatusCode(StatusCodes.Status200OK);
+			return new ReturnModel()
+			{
+				status = 200,
+				message = $"Benutzer {username} wurde {(newStatus ? "re" : "de")}aktiviert!"
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
+
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
+			{
+				status = 400,
+				statusMessage = "error",
+				message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
+
+	[HttpGet("users")]
+	[Authorize(Roles = "Admin")]
+	public PublicUser[] Get()
+	{
+		var users = new checkITContext().Users.Select(u => new PublicUser(u)).ToArray();
+		return users;
+	}
+
+	[HttpPost("users/{username}/password")]
+	[Authorize]
+	public ReturnModel PostChangePassword(string username, string password)
+	{
+		try
+		{
+
+			var context = new checkITContext();
+			var isAdmin = User.FindAll(ClaimTypes.Role).Any(c => c is { Type: ClaimTypes.Role } and { Value: "Admin" });
+			var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var actualUsername = isAdmin ? username : authUsername;
+
+			var user = context.Users.Where(u => u.Username == username).FirstOrDefault();
+
+			if (user is null)
+			{
+				StatusCode(StatusCodes.Status400BadRequest);
+				return new ReturnModel()
+				{
+					message = $"Benutzer {username} wurde nicht gefunden!"
+				};
+			}
+
+			user.Passwd = password;
+
+			context.SaveChanges();
+			StatusCode(StatusCodes.Status200OK);
+
+			return new ReturnModel()
+			{
+				message = $"Passwort von Benutzer {username} erfolgreich geändert!"
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
+
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
+			{
+				status = 400,
+				statusMessage = "error",
+				message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
 }
