@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Page imports
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
+import UserPage from './pages/UserPage';
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route exact path='/' element={<Navigate to='/login' />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/home' element={<HomePage />} />
+          <Route path='/user' element={<UserPage />} />
         </Routes>
       </BrowserRouter>
     </div>
