@@ -9,38 +9,76 @@ namespace awl_raumreservierung.Controllers;
 [Route("[controller]")]
 public class userController : ControllerBase
 {
-    private readonly ILogger<userController> _logger;
+	private readonly ILogger<userController> _logger;
 
-    public userController(ILogger<userController> logger)
-    {
-        _logger = logger;
-    }
+	public userController(ILogger<userController> logger)
+	{
+		_logger = logger;
+	}
 
-    [HttpGet("{idOrUsername}")]
-    [Authorize()]
-    public PublicUser GetByID(string idOrUsername){
-        int x = 0;
-        var user = new checkITContext().Users.Where(u => int.TryParse(idOrUsername, out x) ? u.Id.ToString() == idOrUsername : u.Username == idOrUsername).First();
-        var publicUser = new PublicUser(user);
-        return publicUser;
-    }
+	[HttpGet("{idOrUsername}")]
+	[Authorize()]
+	public PublicUser GetByID(string idOrUsername)
+	{
+		PublicUser? publicUser;
+		if (int.TryParse(idOrUsername, out int x))
+		{
+			publicUser = UserHelpers.GetUser(x).ToPublicUser();
+		}
+		else
+		{
+			publicUser = UserHelpers.GetUser(idOrUsername).ToPublicUser();
+		}
 
-    [HttpPost("password")]
-    [Authorize]
-    public void PostChangePassword(string password){
-        var context = new checkITContext();
-        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		if (publicUser is null)
+			StatusCode(StatusCodes.Status400BadRequest);
 
-        var user = context.Users.Where(u => u.Username == authUsername).FirstOrDefault();
+		return publicUser;
+	}
 
-        if (user is null) {
-            StatusCode(StatusCodes.Status404NotFound);
-            return;
-        }
+	[HttpPost("password")]
+	[Authorize]
+	public ReturnModel PostChangePassword(string password)
+	{
+		try
+		{
+			var context = new checkITContext();
+			var authUsername = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        user.Passwd = password;
+			var user = UserHelpers.GetUser(authUsername);
 
-        context.SaveChanges();
-        StatusCode(StatusCodes.Status200OK);
-    }
+			if (user is null)
+			{
+				StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel
+				{
+					status = 400,
+					statusMessage = "error",
+					message = "Benutzer konnte nicht gefunden werden!"
+				};
+			}
+
+			user.Passwd = password;
+
+			context.SaveChanges();
+			StatusCode(StatusCodes.Status200OK);
+			return new ReturnModel
+			{
+				message = "Passwort erfolgreich geändert!"
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
+
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
+			{
+				status = 400,
+				statusMessage = "error",
+				message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
+
 }
