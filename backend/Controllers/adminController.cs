@@ -18,14 +18,13 @@ public class adminController : ControllerBase
         ctx = new checkITContext();
 	}
 
-	[HttpPut("users/{username}")]
+	[HttpPut("user")]
 	[Authorize(Roles = "Admin")]
-	public ReturnModel Put(string username, string firstname, string lastname, UserRole rolle, string password)
+	public ReturnModel Put(CreateUserModel model)
 	{
-
 		try
 		{
-			if (String.IsNullOrWhiteSpace(username))
+			if (String.IsNullOrWhiteSpace(model.username))
 			{
 				StatusCode(StatusCodes.Status404NotFound);
 				return new ReturnModel()
@@ -36,7 +35,7 @@ public class adminController : ControllerBase
 				};
 			}
 
-			var existingUser = UserHelpers.GetUser(username);
+			var existingUser = UserHelpers.GetUser(model.username);
 
 			if (existingUser != null)
 			{
@@ -51,12 +50,12 @@ public class adminController : ControllerBase
 
 
 			ctx.Add(new User {
-				Username = username,
-				Firstname = firstname,
-				Lastname = lastname,
-				Passwd = password,
+				Username = model.username,
+				Firstname = model.firstname,
+				Lastname = model.lastname,
+				Passwd = model.password,
 				Lastchange = DateTime.Now,
-				Role = rolle,
+				Role = model.rolle,
 				Active = true
 			});
 			ctx.SaveChanges();
@@ -64,7 +63,7 @@ public class adminController : ControllerBase
 
 			return new ReturnModel()
 			{
-				message = $"Benutzer {username} erfolgreich angelegt!"
+				message = $"Benutzer {model.username} erfolgreich angelegt!"
 			};
 		}
 		catch (Exception ex)
@@ -232,7 +231,6 @@ public class adminController : ControllerBase
 				StatusCode(StatusCodes.Status400BadRequest);
 				return new ReturnModel()
 				{
-                    status = 400,
 					message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}

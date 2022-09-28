@@ -1,5 +1,6 @@
 using System.Configuration;
 using System.Security.Claims;
+using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,22 +19,24 @@ public class userController : ControllerBase
 
 	[HttpGet("{idOrUsername}")]
 	[Authorize()]
-	public PublicUser GetByID(string idOrUsername)
+	public PublicUser? GetByID(string idOrUsername)
 	{
-		PublicUser? publicUser;
+		User user;
 		if (int.TryParse(idOrUsername, out int x))
 		{
-			publicUser = UserHelpers.GetUser(x).ToPublicUser();
+			user = UserHelpers.GetUser(x);
 		}
 		else
 		{
-			publicUser = UserHelpers.GetUser(idOrUsername).ToPublicUser();
+			user = UserHelpers.GetUser(idOrUsername);
 		}
 
-		if (publicUser is null)
-			StatusCode(StatusCodes.Status400BadRequest);
+		if (user is null) {
+			StatusCode(StatusCodes.Status404NotFound,"Yadada");
+            throw new System.Exception("dsaf");
+        }
 
-		return publicUser;
+		return user.ToPublicUser();
 	}
 
 	[HttpPost("password")]
@@ -49,11 +52,8 @@ public class userController : ControllerBase
 
 			if (user is null)
 			{
-				StatusCode(StatusCodes.Status404NotFound);
-				return new ReturnModel
+				return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
 				{
-					status = 400,
-					statusMessage = "error",
 					message = "Benutzer konnte nicht gefunden werden!"
 				};
 			}
@@ -61,8 +61,8 @@ public class userController : ControllerBase
 			user.Passwd = password;
 
 			context.SaveChanges();
-			StatusCode(StatusCodes.Status200OK);
-			return new ReturnModel
+			
+			return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 			{
 				message = "Passwort erfolgreich geändert!"
 			};
@@ -72,10 +72,8 @@ public class userController : ControllerBase
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
 			StatusCode(StatusCodes.Status400BadRequest);
-			return new ReturnModel()
+			return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 			{
-				status = 400,
-				statusMessage = "error",
 				message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
