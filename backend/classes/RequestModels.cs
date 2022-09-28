@@ -1,10 +1,27 @@
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+
 namespace awl_raumreservierung
 {
-
 	public class ReturnModel
 	{
-		public int status { get; set; } = 200;
-		public string statusMessage { get; set; } = "success";
+        public ReturnModel() : this (new StatusCodeResult(200)) {
+		  }
+        public ReturnModel(StatusCodeResult statusCode) {
+            status = statusCode.StatusCode;
+				if (status is < 300 and > 199) {
+					statusMessage = "success";
+				} else {
+					statusMessage = ReasonPhrases.GetReasonPhrase(status);
+				}
+
+				message = string.Empty;
+        }
+
+		public int status { get; set; }
+		public string statusMessage { get; set; }
 		public string message { get; set; }
 	}
 
