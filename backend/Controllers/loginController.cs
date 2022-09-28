@@ -33,7 +33,7 @@ public class loginController : ControllerBase
 			_ => StatusCodes.Status400BadRequest
 		};
 
-		res = Login.LoginMessage.Success;
+		StatusCode(statuscode);
 
 		if (res is Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin)
 		{
@@ -74,8 +74,12 @@ public class loginController : ControllerBase
 			return Results.Ok(stringToken);
 		}
 
-		StatusCode(statuscode);
-
 		return Results.Unauthorized();
 	}
+
+    [HttpPost("logout")]
+    [Authorize]
+    public void PostLogout(){
+        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
 }
