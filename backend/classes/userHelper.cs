@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace awl_raumreservierung.classes
 {
@@ -15,6 +16,11 @@ namespace awl_raumreservierung.classes
 				id = user.Id;
 			}
 			return id;
+		}
+		public static bool isAdmin()
+		{
+			var isAdmin = ControllerBase.User.FindAll(ClaimTypes.Role).Any(c => c is { Type: ClaimTypes.Role } and { Value: "Admin" });
+			return isAdmin;
 		}
 	}
 }

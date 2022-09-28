@@ -30,54 +30,105 @@ public class bookingController : ControllerBase
 	}
 	[HttpPut("book")]
 	[Authorize]
-	public StatusCodeResult book(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
+	public ReturnModel book(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
 	{
 		var db = new checkITContext();
-		// if (db.Rooms.Where(r => r.Id == roomId).FirstOrDefault().active)	TODO: DB eintrag "active"
+		if (db.Rooms.Where(r => r.Id == roomId).FirstOrDefault().active ==1) { 
 		var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
 		var userId = userHelper.getUserId(authUsername);
 		if (userId < 0)
 		{
-			return StatusCode(StatusCodes.Status404NotFound);
+			return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
+			{
+				message = $"Benutzer {authUsername} nicht gefunden."
+			};
 		}
 		var booking = new Booking(startTime, endTime, roomId, userId, createTime, createdBy);
-
 		db.Bookings.Add(booking);
 		db.SaveChanges();
-		return StatusCode(StatusCodes.Status201Created);
+		return new ReturnModel(StatusCode(StatusCodes.Status201Created))
+		{
+			message = "Buchung erfolgreich."
+		};
+		}else
+		{
+		return new ReturnModel()
+		{
+			message = "Raum ist nicht Buchbar."
+		};
+		}
 	}
 
 	[HttpDelete("remove")]
 	[Authorize]
-	public StatusCodeResult remove(int bookingId)
+	public ReturnModel remove(int bookingId)
 	{
 		var db = new checkITContext();
 		var booking = db.Bookings.Where(b => b.Id == bookingId).FirstOrDefault();
 		if (booking != null)
 		{
-			db.Bookings.Remove(booking);
-			db.SaveChanges();
+
+			var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var userId = userHelper.getUserId(authUsername);
+			if (userId < 0)
+			{
+				return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
+				{
+					message = $"Benutzer {authUsername} nicht gefunden."
+				};
+			}
+			if (userId == booking.UserId || userHelper.isAdmin())
+			{
+				if (booking != null)
+				{
+					db.Bookings.Remove(booking);
+					db.SaveChanges();
+				}
+				return new ReturnModel(StatusCode(StatusCodes.Status200OK))
+				{
+					message = "Buchung erfolgreich entfernt."
+				};
+			}
+			else
+			{
+				return new ReturnModel(StatusCode(StatusCodes.Status401Unauthorized))
+				{
+					message = "Keine Berechtigung."
+				};
+			}
 		}
-		return StatusCode(StatusCodes.Status200OK);
+		else
+		{
+			return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
+			{
+				message = "Buchung nicht gefunden."
+			};
+		}
 	}
 	[HttpPut("bookAsAdmin")]
 	[Authorize(Roles = "Adminstrator")]
-	public StatusCodeResult bookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
+	public ReturnModel bookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
 	{
 		var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
 		var userId = userHelper.getUserId(authUsername);
 		if (userId < 0)
 		{
-			return StatusCode(StatusCodes.Status404NotFound);
+			return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
+			{ 
+				message = $"Benutzer {authUsername} nicht gefunden."
+			};
 		}
 		var db = new checkITContext();
 		var booking = new Booking(startTime, endTime, roomId, userId, createTime, createdBy);
 		db.Bookings.Add(booking);
 		db.SaveChanges();
-		return StatusCode(StatusCodes.Status201Created);
+		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
+		{
+			message = "Buchung erfolgreich."
+		};
 	}
 	[HttpPost("edit")]
-	public StatusCodeResult edit( DateTime startTime,DateTime newEndTime)
+	public ReturnModel edit(DateTime startTime,DateTime newEndTime)
 	{
 		var db = new checkITContext();
 		var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -85,33 +136,58 @@ public class bookingController : ControllerBase
 		var userId = userHelper.getUserId(authUsername);
 		if (userId < 0)
 		{
-			return StatusCode(StatusCodes.Status404NotFound);
+			return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
+			{
+				message = $"Benutzer {authUsername} nicht gefunden."
+			};
 		}
 		if (booking == null)
 		{
-			return StatusCode(StatusCodes.Status404NotFound);
+			return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
+			{
+				message = "Keine Buchung zum angegebenen Zeitpunkt."
+			};
 		}
 		// user auth
-		var isAdmin = User.FindAll(ClaimTypes.Role).Any(c => c is { Type: ClaimTypes.Role } and { Value: "Admin" });
-
-		if (userId == booking.UserId || isAdmin)
+		if (userId == booking.UserId || userHelper.isAdmin())
 		{
 			// booking in future check
 			if (booking != null && booking.EndTime > DateTime.Now)
 			{
 				// no overlap check
-				if (db.Bookings.Where(b => b.StartTime > startTime && b.StartTime < startTime).Any())
+				if (db.Bookings.Where(b => b.StartTime > startTime && b.StartTime < newEndTime).Any())
 				{
 					booking.EndTime = newEndTime;
 					db.SaveChanges();
+					return new ReturnModel(StatusCode(StatusCodes.Status200OK))
+					{
+						message = "Buchung erfolgreich bearbeitet."
+					};
+				}
+				else
+				{
+					return new ReturnModel(StatusCode(StatusCodes.Status409Conflict))
+					{
+						message = "Neue Endzeit kolidiert mit einer anderen Buchung."
+					};
 				}
 			}
 			else
 			{
-			return StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel
+				{
+					status = 400,
+					statusMessage = "error",
+					message = "Buchung abgelaufen."
+				};
 			}
-		return StatusCode(StatusCodes.Status200OK);
 		}
-		return StatusCode(StatusCodes.Status200OK);
+		else
+		{
+			return new ReturnModel
+			{
+				message = "Keine Berechtigung."
+			};
+		}
 	}
 }
