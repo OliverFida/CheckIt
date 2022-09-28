@@ -12,8 +12,9 @@ namespace awl_raumreservierung{
 			 // User mit username holen
 			return user switch 
 			{
-				{ Active: false } => LoginMessage.InactiveUser,
-				{ Passwd: var pw, Role: var role} when BC.Verify(password, pw) => (role == UserRole.Admin)?LoginMessage.SuccessAsAdmin:LoginMessage.Success,
+				{Active: false} => LoginMessage.InactiveUser,
+				{Passwd: var pw, Role: var role} when pw == password => (role == UserRole.Admin)?LoginMessage.SuccessAsAdmin:LoginMessage.Success,
+				{Passwd: var pw} when pw == password=> LoginMessage.Success,
 				_ => LoginMessage.InvalidCredentials
 			};
 		}

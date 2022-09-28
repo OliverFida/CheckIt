@@ -1,4 +1,7 @@
-﻿namespace awl_raumreservierung.classes
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+namespace awl_raumreservierung.classes
 {
 	public static class userHelper
 	{
