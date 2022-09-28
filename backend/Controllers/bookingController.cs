@@ -28,6 +28,7 @@ public class bookingController : ControllerBase
 		var before = after.Where(s=> s.EndTime <= bookingHelper.endNextWeek(DateTime.Now));
 		return before.ToArray();
 	}
+	
 	[HttpPut("book")]
 	[Authorize]
 	public StatusCodeResult book(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
