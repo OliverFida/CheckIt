@@ -10,9 +10,12 @@ public class adminController : ControllerBase
 {
 	private readonly ILogger<adminController> _logger;
 
+    private checkITContext ctx;
+
 	public adminController(ILogger<adminController> logger)
 	{
 		_logger = logger;
+        ctx = new checkITContext();
 	}
 
 	[HttpPut("users/{username}")]
@@ -22,11 +25,9 @@ public class adminController : ControllerBase
 
 		try
 		{
-			var ctx = new checkITContext();
-
 			if (String.IsNullOrWhiteSpace(username))
 			{
-				StatusCode(StatusCodes.Status400BadRequest);
+				StatusCode(StatusCodes.Status404NotFound);
 				return new ReturnModel()
 				{
 					status = 400,
@@ -35,7 +36,7 @@ public class adminController : ControllerBase
 				};
 			}
 
-			var existingUser = ctx.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
+			var existingUser = UserHelpers.GetUser(username);
 
 			if (existingUser != null)
 			{
@@ -44,13 +45,12 @@ public class adminController : ControllerBase
 				{
 					status = 400,
 					statusMessage = "error",
-					message = "Dieser Benutzer existiert bereits!"
+					message = "Ein Benutzer mit diesem Benutzernamen existiert bereits!"
 				};
 			}
 
 
-			var newUser = new User()
-			{
+			ctx.Add(new User {
 				Username = username,
 				Firstname = firstname,
 				Lastname = lastname,
@@ -58,11 +58,10 @@ public class adminController : ControllerBase
 				Lastchange = DateTime.Now,
 				Role = rolle,
 				Active = true
-			};
-
-			ctx.Add(newUser);
+			});
 			ctx.SaveChanges();
 			StatusCode(StatusCodes.Status201Created);
+
 			return new ReturnModel()
 			{
 				message = $"Benutzer {username} erfolgreich angelegt!"
@@ -125,21 +124,20 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-			var context = new checkITContext();
-
-			var user = context.Users.Where(u => u.Username == username).FirstOrDefault();
+			var user = UserHelpers.GetUser(username);
 
 			if (user is null)
 			{
-				StatusCode(StatusCodes.Status400BadRequest);
+				StatusCode(StatusCodes.Status404NotFound);
 				return new ReturnModel()
 				{
-                    status = 400,
+                    status = 404,
 					message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
 
-			context.SaveChanges();
+            ctx.Users.Remove(user);
+			ctx.SaveChanges();
 
 			StatusCode(StatusCodes.Status200OK);
 			return new ReturnModel()
@@ -169,29 +167,28 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-
-			var context = new checkITContext();
-
-			var user = context.Users.Where(u => u.Username == username);
+			var user = ctx.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
 
 			if (user is null)
 			{
-				StatusCode(StatusCodes.Status400BadRequest);
+				StatusCode(StatusCodes.Status404NotFound);
 				return new ReturnModel()
 				{
-					status = 400,
+					status = 404,
 					statusMessage = "error",
-					message = "Dieser Benutzer existiert nicht!"
+					message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
 
-			context.SaveChanges();
+            bool newStatus = !user.Active;
+            user.Active = newStatus;
+			ctx.SaveChanges();
 
 			StatusCode(StatusCodes.Status200OK);
 			return new ReturnModel()
 			{
 				status = 200,
-				message = "Dieser Benutzer existiert bereits!"
+				message = $"Benutzer {username} wurde {(newStatus ? "re" : "de")}aktiviert!"
 			};
 		}
 		catch (Exception ex)
@@ -232,10 +229,11 @@ public class adminController : ControllerBase
 
 			if (user is null)
 			{
-				StatusCode(StatusCodes.Status404NotFound);
+				StatusCode(StatusCodes.Status400BadRequest);
 				return new ReturnModel()
 				{
-					message = $"Benutzer {username} erfolgreich angelegt!"
+                    status = 400,
+					message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
 
@@ -246,7 +244,7 @@ public class adminController : ControllerBase
 
 			return new ReturnModel()
 			{
-				message = $"Benutzer {username} erfolgreich angelegt!"
+				message = $"Passwort von Benutzer {username} erfolgreich geändert!"
 			};
 		}
 		catch (Exception ex)

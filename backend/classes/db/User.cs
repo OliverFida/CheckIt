@@ -12,7 +12,7 @@ namespace awl_raumreservierung
         public string Passwd { get; set; } = null!;
         public DateTime? Lastlogon { get; set; }
         public DateTime? Lastchange { get; set; }
-        public bool? Active { get; set; }
+        public bool Active { get; set; }
         public UserRole? Role { get; set; }
     }
 

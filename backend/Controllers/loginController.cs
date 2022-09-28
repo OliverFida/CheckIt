@@ -35,6 +35,20 @@ public class loginController : ControllerBase
 
 		StatusCode(statuscode);
 
+		if(res == Login.LoginMessage.InactiveUser) {
+			return Results.BadRequest( new {
+				value = String.Empty,
+				message = "Benutzerkonto deaktiviert! Kontaktieren Sie einen Administrator."
+			});
+		}
+
+		if(res == Login.LoginMessage.InvalidCredentials) {
+			return Results.BadRequest( new {
+				value = String.Empty,
+				message = "Ungültige Benutzerdaten angegeben!"
+			});
+		}
+
 		if (res is Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin)
 		{
 
@@ -48,8 +62,7 @@ public class loginController : ControllerBase
 
 			var issuer = builder.Configuration["Jwt:Issuer"];
 			var audience = builder.Configuration["Jwt:Audience"];
-			var key = Encoding.ASCII.GetBytes
-	 (builder.Configuration["Jwt:Key"]);
+			var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Subject = new ClaimsIdentity(new[]
@@ -71,7 +84,9 @@ public class loginController : ControllerBase
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 			var stringToken = tokenHandler.WriteToken(token);
-			return Results.Ok(stringToken);
+			return Results.Ok(new {
+				value = stringToken
+			});
 		}
 
 		return Results.Unauthorized();
