@@ -34,7 +34,8 @@ public class bookingController : ControllerBase
 	{
 		var db = new checkITContext();
 		// if (db.Rooms.Where(r => r.Id == roomId).FirstOrDefault().active)	TODO: DB eintrag "active"
-		var userId = userHelper.getUserId(username);
+		var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		var userId = userHelper.getUserId(authUsername);
 		if (userId < 0)
 		{
 			return StatusCode(StatusCodes.Status404NotFound);
@@ -63,7 +64,8 @@ public class bookingController : ControllerBase
 	[Authorize(Roles = "Adminstrator")]
 	public StatusCodeResult bookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
 	{
-		var userId = userHelper.getUserId(username);
+		var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		var userId = userHelper.getUserId(authUsername);
 		if (userId < 0)
 		{
 			return StatusCode(StatusCodes.Status404NotFound);
@@ -80,7 +82,7 @@ public class bookingController : ControllerBase
 		var db = new checkITContext();
 		var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
 		var booking = db.Bookings.Where(b => b.StartTime == startTime).FirstOrDefault();
-		var userId = userHelper.getUserId(username);
+		var userId = userHelper.getUserId(authUsername);
 		if (userId < 0)
 		{
 			return StatusCode(StatusCodes.Status404NotFound);
@@ -92,7 +94,7 @@ public class bookingController : ControllerBase
 		// user auth
 		var isAdmin = User.FindAll(ClaimTypes.Role).Any(c => c is { Type: ClaimTypes.Role } and { Value: "Admin" });
 
-		if (userId == booking.UserId || )
+		if (userId == booking.UserId || isAdmin)
 		{
 			// booking in future check
 			if (booking != null && booking.EndTime > DateTime.Now)
@@ -110,5 +112,6 @@ public class bookingController : ControllerBase
 			}
 		return StatusCode(StatusCodes.Status200OK);
 		}
+		return StatusCode(StatusCodes.Status200OK);
 	}
 }
