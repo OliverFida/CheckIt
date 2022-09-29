@@ -49,7 +49,7 @@ public class userController : ControllerBase
             var context = new checkITContext();
             var authUsername = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var user = Helpers.GetUser(authUsername);
+			var user = UserHelpers.GetUser(authUsername);
 
             if (user is null)
             {
