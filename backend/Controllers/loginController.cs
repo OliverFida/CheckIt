@@ -33,7 +33,7 @@ public class loginController : ControllerBase
 			_ => StatusCodes.Status400BadRequest
 		};
 
-		StatusCode(statuscode);
+		Response.StatusCode = statuscode;
 
 		if(res == Login.LoginMessage.InactiveUser) {
 			return Results.BadRequest( new {
