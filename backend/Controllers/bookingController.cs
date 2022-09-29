@@ -23,7 +23,7 @@ public class bookingController : ControllerBase
 
     [HttpGet("room/{roomId}")]
     [Authorize]
-    public PublicBooking[] Get(int roomId)
+    public PublicBooking[] Get(int roomId, DateTime? date)
     {
         try
         {
@@ -34,10 +34,16 @@ public class bookingController : ControllerBase
                 return new PublicBooking[0];
             }
 
+            if(date == null)
+            {
+                date = DateTime.Now.StartOfWeek();
+            }
+            date = date.Value.StartOfWeek();
+
             return room.GetBookings()
                        .Where(b => 
-                            b.StartTime >= DateTime.Now.StartOfWeek() &&
-                            b.EndTime <= DateTime.Now.EndOfNextWeek() 
+                            b.StartTime >= date.Value &&
+                            b.EndTime <= date.Value.AddDays(6)
                         ).Select(b => b.ToPublicBooking()).ToArray();
         }
         catch(Exception ex)
