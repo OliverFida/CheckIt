@@ -11,9 +11,10 @@ namespace awl_raumreservierung.Controllers;
 public class userController : ControllerBase
 {
     private readonly ILogger<userController> _logger;
-
+    private checkITContext ctx;
     public userController(ILogger<userController> logger)
     {
+        ctx = new();
         _logger = logger;
     }
 
@@ -40,16 +41,13 @@ public class userController : ControllerBase
         return user.ToPublicUser();
     }
 
-    [HttpPost("password")]
+    [HttpPatch("password")]
     [Authorize]
     public ReturnModel PostChangePassword(string password)
     {
         try
         {
-            var context = new checkITContext();
-            var authUsername = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var user = Helpers.GetUser(authUsername);
+            var user = User.GetUser();
 
             if (user is null)
             {
@@ -60,8 +58,9 @@ public class userController : ControllerBase
             }
 
             user.Passwd = password;
-
-            context.SaveChanges();
+            
+            ctx.Users.Update(user);
+            ctx.SaveChanges();
 
             return new ReturnModel(StatusCode(StatusCodes.Status200OK))
             {
