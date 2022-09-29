@@ -1,10 +1,12 @@
 // Component imports
 import React, {useState, useEffect} from 'react';
 import {Navbar, Stack, NavDropdown, Button} from 'react-bootstrap';
+import {useNavigate} from 'react-router-dom';
 // API imports
 import RoomsAPI from '../../api/rooms';
 
 export default function AppNavBar(){
+    const navigate = useNavigate();
     const [rooms, setRooms] = useState([]);
     const [roomElements, setRoomElements] = useState([]);
 
@@ -24,6 +26,10 @@ export default function AppNavBar(){
         setRoomElements(rooms.map(room => <NavDropdown.Item key={`room_${room}`}>{room}</NavDropdown.Item>));
     }
 
+    const onLogout = () => {
+        navigate("/login");
+    };
+
     return(
         <Navbar bg='light' expand='lg'>
             <Stack direction='horizontal' style={{width: '100%', justifyContent: 'space-between'}}>
@@ -32,7 +38,7 @@ export default function AppNavBar(){
                     <NavDropdown title='Raum' align={'end'}>
                         {roomElements}
                     </NavDropdown>
-                    <Button>Abmelden</Button>
+                    <Button onClick={onLogout}>Abmelden</Button>
                 </Stack>
             </Stack>
         </Navbar>

@@ -1,0 +1,11 @@
+th{
+    text-align: center;
+}
+.rowTitle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.buchenBtn{
+    width: 100%;
+}

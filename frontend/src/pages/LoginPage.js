@@ -1,13 +1,15 @@
 // Component imports
 import React from 'react';
-
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import {useNavigate} from 'react-router-dom';
+import {Button, Form, Container, Row, Col} from 'react-bootstrap';
 
 export default function LoginPage(){
+    const navigate = useNavigate();
+
+    const onLogin = () => {
+        navigate("/home");
+    };
+
     return(
         <Container>
             <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
@@ -22,7 +24,7 @@ export default function LoginPage(){
                             <Form.Label>Passwort</Form.Label>
                             <Form.Control type="password"/>
                         </Form.Group>                
-                        <Button variant="primary" type="submit" className="mx-auto d-block">
+                        <Button variant="primary" type="submit" className="mx-auto d-block" onClick={onLogin}>
                             Einloggen
                         </Button>
                     </Form>
