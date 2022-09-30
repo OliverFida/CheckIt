@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers().AddNewtonsoftJson(o =>
 {
     o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+    //o.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 });
 
 builder.Services.AddAuthentication(options =>
