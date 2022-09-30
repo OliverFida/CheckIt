@@ -24,10 +24,10 @@ public class roomController : ControllerBase
 	}
 	[HttpPut("add")]
 	[Authorize(Roles = "Adminstrator")]
-	public ReturnModel add(string roomNr, string roomName)
+	public ReturnModel add(string roomNr, string roomName,bool active)
 	{
 		var db = new checkITContext();
-		var room = new Room(roomNr,roomName);
+		var room = new Room(roomNr,roomName,active);
 
       db.Rooms.Add(room);
 		db.SaveChanges();

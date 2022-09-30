@@ -65,11 +65,11 @@ namespace awl_raumreservierung {
 
       public static Boolean BookingOverlaps(CreateBookingModel model)
       {
-				bool overlapsWithOtherBookings = Helpers.GetRoom(model.roomId)
+				bool overlapsWithOtherBookings = Helpers.GetRoom(model.RoomID)
 													.GetBookings()
 													.Any(b =>
-														 b.StartTime <= model.endTime &&
-														 model.startTime <= b.EndTime
+														 b.StartTime <= model.EndTime &&
+														 model.StartTime <= b.EndTime
 													);
             return overlapsWithOtherBookings;
       }
