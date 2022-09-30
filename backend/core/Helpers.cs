@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 namespace awl_raumreservierung {
@@ -62,7 +63,16 @@ namespace awl_raumreservierung {
 
         }
 
-
+      public static Boolean BookingOverlaps(CreateBookingModel model)
+      {
+				bool overlapsWithOtherBookings = Helpers.GetRoom(model.roomId)
+													.GetBookings()
+													.Any(b =>
+														 b.StartTime <= model.endTime &&
+														 model.startTime <= b.EndTime
+													);
+            return overlapsWithOtherBookings;
+      }
     }
 
 

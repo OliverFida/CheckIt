@@ -71,12 +71,7 @@ public class bookingController : ControllerBase
                 };
             }
 
-            bool overlapsWithOtherBookings = room
-																.GetBookings()
-                                                .Any(b =>
-                                                    b.StartTime <= model.EndTime &&
-                                                    model.StartTime <= b.EndTime
-                                                );
+         bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
 
             if(overlapsWithOtherBookings)
             {
@@ -176,21 +171,36 @@ public class bookingController : ControllerBase
 
     [HttpPut("bookAsAdmin")]
     [Authorize(Roles = "Admin")]
-    public StatusCodeResult bookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
+    public ReturnModel bookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
     {
         var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var userId = userHelper.getUserId(authUsername);
-        if (userId < 0)
+        var user = Helpers.GetUser(authUsername);
+        if (user is null)
         {
-            return StatusCode(StatusCodes.Status404NotFound);
-        }
-        var db = new checkITContext();
-        var booking = new Booking(startTime, endTime, roomId, userId, createTime, createdBy);
+         return new ReturnModel(new StatusCodeResult(404))
+         {
+				message = "User nicht gefunden"
+			};
+      }
+        bool overlapsWithOtherBookings = Helpers.BookingOverlaps(m)
+		if (overlapsWithOtherBookings)
+		{
+			Response.StatusCode = StatusCodes.Status400BadRequest;
+			return new ReturnModel(new StatusCodeResult(400))
+			{
+				message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
+			};
+		}
+		var db = new checkITContext();
+        var booking = new Booking(startTime, endTime, roomId, user.Id, createTime, createdBy);
         db.Bookings.Add(booking);
         db.SaveChanges();
-        return StatusCode(StatusCodes.Status201Created);
-    }
-    [HttpPost("edit")]
+		return new ReturnModel()
+		{
+			message = "Buchung erfolgreich"
+		};
+	}
+	[HttpPost("edit")]
     public StatusCodeResult edit(DateTime startTime, DateTime newEndTime)
     {
         var db = new checkITContext();
