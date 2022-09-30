@@ -10,7 +10,9 @@ namespace awl_raumreservierung.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+#pragma warning disable IDE1006 // Naming Styles
 public class bookingController : ControllerBase
+#pragma warning restore IDE1006 // Naming Styles
 {
 	private readonly ILogger<bookingController> _logger;
 	private readonly checkITContext ctx;
@@ -57,7 +59,7 @@ public class bookingController : ControllerBase
 
 	[HttpPut("book")]
 	[Authorize]
-	public ReturnModel book(CreateBookingModel model)
+	public ReturnModel Book(CreateBookingModel model)
 	{
 		try
 		{
@@ -131,7 +133,7 @@ public class bookingController : ControllerBase
 
 	[HttpDelete("{bookingId}")]
 	[Authorize]
-	public ReturnModel remove(int bookingId)
+	public ReturnModel Remove(int bookingId)
 	{
 		try
 		{
@@ -179,7 +181,7 @@ public class bookingController : ControllerBase
 	}
 	[HttpPut("bookAsAdmin")]
 	[Authorize(Roles = "Admin")]
-	public ReturnModel bookAsAdmin(CreateBookingModel model)
+	public ReturnModel BookAsAdmin(CreateBookingModel model)
 	{
 		bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
 		if (overlapsWithOtherBookings)
@@ -208,7 +210,7 @@ public class bookingController : ControllerBase
 		};
 	}
 	[HttpPost("edit")]
-	public ReturnModel edit(long bookingId, DateTime EndTime)
+	public ReturnModel Edit(long bookingId, DateTime EndTime)
 	{
 		Booking? booking = Helpers.GetBooking(bookingId);
 		if (booking is null)
@@ -228,8 +230,7 @@ public class bookingController : ControllerBase
 			};
 		}
 		// booking in future check
-		bool inPast = (booking != null) && (booking.EndTime > DateTime.Now);
-		if (inPast)
+		if (booking.EndTime < DateTime.Now)
 		{
 			return new ReturnModel(new StatusCodeResult(400))
 			{
