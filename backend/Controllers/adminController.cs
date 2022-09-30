@@ -24,7 +24,7 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-			if (model.username.IsNullOrWhiteSpace())
+			if (model.Username.IsNullOrWhiteSpace())
 			{
 				Response.StatusCode = StatusCodes.Status404NotFound;
                 return new ReturnModel()
@@ -35,7 +35,7 @@ public class adminController : ControllerBase
 				};
 			}
 
-			var existingUser = Helpers.GetUser(model.username);
+			var existingUser = Helpers.GetUser(model.Username);
 
 			if (existingUser != null)
 			{
@@ -50,12 +50,12 @@ public class adminController : ControllerBase
 
 
 			ctx.Add(new User {
-				Username = model.username,
-				Firstname = model.firstname,
-				Lastname = model.lastname,
-				Passwd = model.password,
+				Username = model.Username,
+				Firstname = model.FirstName,
+				Lastname = model.LastName,
+				Passwd = model.Password,
 				Lastchange = DateTime.Now,
-				Role = model.rolle,
+				Role = model.Role,
 				Active = true
 			});
 			ctx.SaveChanges();
@@ -63,8 +63,8 @@ public class adminController : ControllerBase
 
             return new ReturnModel()
 			{
-				Message = $"Benutzer {model.username} erfolgreich angelegt!",
-				Data = Helpers.GetUser(model.username).ToPublicUser()
+				Message = $"Benutzer {model.Username} erfolgreich angelegt!",
+				Data = Helpers.GetUser(model.Username).ToPublicUser()
 			};
 		}
 		catch (Exception ex)
@@ -100,9 +100,9 @@ public class adminController : ControllerBase
 				};
 			}
 
-			user.Firstname = model.firstname;
-			user.Lastname = model.lastname;
-			user.Role = model.rolle;
+			user.Firstname = model.FirstName;
+			user.Lastname = model.LastName;
+			user.Role = model.Role;
 			user.Lastchange = DateTime.Now;
 
 			ctx.Users.Update(user);
