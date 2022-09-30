@@ -18,16 +18,17 @@ public class adminController : ControllerBase
         ctx = new checkITContext();
 	}
 
-	[HttpPut("user")]
+	[HttpPut("users/{username}")]
 	[Authorize(Roles = "Admin")]
-	public ReturnModel Put(CreateUserModel model)
+	public ReturnModel Put(string username, string firstname, string lastname, UserRole rolle, string password)
 	{
+
 		try
 		{
-			if (model.username.IsNullOrWhiteSpace())
+			if (String.IsNullOrWhiteSpace(username))
 			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
-                return new ReturnModel()
+				StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel()
 				{
 					status = 400,
 					statusMessage = "error",
@@ -35,12 +36,12 @@ public class adminController : ControllerBase
 				};
 			}
 
-			var existingUser = Helpers.GetUser(model.username);
+			var existingUser = UserHelpers.GetUser(username);
 
 			if (existingUser != null)
 			{
-                Response.StatusCode = StatusCodes.Status400BadRequest;
-                return new ReturnModel()
+				StatusCode(StatusCodes.Status400BadRequest);
+				return new ReturnModel()
 				{
 					status = 400,
 					statusMessage = "error",
@@ -50,29 +51,28 @@ public class adminController : ControllerBase
 
 
 			ctx.Add(new User {
-				Username = model.username,
-				Firstname = model.firstname,
-				Lastname = model.lastname,
-				Passwd = model.password,
+				Username = username,
+				Firstname = firstname,
+				Lastname = lastname,
+				Passwd = password,
 				Lastchange = DateTime.Now,
-				Role = model.rolle,
+				Role = rolle,
 				Active = true
 			});
 			ctx.SaveChanges();
-            Response.StatusCode = StatusCodes.Status201Created;
+			StatusCode(StatusCodes.Status201Created);
 
-            return new ReturnModel()
+			return new ReturnModel()
 			{
-				message = $"Benutzer {model.username} erfolgreich angelegt!",
-				data = Helpers.GetUser(model.username).ToPublicUser()
+				message = $"Benutzer {username} erfolgreich angelegt!"
 			};
 		}
 		catch (Exception ex)
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-            Response.StatusCode = StatusCodes.Status400BadRequest;
-            return new ReturnModel()
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
 			{
 				status = 400,
 				statusMessage = "error",
@@ -81,45 +81,34 @@ public class adminController : ControllerBase
 		}
 	}
 
-	[HttpPatch("user/{username}")]
+	[HttpPost("users/{username}")]
 	[Authorize(Roles = "Admin")]
-	public ReturnModel UpdateUser(string username, UpdateUserModel model)
+	public ReturnModel Post(string username, string firstname, string lastname, UserRole rolle)
 	{
 		try
 		{
-			var user = Helpers.GetUser(username);
+			var context = new checkITContext();
 
-			if(user is null)
-			{
-				Response.StatusCode = 404;
-				return new ReturnModel
-				{
-					status = 404,
-					statusMessage = "error",
-					message = "Benutzer konnte nicht gefunden werden!"
-				};
-			}
+			var user = context.Users.Where(u => u.Username == username).First();
 
-			user.Firstname = model.firstname;
-			user.Lastname = model.lastname;
-			user.Role = model.rolle;
+			user.Firstname = firstname;
+			user.Lastname = lastname;
+			user.Role = rolle;
 			user.Lastchange = DateTime.Now;
 
-			ctx.Users.Update(user);
-			ctx.SaveChanges();
+			context.SaveChanges();
 
-			Response.StatusCode = StatusCodes.Status200OK;
+			StatusCode(StatusCodes.Status200OK);
 			return new ReturnModel()
 			{
-				message = $"Benutzer {username} erfolgreich bearbeitet!",
-				data = user.ToPublicUser()
+				message = $"Benutzer {username} erfolgreich bearbeitet!"
 			};
 		}
 		catch (Exception ex)
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-			Response.StatusCode = StatusCodes.Status400BadRequest;
+			StatusCode(StatusCodes.Status400BadRequest);
 			return new ReturnModel()
 			{
 				status = 400,
@@ -129,26 +118,28 @@ public class adminController : ControllerBase
 		}
 	}
 
-	[HttpDelete("user/{username}")]
+	[HttpDelete("users/{username}")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Delete(string username)
 	{
 		try
 		{
-			var user = Helpers.GetUser(username);
+			var user = UserHelpers.GetUser(username);
 
 			if (user is null)
 			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
-				return new ReturnModel(new StatusCodeResult(404))
+				StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel()
 				{
+                    status = 404,
 					message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
+
             ctx.Users.Remove(user);
 			ctx.SaveChanges();
 
-			Response.StatusCode = StatusCodes.Status200OK;
+			StatusCode(StatusCodes.Status200OK);
 			return new ReturnModel()
 			{
 				message = $"Benutzer {username} erfolgreich gelöscht!"
@@ -159,7 +150,7 @@ public class adminController : ControllerBase
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-			Response.StatusCode = StatusCodes.Status400BadRequest;
+			StatusCode(StatusCodes.Status400BadRequest);
 			return new ReturnModel()
 			{
 				status = 400,
@@ -170,17 +161,17 @@ public class adminController : ControllerBase
 
 	}
 
-	[HttpPost("user/{username}/activate")]
+	[HttpPost("users/{username}/activate")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Post(string username)
 	{
 		try
 		{
-			var user = Helpers.GetUser(username);
+			var user = ctx.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
 
 			if (user is null)
 			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
+				StatusCode(StatusCodes.Status404NotFound);
 				return new ReturnModel()
 				{
 					status = 404,
@@ -191,23 +182,20 @@ public class adminController : ControllerBase
 
             bool newStatus = !user.Active;
             user.Active = newStatus;
-			user.Lastchange = DateTime.Now;
-			ctx.Users.Update(user);
 			ctx.SaveChanges();
 
-			Response.StatusCode = StatusCodes.Status200OK;
+			StatusCode(StatusCodes.Status200OK);
 			return new ReturnModel()
 			{
 				status = 200,
-				message = $"Benutzer {username} wurde {(newStatus ? "re" : "de")}aktiviert!",
-				data = user.ToPublicUser()
+				message = $"Benutzer {username} wurde {(newStatus ? "re" : "de")}aktiviert!"
 			};
 		}
 		catch (Exception ex)
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-			Response.StatusCode = StatusCodes.Status400BadRequest;
+			StatusCode(StatusCodes.Status400BadRequest);
 			return new ReturnModel()
 			{
 				status = 400,
@@ -221,60 +209,39 @@ public class adminController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	public PublicUser[] Get()
 	{
-		try
-		{
-			var users = new checkITContext().Users.Select(u => u.ToPublicUser()).ToArray();
-			return users;
-		}
-		catch(Exception ex)
-		{
-			_logger.LogError("Fehler aufgetreten: ", ex);
-			Response.StatusCode = StatusCodes.Status500InternalServerError;
-			return new PublicUser[0];
-		}
+		var users = new checkITContext().Users.Select(u => new PublicUser(u)).ToArray();
+		return users;
 	}
 
-	[HttpGet("roles")]
-	[Authorize(Roles = "Admin")]
-	public Dictionary<int, string> GetRoles()
+	[HttpPost("users/{username}/password")]
+	[Authorize]
+	public ReturnModel PostChangePassword(string username, string password)
 	{
 		try
 		{
-            return Enum.GetValues(typeof(UserRole))
-				.Cast<UserRole>()
-				.ToDictionary(t => (int)(object)t, t => t.ToString());
-        }
-		catch(Exception ex)
-        {
-            _logger.LogError("Fehler aufgetreten: ", ex);
-            Response.StatusCode = StatusCodes.Status500InternalServerError;
-            return new Dictionary<int, string>();
-        }
-	}
 
-	[HttpPatch("user/{username}/password")]
-	[Authorize(Roles = "Admin")]
-	public ReturnModel ChangePassword(string username, string password)
-	{
-		try
-		{
-			var isAdmin = User.IsInRole("Admin");
-			var user = Helpers.GetUser(username);
+			var context = new checkITContext();
+			var isAdmin = User.FindAll(ClaimTypes.Role).Any(c => c is { Type: ClaimTypes.Role } and { Value: "Admin" });
+			var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var actualUsername = isAdmin ? username : authUsername;
+
+			var user = context.Users.Where(u => u.Username == username).FirstOrDefault();
 
 			if (user is null)
 			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
-				return new ReturnModel(new StatusCodeResult(404))
+				StatusCode(StatusCodes.Status400BadRequest);
+				return new ReturnModel()
 				{
+                    status = 400,
 					message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
 
 			user.Passwd = password;
-			user.Lastchange = DateTime.Now;
-			ctx.Users.Update(user);
-			ctx.SaveChanges();
-			Response.StatusCode = StatusCodes.Status200OK;
+
+			context.SaveChanges();
+			StatusCode(StatusCodes.Status200OK);
+
 			return new ReturnModel()
 			{
 				message = $"Passwort von Benutzer {username} erfolgreich geändert!"
@@ -284,7 +251,7 @@ public class adminController : ControllerBase
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-			Response.StatusCode = StatusCodes.Status400BadRequest;
+			StatusCode(StatusCodes.Status400BadRequest);
 			return new ReturnModel()
 			{
 				status = 400,

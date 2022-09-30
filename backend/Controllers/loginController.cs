@@ -33,7 +33,7 @@ public class loginController : ControllerBase
 			_ => StatusCodes.Status400BadRequest
 		};
 
-		Response.StatusCode = statuscode;
+		StatusCode(statuscode);
 
 		if(res == Login.LoginMessage.InactiveUser) {
 			return Results.BadRequest( new {
@@ -84,7 +84,9 @@ public class loginController : ControllerBase
 			var tokenHandler = new JwtSecurityTokenHandler();
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 			var stringToken = tokenHandler.WriteToken(token);
-			return Results.Ok(stringToken);
+			return Results.Ok(new {
+				value = stringToken
+			});
 		}
 
 		return Results.Unauthorized();

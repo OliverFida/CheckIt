@@ -17,7 +17,7 @@ namespace awl_raumreservierung
     }
 
     public enum UserRole {
-        User,
-        Admin
+        Admin,
+        User
     }
 }

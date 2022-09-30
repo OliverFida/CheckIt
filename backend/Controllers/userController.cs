@@ -1,6 +1,5 @@
 using System.Configuration;
 using System.Security.Claims;
-using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,73 +9,76 @@ namespace awl_raumreservierung.Controllers;
 [Route("[controller]")]
 public class userController : ControllerBase
 {
-    private readonly ILogger<userController> _logger;
-    private checkITContext ctx;
-    public userController(ILogger<userController> logger)
-    {
-        ctx = new();
-        _logger = logger;
-    }
+	private readonly ILogger<userController> _logger;
 
-    [HttpGet("{idOrUsername}")]
-    [Authorize()]
-    public PublicUser? GetByID(string idOrUsername)
-    {
-        User user;
-        if (int.TryParse(idOrUsername, out int x))
-        {
-            user = Helpers.GetUser(x);
-        }
-        else
-        {
-            user = Helpers.GetUser(idOrUsername);
-        }
+	public userController(ILogger<userController> logger)
+	{
+		_logger = logger;
+	}
 
-        if (user is null)
-        {
-            Response.StatusCode = StatusCodes.Status404NotFound;
-            return new PublicUser(null);
-        }
+	[HttpGet("{idOrUsername}")]
+	[Authorize()]
+	public PublicUser GetByID(string idOrUsername)
+	{
+		PublicUser? publicUser;
+		if (int.TryParse(idOrUsername, out int x))
+		{
+			publicUser = UserHelpers.GetUser(x).ToPublicUser();
+		}
+		else
+		{
+			publicUser = UserHelpers.GetUser(idOrUsername).ToPublicUser();
+		}
 
-        return user.ToPublicUser();
-    }
+		if (publicUser is null)
+			StatusCode(StatusCodes.Status400BadRequest);
 
-    [HttpPatch("password")]
-    [Authorize]
-    public ReturnModel PostChangePassword(string password)
-    {
-        try
-        {
-            var user = User.GetUser();
+		return publicUser;
+	}
 
-            if (user is null)
-            {
-                return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
-                {
-                    message = "Benutzer konnte nicht gefunden werden!"
-                };
-            }
+	[HttpPost("password")]
+	[Authorize]
+	public ReturnModel PostChangePassword(string password)
+	{
+		try
+		{
+			var context = new checkITContext();
+			var authUsername = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            user.Passwd = password;
-            
-            ctx.Users.Update(user);
-            ctx.SaveChanges();
+			var user = UserHelpers.GetUser(authUsername);
 
-            return new ReturnModel(StatusCode(StatusCodes.Status200OK))
-            {
-                message = "Passwort erfolgreich geändert!"
-            };
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Fehler aufgetreten: ", ex);
+			if (user is null)
+			{
+				StatusCode(StatusCodes.Status404NotFound);
+				return new ReturnModel
+				{
+					status = 400,
+					statusMessage = "error",
+					message = "Benutzer konnte nicht gefunden werden!"
+				};
+			}
 
-            Response.StatusCode = StatusCodes.Status400BadRequest;
-            return new ReturnModel(StatusCode(StatusCodes.Status200OK))
-            {
-                message = "Es ist ein Fehler aufgetreten!"
-            };
-        }
-    }
+			user.Passwd = password;
+
+			context.SaveChanges();
+			StatusCode(StatusCodes.Status200OK);
+			return new ReturnModel
+			{
+				message = "Passwort erfolgreich geändert!"
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
+
+			StatusCode(StatusCodes.Status400BadRequest);
+			return new ReturnModel()
+			{
+				status = 400,
+				statusMessage = "error",
+				message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
 
 }
