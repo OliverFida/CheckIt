@@ -10,7 +10,9 @@ namespace awl_raumreservierung.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+#pragma warning disable IDE1006 // Naming Styles
 public class loginController : ControllerBase
+#pragma warning restore IDE1006 // Naming Styles
 {
 	public static WebApplicationBuilder? builder;
 	private readonly ILogger<loginController> _logger;
