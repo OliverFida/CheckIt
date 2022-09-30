@@ -37,6 +37,10 @@ function RoomDropDown(){
     useEffect(() => {
         setElements(rooms.map(room => <NavDropdown.Item key={`room_${room.number}`} onClick={() => {onRoomSelect(room.name, room.id)}}>{room.name}</NavDropdown.Item>));
     }, [rooms]);
+    
+    useEffect(() => {
+        if(rooms.length > 0) onRoomSelect(rooms[0].name, rooms[0].id);
+    }, [elements]);
 
     const onRoomSelect = (name, id) => {
         setHpContext({...hpContext, roomName: name, roomId: id});
