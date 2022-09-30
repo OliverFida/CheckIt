@@ -12,8 +12,8 @@ namespace awl_raumreservierung.Controllers;
 [Route("[controller]")]
 public class bookingController : ControllerBase
 {
-	private readonly ILogger<bookingController> _logger;
-	private checkITContext ctx;
+    private readonly ILogger<bookingController> _logger;
+    private readonly checkITContext ctx;
 
 	public bookingController(ILogger<bookingController> logger)
 	{
@@ -50,17 +50,17 @@ public class bookingController : ControllerBase
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new PublicBooking[0];
-		}
-	}
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            return new PublicBooking[0];
+        }
+    }
 
-	[HttpPut("book")]
-	[Authorize]
-	public ReturnModel book(CreateBookingModel model)
-	{
-		try
-		{
+    [HttpPut("book")]
+    [Authorize]
+    public ReturnModel book(CreateBookingModel model)
+    {
+        try
+        {
 			Room? room = Helpers.GetRoom(model.RoomID);
 			if (room == null)
 			{
@@ -71,6 +71,13 @@ public class bookingController : ControllerBase
 				};
 			}
 
+         bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
+
+            if(overlapsWithOtherBookings)
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
+                return new ReturnModel(new StatusCodeResult(400))
+                {
 			// TODO : Check if room is active
 			bool roomActive = room.Active;
 			if (!roomActive)
@@ -82,6 +89,14 @@ public class bookingController : ControllerBase
 				};
 
 			}
+                {
+                    message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
+                };
+            }
+                {
+                    message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
+                };
+            }
 
 			bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
 
@@ -127,13 +142,13 @@ public class bookingController : ControllerBase
 		}
 	}
 
-	[HttpDelete("{bookingId}")]
-	[Authorize]
-	public ReturnModel remove(int bookingId)
-	{
-		try
-		{
-			Booking? booking = Helpers.GetBooking(bookingId);
+    [HttpDelete("{bookingId}")]
+    [Authorize]
+    public ReturnModel remove(int bookingId)
+    {
+        try
+        {
+            Booking? booking = Helpers.GetBooking(bookingId);
 
 			if (booking is null)
 			{
@@ -174,20 +189,12 @@ public class bookingController : ControllerBase
 				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
-	}
-
-
-	[HttpPut("bookAsAdmin")]
-	[Authorize(Roles = "Admin")]
-	public ReturnModel bookAsAdmin(CreateBookingModel model)
-	{
-		var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		var user = Helpers.GetUser(authUsername);
-		if (user is null)
-		{
-			return new ReturnModel(new StatusCodeResult(404))
-			{
-				Message = "User nicht gefunden"
+        var user = Helpers.GetUser(authUsername);
+        if (user is null)
+        {
+         return new ReturnModel(new StatusCodeResult(404))
+         {
+				message = "User nicht gefunden"
 			};
 		}
 		Room? room = Helpers.GetRoom(model.RoomID);
@@ -211,6 +218,10 @@ public class bookingController : ControllerBase
 
 		}
 
+    [HttpPut("bookAsAdmin")]
+    [Authorize(Roles = "Admin")]
+    public ReturnModel bookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
+    {
 		bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
 		if (overlapsWithOtherBookings)
 		{
@@ -220,82 +231,71 @@ public class bookingController : ControllerBase
 				Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
 			};
 		}
-		Booking booking = new()
+		var db = new checkITContext();
+        var booking = new Booking(startTime, endTime, roomId, user.Id, createTime, createdBy);
+        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = Helpers.GetUser(authUsername);
+        if (user is null)
+        {
+         return new ReturnModel(new StatusCodeResult(404))
+         {
+				message = "User nicht gefunden"
+			};
+      }
+        bool overlapsWithOtherBookings = Helpers.BookingOverlaps(m)
+		if (overlapsWithOtherBookings)
 		{
-			StartTime = model.StartTime,
-			EndTime = model.EndTime,
-			Room = model.RoomID,
-			UserId = User.GetUser()?.Id ?? 0L,
-			CreateTime = DateTime.Now,
-			CreatedBy = User.GetUser()?.Id
-		};
-
-		ctx.Bookings.Add(booking);
-		ctx.SaveChanges();
+			Response.StatusCode = StatusCodes.Status400BadRequest;
+			return new ReturnModel(new StatusCodeResult(400))
+			{
+				message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
+			};
+		}
+		var db = new checkITContext();
+        var booking = new Booking(startTime, endTime, roomId, user.Id, createTime, createdBy);
+        db.Bookings.Add(booking);
+        db.SaveChanges();
 		return new ReturnModel()
 		{
-			Message = $"Raum {room.Number} wurde erfolgreich für den {model.StartTime:d} gebucht.",
-			Data = booking.ToPublicBooking()
+			message = "Buchung erfolgreich"
 		};
 	}
 	[HttpPost("edit")]
-	public ReturnModel edit(CreateBookingModel model)
-	{
-		string authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		Booking? booking = Helpers.GetBooking(model.RoomID);
-		var userId = userHelper.getUserId(authUsername);
-		if (userId < 0)
-		{
-			return new ReturnModel(new StatusCodeResult(404))
-			{
-				Message = "User nicht gefunden"
-			};
-		}
-		if (booking == null)
-		{
-			Response.StatusCode = StatusCodes.Status404NotFound;
-			return new ReturnModel(new StatusCodeResult(404))
-			{
-				Message = "Buchung konnte nicht gefunden werden!"
-			};
-		}
-		// user auth
-		if (booking.UserId != User.GetUser()?.Id && !User.IsInRole("Admin"))
-		{
-			Response.StatusCode = StatusCodes.Status401Unauthorized;
-			return new ReturnModel(new StatusCodeResult(401))
-			{
-				Message = "Es können nur eigene Buchungen gelöscht werden!"
-			};
-		}
-		// booking in past check
-		bool inPast = (booking != null) && (booking.EndTime > DateTime.Now);
-		if (inPast)
-		{
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel(new StatusCodeResult(400))
-			{
-				Message = "Die angegebene Buchung befindet sich in der Vergangenheit"
-			};
-		}
-		// no overlap check
-		bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
-		if (overlapsWithOtherBookings)
-		{
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel(new StatusCodeResult(400))
-			{
-				Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
-			};
-		}
-		booking.StartTime = model.StartTime;
-		booking.EndTime = model.EndTime;
-		ctx.SaveChanges();
-		return new ReturnModel()
-		{
-			Message = "Buchung erfolgreich veränder",
-			Data = booking.ToPublicBooking()
-		};
+    public StatusCodeResult edit(DateTime startTime, DateTime newEndTime)
+    {
+        var db = new checkITContext();
+        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var booking = db.Bookings.Where(b => b.StartTime == startTime).FirstOrDefault();
+        var userId = userHelper.getUserId(authUsername);
+        if (userId < 0)
+        {
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+        if (booking == null)
+        {
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+        // user auth
+        var isAdmin = User.FindAll(ClaimTypes.Role).Any(c => c is { Type: ClaimTypes.Role } and { Value: "Admin" });
 
-	}
+        if (userId == booking.UserId || isAdmin)
+        {
+            // booking in future check
+            if (booking != null && booking.EndTime > DateTime.Now)
+            {
+                // no overlap check
+                if (db.Bookings.Where(b => b.StartTime > startTime && b.StartTime < startTime).Any())
+                {
+                    booking.EndTime = newEndTime;
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+            return StatusCode(StatusCodes.Status200OK);
+        }
+        return StatusCode(StatusCodes.Status200OK);
+    }
 }
