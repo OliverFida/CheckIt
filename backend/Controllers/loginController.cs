@@ -60,6 +60,10 @@ public class loginController : ControllerBase
 
 			claims.Add(new Claim(ClaimTypes.Role, "User"));
 
+			if(builder is null){
+				throw new Exception("Builder is null uff 🙀");
+			}
+
 			var issuer = builder.Configuration["Jwt:Issuer"];
 			var audience = builder.Configuration["Jwt:Audience"];
 			var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);

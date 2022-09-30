@@ -27,11 +27,11 @@ public class bookingController : ControllerBase
     {
         try
         {
-            Room room = Helpers.GetRoom(roomId);
+            Room? room = Helpers.GetRoom(roomId);
             if(room == null)
             {
                 Response.StatusCode = StatusCodes.Status404NotFound;
-                return new PublicBooking[0];
+                return Array.Empty<PublicBooking>();
             }
 
             if(date == null)
@@ -61,20 +61,21 @@ public class bookingController : ControllerBase
     {
         try
         {
-            if(Helpers.GetRoom(model.roomId) == null)
+			Room? room = Helpers.GetRoom(model.RoomID);
+			if (room == null)
             {
                 Response.StatusCode = StatusCodes.Status404NotFound;
                 return new ReturnModel(new StatusCodeResult(404))
                 {
-                    message = "Raum konnte nicht gefunden werden!"
+                    Message = "Raum konnte nicht gefunden werden!"
                 };
             }
 
-            bool overlapsWithOtherBookings = Helpers.GetRoom(model.roomId)
-                                                .GetBookings()
+            bool overlapsWithOtherBookings = room
+																.GetBookings()
                                                 .Any(b =>
-                                                    b.StartTime <= model.endTime &&
-                                                    model.startTime <= b.EndTime
+                                                    b.StartTime <= model.EndTime &&
+                                                    model.StartTime <= b.EndTime
                                                 );
 
             if(overlapsWithOtherBookings)
@@ -82,20 +83,20 @@ public class bookingController : ControllerBase
                 Response.StatusCode = StatusCodes.Status400BadRequest;
                 return new ReturnModel(new StatusCodeResult(400))
                 {
-                    message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
+                    Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
                 };
             }
 
             // TODO : Check if room is active
 
-            Booking book = new Booking
+            Booking book = new()
             {
-                StartTime = model.startTime,
-                EndTime = model.endTime,
-                Room = model.roomId,
-                UserId = User.GetUser().Id,
+                StartTime = model.StartTime,
+                EndTime = model.EndTime,
+                Room = model.RoomID,
+                UserId = User.GetUser()?.Id ?? 0L,
                 CreateTime = DateTime.Now,
-                CreatedBy = User.GetUser().Id
+                CreatedBy = User.GetUser()?.Id
             };
             ctx.Bookings.Add(book);
 
@@ -103,10 +104,10 @@ public class bookingController : ControllerBase
 
             Response.StatusCode = StatusCodes.Status201Created;
             return new ReturnModel
-            {
-                status = 201,
-                message = $"Raum {Helpers.GetRoom(model.roomId).Number} wurde erfolgreich für den {model.startTime.ToString("d")} gebucht.",
-                data = book.ToPublicBooking()
+				{
+                Status = 201,
+                Message = $"Raum {room.Number} wurde erfolgreich für den {model.StartTime:d} gebucht.",
+                Data = book.ToPublicBooking()
             };
         }
         catch(Exception ex)
@@ -116,9 +117,9 @@ public class bookingController : ControllerBase
             Response.StatusCode = StatusCodes.Status400BadRequest;
             return new ReturnModel()
             {
-                status = 400,
-                statusMessage = "error",
-                message = "Es ist ein Fehler aufgetreten!"
+                Status = 400,
+                StatusMessage = "error",
+                Message = "Es ist ein Fehler aufgetreten!"
             };
         }
     }
@@ -129,23 +130,23 @@ public class bookingController : ControllerBase
     {
         try
         {
-            Booking booking = Helpers.GetBooking(bookingId);
+            Booking? booking = Helpers.GetBooking(bookingId);
 
             if(booking is null)
             {
                 Response.StatusCode = StatusCodes.Status404NotFound;
                 return new ReturnModel(new StatusCodeResult(404))
                 {
-                    message = "Buchung konnte nicht gefunden werden!"
+                    Message = "Buchung konnte nicht gefunden werden!"
                 };
             }
 
-            if(booking.UserId != User.GetUser().Id && !User.IsInRole("Admin"))
+            if(booking.UserId != User.GetUser()?.Id && !User.IsInRole("Admin"))
             {
                 Response.StatusCode = StatusCodes.Status401Unauthorized;
                 return new ReturnModel(new StatusCodeResult(401))
                 {
-                    message = "Es können nur eigene Buchungen gelöscht werden!"
+                    Message = "Es können nur eigene Buchungen gelöscht werden!"
                 };
             }
 
@@ -155,7 +156,7 @@ public class bookingController : ControllerBase
             Response.StatusCode = StatusCodes.Status200OK;
             return new ReturnModel
             {
-                message = $"Buchung erfolgreich gelöscht!"
+                Message = $"Buchung erfolgreich gelöscht!"
             };
         }
         catch (Exception ex)
@@ -165,9 +166,9 @@ public class bookingController : ControllerBase
             Response.StatusCode = StatusCodes.Status400BadRequest;
             return new ReturnModel()
             {
-                status = 400,
-                statusMessage = "error",
-                message = "Es ist ein Fehler aufgetreten!"
+                Status = 400,
+                StatusMessage = "error",
+                Message = "Es ist ein Fehler aufgetreten!"
             };
         }
     }
