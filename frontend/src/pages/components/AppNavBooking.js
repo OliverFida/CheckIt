@@ -5,11 +5,13 @@ import {Nav, Button, NavDropdown} from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
 // API imports
 import RoomsAPI from '../../api/rooms';
+import LoginAPI from '../../api/login';
 
 export default function AppNavBooking(){
     const navigate = useNavigate();
     
     const onLogout = () => {
+        LoginAPI.logout();
         navigate("/login");
     };
 

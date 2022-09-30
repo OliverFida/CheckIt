@@ -2,8 +2,8 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Stack, Button, Form, Container, Row, Col} from 'react-bootstrap';
-import AppNavBar from './components/AppNavBar';
 import LoginContextProvider, { LoginContext } from '../contexts/LoginContext';
+import AppNavBar from './components/AppNavBar';
 // API imports
 import LoginAPI from '../api/login';
 
@@ -12,11 +12,11 @@ export default function LoginPage(){
         <LoginContextProvider>
             <LoginPageContent />
         </LoginContextProvider>
-    )
+    );
 };
 
 function LoginPageContent(){
-    const {loginContext} = useContext(LoginContext);
+    const {loginContext, setLoginContext} = useContext(LoginContext);
     const [values, setValues] = useState({username: "", password: ""});
     const navigate = useNavigate();
 
@@ -25,8 +25,10 @@ function LoginPageContent(){
     };
 
     const onLogin = () => {
-        var response = LoginAPI.login(values.username, values.password);
+        var response = LoginAPI.login(values.username.toLowerCase(), values.password);
         if(response.statusCode === 200){
+            // setLoginContext({...loginContext, username: values.username.toLowerCase(), loginToken: response.value});
+            localStorage.setItem("loginToken", response.value);
             navigate("/home");
         }else{
             setValues({...values, password: ""});
@@ -37,7 +39,7 @@ function LoginPageContent(){
         <Stack direction='vertical'>
             <AppNavBar />
             <Container>
-                <Row className="justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <Row className="justify-content-center align-items-center" style={{ height: 'calc(100vh - 60px)' }}>
                     <Col xs={6} lg={3}>
                         <Form>
                             <Form.Group className="mb-3" controlId="formEmail">

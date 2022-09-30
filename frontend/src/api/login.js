@@ -16,6 +16,11 @@ function login(username, password){
     return debugResponse400;
 }
 
+function logout(){
+    localStorage.clear();
+}
+
 module.exports = {
-    login
+    login,
+    logout
 };
