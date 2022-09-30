@@ -13,15 +13,14 @@ namespace awl_raumreservierung
         public DateTime? CreateTime { get; set; }
         public long? CreatedBy { get; set; }
 
-        public Booking() { }
-        public Booking(DateTime? startTime, DateTime? endTime, long room, long userId, DateTime? createTime, long? createdBy)
-        {
-            StartTime = startTime;
-            EndTime = endTime;
-            Room = room;
-            UserId = userId;
-            CreateTime = createTime;
-            CreatedBy = createdBy;
-        }
-    }
+      public Booking(DateTime? startTime, DateTime? endTime, long room, long userId, DateTime? createTime, long? createdBy)
+      {
+         StartTime = startTime;
+         EndTime = endTime;
+         Room = room;
+         UserId = userId;
+         CreateTime = createTime;
+         CreatedBy = createdBy;
+      }
+   }
 }
