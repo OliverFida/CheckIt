@@ -2,6 +2,7 @@
 import React from 'react';
 import {Stack} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
+import AppNavBooking from './components/AppNavBooking';
 import Stundenplan from './components/Stundenplan';
 import HomePageContextProvider from '../contexts/HomePageContext';
 
@@ -9,7 +10,9 @@ export default function HomePage(){
     return(
         <HomePageContextProvider>
             <Stack direction='vertical'>
-                <AppNavBar />
+                <AppNavBar>
+                    <AppNavBooking />
+                </AppNavBar>
                 <Stundenplan />
             </Stack>
         </HomePageContextProvider>
