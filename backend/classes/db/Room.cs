@@ -9,7 +9,7 @@ namespace awl_raumreservierung
         public string? Number { get; set; }
         public string? Name { get; set; }
         public bool Active {get; set; }
-
+      public Room() { }
       public Room(string? number, string? name, bool active)
       {
          Number = number;
