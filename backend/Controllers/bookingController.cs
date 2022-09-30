@@ -13,7 +13,7 @@ namespace awl_raumreservierung.Controllers;
 public class bookingController : ControllerBase
 {
     private readonly ILogger<bookingController> _logger;
-    private checkITContext ctx;
+    private readonly checkITContext ctx;
 
     public bookingController(ILogger<bookingController> logger)
     {
@@ -51,13 +51,13 @@ public class bookingController : ControllerBase
             _logger.LogError("Fehler aufgetreten: ", ex);
 
             Response.StatusCode = StatusCodes.Status400BadRequest;
-            return new PublicBooking[0];
+            return Array.Empty<PublicBooking>();
         }
     }
 
     [HttpPut("book")]
     [Authorize]
-    public ReturnModel book(CreateBookingModel model)
+    public ReturnModel Book(CreateBookingModel model)
     {
         try
         {
@@ -126,7 +126,7 @@ public class bookingController : ControllerBase
 
     [HttpDelete("{bookingId}")]
     [Authorize]
-    public ReturnModel remove(int bookingId)
+    public ReturnModel Remove(int bookingId)
     {
         try
         {
@@ -176,10 +176,10 @@ public class bookingController : ControllerBase
 
     [HttpPut("bookAsAdmin")]
     [Authorize(Roles = "Admin")]
-    public StatusCodeResult bookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
+    public StatusCodeResult BookAsAdmin(int roomId, DateTime startTime, DateTime endTime, DateTime createTime, int createdBy)
     {
         var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var userId = userHelper.getUserId(authUsername);
+        var userId = UserHelper.GetUserId(authUsername);
         if (userId < 0)
         {
             return StatusCode(StatusCodes.Status404NotFound);
@@ -191,12 +191,12 @@ public class bookingController : ControllerBase
         return StatusCode(StatusCodes.Status201Created);
     }
     [HttpPost("edit")]
-    public StatusCodeResult edit(DateTime startTime, DateTime newEndTime)
+    public StatusCodeResult Edit(DateTime startTime, DateTime newEndTime)
     {
         var db = new checkITContext();
         var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var booking = db.Bookings.Where(b => b.StartTime == startTime).FirstOrDefault();
-        var userId = userHelper.getUserId(authUsername);
+        var userId = UserHelper.GetUserId(authUsername);
         if (userId < 0)
         {
             return StatusCode(StatusCodes.Status404NotFound);

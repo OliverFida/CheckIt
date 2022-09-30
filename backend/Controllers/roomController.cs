@@ -17,14 +17,14 @@ public class roomController : ControllerBase
 
 	[HttpGet("get")]
 	[Authorize]
-	public Room[] getRooms()
+	public Room[] GetRooms()
 	{
 		var db = new checkITContext();
 		return db.Rooms.ToArray();
 	}
 	[HttpPut("add")]
 	[Authorize(Roles = "Adminstrator")]
-	public ReturnModel add(string roomNr, string roomName)
+	public ReturnModel Add(string roomNr, string roomName)
 	{
 		var db = new checkITContext();
 		var room = new Room(roomNr,roomName);
@@ -56,7 +56,7 @@ public class roomController : ControllerBase
 	}
 	[HttpPost("edit")]
 	[Authorize(Roles = "Adminstrator")]
-	public ReturnModel edit(int roomId, string newNr, string newName)
+	public ReturnModel Edit(int roomId, string newNr, string newName)
 	{
 		var db = new checkITContext();
 		var room = db.Rooms.Where(b => b.Id == roomId).FirstOrDefault();

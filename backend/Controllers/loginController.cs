@@ -78,7 +78,7 @@ public class loginController : ControllerBase
 					 Guid.NewGuid().ToString()),
 
 				 }.Union(claims)),
-				Expires = DateTime.UtcNow.AddMinutes(5),
+				Expires = DateTime.UtcNow.AddMinutes(15),
 				Issuer = issuer,
 				Audience = audience,
 				SigningCredentials = new SigningCredentials
