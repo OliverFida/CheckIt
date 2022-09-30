@@ -7,7 +7,7 @@
         public int Id { get; set; }
         public string? Number { get; set; }
         public string? Name { get; set; }
-        public PublicRoom(Room room)
+        public PublicRoom(Room? room)
         {
             if(room != null)
             {

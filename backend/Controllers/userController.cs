@@ -13,7 +13,7 @@ public class userController : ControllerBase
 #pragma warning restore IDE1006 // Naming Styles
 {
 	private readonly ILogger<userController> _logger;
-	private checkITContext ctx;
+	private readonly checkITContext ctx;
 	public userController(ILogger<userController> logger)
 	{
 		ctx = new();

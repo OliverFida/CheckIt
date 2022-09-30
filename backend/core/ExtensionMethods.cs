@@ -6,7 +6,7 @@ namespace awl_raumreservierung
     public static class ExtensionMethods
     {
 
-        public static bool IsNullOrWhiteSpace(this string str)
+        public static bool IsNullOrWhiteSpace(this string? str)
         {
             return String.IsNullOrWhiteSpace(str);
         }
@@ -33,12 +33,12 @@ namespace awl_raumreservierung
             }
         }
 
-        public static PublicUser ToPublicUser(this User usr)
+        public static PublicUser ToPublicUser(this User? usr)
         {
             return new PublicUser(usr);
         }
 
-        public static PublicRoom ToPublicRoom(this Room room)
+        public static PublicRoom ToPublicRoom(this Room? room)
         {
             return new PublicRoom(room);
         }
