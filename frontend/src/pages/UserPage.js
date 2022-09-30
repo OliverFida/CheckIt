@@ -22,7 +22,9 @@ export default function UserPage(){
             </Stack>
 
             <div>
-                <h3>Vorname Nachname</h3>
+                <div>
+                    <span>Vorname Nachname</span>
+                </div>
                 <Button onClick={handleShow}>
                     Passwort ändern
                 </Button>
@@ -40,7 +42,7 @@ export default function UserPage(){
                         <Form.Control type="text"/>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="changePasswordConfirm">
-                        <Form.Label>Neues Passwort bestätigen</Form.Label>
+                        <Form.Label>Neues Passwort wiederholen</Form.Label>
                         <Form.Control type="text"/>
                     </Form.Group>                                      
                 </Form> 

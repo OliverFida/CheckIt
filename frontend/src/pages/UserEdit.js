@@ -24,7 +24,7 @@ export default function UserEdit(){
 
     return(
         <>
-             <Stack direction='vertical'>
+            <Stack direction='vertical'>
                 <AppNavBar />
             </Stack>
        
@@ -106,7 +106,7 @@ export default function UserEdit(){
                         <Form.Control type="password"/>
                     </Form.Group> 
                     <Form.Group className="mb-3" controlId="newPasswordConfirm">
-                        <Form.Label>Passwort</Form.Label>
+                        <Form.Label>Passwort wiederholen</Form.Label>
                         <Form.Control type="password"/>
                     </Form.Group>                                      
                 </Form> 

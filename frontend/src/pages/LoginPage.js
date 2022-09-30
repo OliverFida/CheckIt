@@ -1,7 +1,8 @@
 // Component imports
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Button, Form, Container, Row, Col} from 'react-bootstrap';
+import {Stack, Button, Form, Container, Row, Col} from 'react-bootstrap';
+import AppNavBar from './components/AppNavBar';
 
 export default function LoginPage(){
     const navigate = useNavigate();
@@ -11,8 +12,12 @@ export default function LoginPage(){
     };
 
     return(
+        <>
+        <Stack direction='vertical'>
+                <AppNavBar />
+        </Stack>
         <Container>
-            <Row className="justify-content-center align-items-center" style={{ height: '100vh' }}>
+            <Row className="justify-content-center align-items-center" style={{ height: '80vh' }}>
                 <Col xs={6} lg={3}>
                     <Form>
                         <Form.Group className="mb-3" controlId="formEmail">
@@ -31,6 +36,7 @@ export default function LoginPage(){
                 </Col>
             </Row>
         </Container>
+        </>
     );
 };
 
