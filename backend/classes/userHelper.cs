@@ -17,10 +17,5 @@ namespace awl_raumreservierung.classes
 			}
 			return id;
 		}
-		public static bool isAdmin()
-		{
-			var isAdmin = ControllerBase.User.FindAll(ClaimTypes.Role).Any(c => c is { Type: ClaimTypes.Role } and { Value: "Admin" });
-			return isAdmin;
-		}
 	}
 }
