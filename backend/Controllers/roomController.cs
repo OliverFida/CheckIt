@@ -11,29 +11,34 @@ public class roomController : ControllerBase
 #pragma warning restore IDE1006 // Naming Styles
 {
     private readonly ILogger<roomController> _logger;
+	private readonly checkITContext ctx;
 
-    public roomController(ILogger<roomController> logger)
+	public roomController(ILogger<roomController> logger)
     {
         _logger = logger;
+		ctx = new checkITContext();
     }
 
 	[HttpGet("get")]
 	[Authorize]
-	public Room[] getRooms()
+	public Room[] GetRooms()
 	{
-		var db = new checkITContext();
-		return db.Rooms.ToArray();
+		return ctx.Rooms.ToArray();
 	}
 	[HttpPut("add")]
-	[Authorize(Roles = "Adminstrator")]
-	public ReturnModel add(string roomNr, string roomName,bool active)
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Add(CreateRoomModel model)
 	{
-		var db = new checkITContext();
-		var room = new Room(roomNr,roomName,active);
+		Room room = new()
+		{
+			Number = model.Number,
+			Name =model.Name,
+			Active = model.Active
+		};
 
-      db.Rooms.Add(room);
-		db.SaveChanges();
-		return new ReturnModel(StatusCode(StatusCodes.Status201Created))
+      ctx.Rooms.Add(room);
+		ctx.SaveChanges();
+		return new ReturnModel(new StatusCodeResult(201))
 		{
 			Message = "Raum erfolgreich erstellt."
 		};
@@ -41,8 +46,8 @@ public class roomController : ControllerBase
 
 	//(Roles = "Adminstrator")
 	[HttpDelete("remove")]
-	[Authorize(Roles = "Adminstrator")]
-	public ReturnModel Put(int roomId)
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Remove(int roomId)
 	{
 		var db = new checkITContext();
 		var room = db.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
@@ -57,20 +62,62 @@ public class roomController : ControllerBase
 		};
 	}
 	[HttpPost("edit")]
-	[Authorize(Roles = "Adminstrator")]
-	public ReturnModel edit(int roomId, string newNr, string newName)
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Edit(long roomId, CreateRoomModel model)
 	{
-		var db = new checkITContext();
-		var room = db.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
-		if (room != null)
+		Room room = Helpers.GetRoom(roomId);
+
+		if (room is null)
 		{
-			room.Number = newNr;
-			room.Name = newName;
-			db.SaveChanges();
-		}
+			return new ReturnModel(new StatusCodeResult(404))
+			{
+				Message = "Raum nicht gefunden"
+			};
+		room.Number = model.Name;
+		room.Name = model.Name;
+		ctx.SaveChanges();
 		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 		{
 			Message = "Raum erfolgreich editiert."
 		};
 	}
+	[HttpPost("room/{roomId}")]
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Activate(long roomId)
+	{
+		Room room = Helpers.GetRoom(roomId);
+		if (room is null)
+		{
+			return new ReturnModel(new StatusCodeResult(404))
+			{
+				Message = "Raum wurde nicht gefunden."
+			};
+		}
+		room.Active = true;
+		ctx.SaveChanges();
+		return new ReturnModel(new StatusCodeResult(201))
+		{
+			Message = "Raum erfolgreich aktiviert!"
+		};
+	}
+	[HttpPost("room/{roomId}")]
+	[Authorize(Roles = "Admin")]
+	public ReturnModel Deactivate(long roomId)
+	{
+		Room room = Helpers.GetRoom(roomId);
+		if (room is null)
+		{
+			return new ReturnModel(new StatusCodeResult(404))
+			{
+				Message = "Raum wurde nicht gefunden."
+			};
+		}
+		room.Active = false;
+		ctx.SaveChanges();
+		return new ReturnModel(new StatusCodeResult(200))
+		{
+			Message = "Raum erfolgreich deaktiviert!"
+		};
+	}
+
 }
