@@ -1,4 +1,3 @@
-using awl_raumreservierung.classes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -53,7 +52,7 @@ public class bookingController : ControllerBase
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
 			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new PublicBooking[0];
+			return Array.Empty<PublicBooking>();
 		}
 	}
 
@@ -230,7 +229,8 @@ public class bookingController : ControllerBase
 			};
 		}
 		// booking in future check
-		if (booking.EndTime < DateTime.Now)
+		bool inPast = booking.EndTime > DateTime.Now;
+		if (inPast)
 		{
 			return new ReturnModel(new StatusCodeResult(400))
 			{

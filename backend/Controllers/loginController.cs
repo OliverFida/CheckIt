@@ -99,6 +99,6 @@ public class loginController : ControllerBase
     [HttpPost("logout")]
     [Authorize]
     public void PostLogout(){
-        var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
+      //   var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

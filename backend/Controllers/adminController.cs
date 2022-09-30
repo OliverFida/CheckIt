@@ -8,11 +8,10 @@ namespace awl_raumreservierung.Controllers;
 [Route("[controller]")]
 #pragma warning disable IDE1006 // Naming Styles
 public class adminController : ControllerBase
-#pragma warning restore IDE1006 // Naming Styles
 {
 	private readonly ILogger<adminController> _logger;
 
-    private checkITContext ctx;
+    private readonly checkITContext ctx;
 
 	public adminController(ILogger<adminController> logger)
 	{
@@ -37,7 +36,7 @@ public class adminController : ControllerBase
 				};
 			}
 
-			var existingUser = Helpers.GetUser(model.Username);
+			var existingUser = Helpers.GetUser(model.Username ?? "");
 
 			if (existingUser != null)
 			{
@@ -52,10 +51,10 @@ public class adminController : ControllerBase
 
 
 			ctx.Add(new User {
-				Username = model.Username,
+				Username = model.Username ?? "",
 				Firstname = model.FirstName,
 				Lastname = model.LastName,
-				Passwd = model.Password,
+				Passwd = model.Password ?? "",
 				Lastchange = DateTime.Now,
 				Role = model.Role,
 				Active = true
@@ -66,7 +65,7 @@ public class adminController : ControllerBase
             return new ReturnModel()
 			{
 				Message = $"Benutzer {model.Username} erfolgreich angelegt!",
-				Data = Helpers.GetUser(model.Username).ToPublicUser()
+				Data = Helpers.GetUser(model.Username ?? "").ToPublicUser()
 			};
 		}
 		catch (Exception ex)
@@ -232,7 +231,7 @@ public class adminController : ControllerBase
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 			Response.StatusCode = StatusCodes.Status500InternalServerError;
-			return new PublicUser[0];
+			return Array.Empty<PublicUser>();
 		}
 	}
 
