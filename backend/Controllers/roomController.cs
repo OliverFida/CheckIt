@@ -33,7 +33,7 @@ public class roomController : ControllerBase
 		db.SaveChanges();
 		return new ReturnModel(StatusCode(StatusCodes.Status201Created))
 		{
-			message = "Raum erfolgreich erstellt."
+			Message = "Raum erfolgreich erstellt."
 		};
 	}
 
@@ -51,7 +51,7 @@ public class roomController : ControllerBase
 		}
 		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 		{
-			message = "Raum erfolgreich entfernt."
+			Message = "Raum erfolgreich entfernt."
 		};
 	}
 	[HttpPost("edit")]
@@ -68,7 +68,7 @@ public class roomController : ControllerBase
 		}
 		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 		{
-			message = "Raum erfolgreich editiert."
+			Message = "Raum erfolgreich editiert."
 		};
 	}
 }

@@ -29,9 +29,9 @@ public class adminController : ControllerBase
 				Response.StatusCode = StatusCodes.Status404NotFound;
                 return new ReturnModel()
 				{
-					status = 400,
-					statusMessage = "error",
-					message = "Das Feld Benutzername darf nicht leer sein!"
+					Status = 400,
+					StatusMessage = "error",
+					Message = "Das Feld Benutzername darf nicht leer sein!"
 				};
 			}
 
@@ -42,9 +42,9 @@ public class adminController : ControllerBase
                 Response.StatusCode = StatusCodes.Status400BadRequest;
                 return new ReturnModel()
 				{
-					status = 400,
-					statusMessage = "error",
-					message = "Ein Benutzer mit diesem Benutzernamen existiert bereits!"
+					Status = 400,
+					StatusMessage = "error",
+					Message = "Ein Benutzer mit diesem Benutzernamen existiert bereits!"
 				};
 			}
 
@@ -63,8 +63,8 @@ public class adminController : ControllerBase
 
             return new ReturnModel()
 			{
-				message = $"Benutzer {model.username} erfolgreich angelegt!",
-				data = Helpers.GetUser(model.username).ToPublicUser()
+				Message = $"Benutzer {model.username} erfolgreich angelegt!",
+				Data = Helpers.GetUser(model.username).ToPublicUser()
 			};
 		}
 		catch (Exception ex)
@@ -74,9 +74,9 @@ public class adminController : ControllerBase
             Response.StatusCode = StatusCodes.Status400BadRequest;
             return new ReturnModel()
 			{
-				status = 400,
-				statusMessage = "error",
-				message = "Es ist ein Fehler aufgetreten!"
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
 	}
@@ -94,9 +94,9 @@ public class adminController : ControllerBase
 				Response.StatusCode = 404;
 				return new ReturnModel
 				{
-					status = 404,
-					statusMessage = "error",
-					message = "Benutzer konnte nicht gefunden werden!"
+					Status = 404,
+					StatusMessage = "error",
+					Message = "Benutzer konnte nicht gefunden werden!"
 				};
 			}
 
@@ -111,8 +111,8 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel()
 			{
-				message = $"Benutzer {username} erfolgreich bearbeitet!",
-				data = user.ToPublicUser()
+				Message = $"Benutzer {username} erfolgreich bearbeitet!",
+				Data = user.ToPublicUser()
 			};
 		}
 		catch (Exception ex)
@@ -122,9 +122,9 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status400BadRequest;
 			return new ReturnModel()
 			{
-				status = 400,
-				statusMessage = "error",
-				message = "Es ist ein Fehler aufgetreten!"
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
 	}
@@ -142,7 +142,7 @@ public class adminController : ControllerBase
 				Response.StatusCode = StatusCodes.Status404NotFound;
 				return new ReturnModel(new StatusCodeResult(404))
 				{
-					message = $"Benutzer {username} wurde nicht gefunden!"
+					Message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
             ctx.Users.Remove(user);
@@ -151,7 +151,7 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel()
 			{
-				message = $"Benutzer {username} erfolgreich gelöscht!"
+				Message = $"Benutzer {username} erfolgreich gelöscht!"
 			};
 
 		}
@@ -162,9 +162,9 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status400BadRequest;
 			return new ReturnModel()
 			{
-				status = 400,
-				statusMessage = "error",
-				message = "Es ist ein Fehler aufgetreten!"
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
 
@@ -183,9 +183,9 @@ public class adminController : ControllerBase
 				Response.StatusCode = StatusCodes.Status404NotFound;
 				return new ReturnModel()
 				{
-					status = 404,
-					statusMessage = "error",
-					message = $"Benutzer {username} wurde nicht gefunden!"
+					Status = 404,
+					StatusMessage = "error",
+					Message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
 
@@ -198,9 +198,9 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel()
 			{
-				status = 200,
-				message = $"Benutzer {username} wurde {(newStatus ? "re" : "de")}aktiviert!",
-				data = user.ToPublicUser()
+				Status = 200,
+				Message = $"Benutzer {username} wurde {(newStatus ? "re" : "de")}aktiviert!",
+				Data = user.ToPublicUser()
 			};
 		}
 		catch (Exception ex)
@@ -210,9 +210,9 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status400BadRequest;
 			return new ReturnModel()
 			{
-				status = 400,
-				statusMessage = "error",
-				message = "Es ist ein Fehler aufgetreten!"
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
 	}
@@ -266,7 +266,7 @@ public class adminController : ControllerBase
 				Response.StatusCode = StatusCodes.Status404NotFound;
 				return new ReturnModel(new StatusCodeResult(404))
 				{
-					message = $"Benutzer {username} wurde nicht gefunden!"
+					Message = $"Benutzer {username} wurde nicht gefunden!"
 				};
 			}
 
@@ -277,7 +277,7 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel()
 			{
-				message = $"Passwort von Benutzer {username} erfolgreich geändert!"
+				Message = $"Passwort von Benutzer {username} erfolgreich geändert!"
 			};
 		}
 		catch (Exception ex)
@@ -287,9 +287,9 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status400BadRequest;
 			return new ReturnModel()
 			{
-				status = 400,
-				statusMessage = "error",
-				message = "Es ist ein Fehler aufgetreten!"
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
 	}

@@ -58,7 +58,7 @@ namespace awl_raumreservierung
             return dt.AddDays(diff);
         }
 
-        public static User GetUser(this ClaimsPrincipal princ)
+        public static User? GetUser(this ClaimsPrincipal princ)
         {
             string username = princ.FindFirstValue(ClaimTypes.NameIdentifier); // Note: Nicht Single line weil er sonst bs macht
             return Helpers.GetUser(username);
