@@ -73,7 +73,17 @@ namespace awl_raumreservierung {
 													);
             return overlapsWithOtherBookings;
       }
-    }
+		public static Boolean BookingOverlaps(Booking booking)
+		{
+			bool overlapsWithOtherBookings = Helpers.GetRoom(booking.Id)
+												.GetBookings()
+												.Any(b =>
+													 b.StartTime <= booking.EndTime &&
+													 booking.StartTime <= b.EndTime
+												);
+			return overlapsWithOtherBookings;
+		}
+	}
 
 
 }
