@@ -11,9 +11,10 @@ namespace awl_raumreservierung.Controllers;
 public class userController : ControllerBase
 {
 	private readonly ILogger<userController> _logger;
-
+	private checkITContext ctx;
 	public userController(ILogger<userController> logger)
 	{
+		ctx = new();
 		_logger = logger;
 	}
 
@@ -21,60 +22,59 @@ public class userController : ControllerBase
 	[Authorize()]
 	public PublicUser? GetByID(string idOrUsername)
 	{
-		User user;
+		User? user;
 		if (int.TryParse(idOrUsername, out int x))
 		{
-			user = UserHelpers.GetUser(x);
+			user = Helpers.GetUser(x);
 		}
 		else
 		{
-			user = UserHelpers.GetUser(idOrUsername);
+			user = Helpers.GetUser(idOrUsername);
 		}
 
-		if (user is null) {
-			StatusCode(StatusCodes.Status404NotFound,"Yadada");
-            throw new System.Exception("dsaf");
-        }
+		if (user is null)
+		{
+			Response.StatusCode = StatusCodes.Status404NotFound;
+			return new PublicUser(null);
+		}
 
 		return user.ToPublicUser();
 	}
 
-	[HttpPost("password")]
+	[HttpPatch("password")]
 	[Authorize]
 	public ReturnModel PostChangePassword(string password)
 	{
 		try
 		{
-			var context = new checkITContext();
-			var authUsername = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-			var user = UserHelpers.GetUser(authUsername);
+			var user = User.GetUser();
 
 			if (user is null)
 			{
 				return new ReturnModel(StatusCode(StatusCodes.Status404NotFound))
 				{
-					message = "Benutzer konnte nicht gefunden werden!"
+					Message = "Benutzer konnte nicht gefunden werden!"
 				};
 			}
 
 			user.Passwd = password;
 
-			context.SaveChanges();
-			
+			ctx.Users.Update(user);
+			ctx.SaveChanges();
+
 			return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 			{
-				message = "Passwort erfolgreich geändert!"
+				Message = "Passwort erfolgreich geändert!"
 			};
 		}
 		catch (Exception ex)
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-			StatusCode(StatusCodes.Status400BadRequest);
+			Response.StatusCode = StatusCodes.Status400BadRequest;
 			return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 			{
-				message = "Es ist ein Fehler aufgetreten!"
+				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
 	}

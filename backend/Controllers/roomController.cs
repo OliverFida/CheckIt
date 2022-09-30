@@ -24,20 +24,23 @@ public class roomController : ControllerBase
 	}
 	[HttpPut("add")]
 	[Authorize(Roles = "Adminstrator")]
-	public StatusCodeResult add(string roomNr, string roomName)
+	public ReturnModel add(string roomNr, string roomName)
 	{
 		var db = new checkITContext();
 		var room = new Room(roomNr,roomName);
 
       db.Rooms.Add(room);
 		db.SaveChanges();
-		return StatusCode(StatusCodes.Status201Created);
+		return new ReturnModel(StatusCode(StatusCodes.Status201Created))
+		{
+			Message = "Raum erfolgreich erstellt."
+		};
 	}
 
 	//(Roles = "Adminstrator")
 	[HttpDelete("remove")]
 	[Authorize(Roles = "Adminstrator")]
-	public StatusCodeResult Put(int roomId)
+	public ReturnModel Put(int roomId)
 	{
 		var db = new checkITContext();
 		var room = db.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
@@ -46,11 +49,14 @@ public class roomController : ControllerBase
 			db.Rooms.Remove(room);
 			db.SaveChanges();
 		}
-		return StatusCode(StatusCodes.Status200OK);
+		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
+		{
+			Message = "Raum erfolgreich entfernt."
+		};
 	}
 	[HttpPost("edit")]
 	[Authorize(Roles = "Adminstrator")]
-	public StatusCodeResult edit(int roomId, string newNr, string newName)
+	public ReturnModel edit(int roomId, string newNr, string newName)
 	{
 		var db = new checkITContext();
 		var room = db.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
@@ -60,6 +66,9 @@ public class roomController : ControllerBase
 			room.Name = newName;
 			db.SaveChanges();
 		}
-		return StatusCode(StatusCodes.Status200OK);
+		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
+		{
+			Message = "Raum erfolgreich editiert."
+		};
 	}
 }
