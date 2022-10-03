@@ -9,13 +9,11 @@ namespace awl_raumreservierung
         {
             try
             {
-                using (checkITContext ctx = new checkITContext())
-                {
-                    return ctx.Users
-                        .Where(u => u.Username.ToLower().Trim() == username.ToLower().Trim())
-                        .FirstOrDefault();
-                }
-            }
+				using checkITContext ctx = new();
+				return ctx.Users
+					 .Where(u => u.Username.ToLower().Trim() == username.ToLower().Trim())
+					 .FirstOrDefault();
+			}
             catch
             {
                 return null;

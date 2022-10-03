@@ -79,11 +79,9 @@ namespace awl_raumreservierung
         {
             try
             {
-                using (checkITContext ctx = new checkITContext())
-                {
-                    return ctx.Bookings.Where(b => b.Room == room.Id).ToArray();
-                }
-            }
+				using checkITContext ctx = new();
+				return ctx.Bookings.Where(b => b.Room == room.Id).ToArray();
+			}
             catch
             {
                 return new List<Booking>().ToArray();
