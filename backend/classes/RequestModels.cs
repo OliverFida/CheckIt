@@ -64,4 +64,13 @@ namespace awl_raumreservierung
         public DateTime EndTime { get; set; }
     }
 
+	public class CreateRoomModel
+	{
+		public long Id { get; set; }
+		public string? Number { get; set; }
+		public string? Name { get; set; }
+		public bool Active { get; set; }
+	}
+
+
 }
