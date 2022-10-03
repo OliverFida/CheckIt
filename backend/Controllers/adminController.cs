@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace awl_raumreservierung.Controllers;
 
 /// <summary>
-/// 
+///
 /// </summary>
 [ApiController]
 [Route("[controller]")]
@@ -16,10 +16,11 @@ public class adminController : ControllerBase
     private readonly ILogger<adminController> _logger;
 
     private readonly checkITContext ctx;
-/// <summary>
-/// 
-/// </summary>
-/// <param name="logger"></param>
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="logger"></param>
     public adminController(ILogger<adminController> logger)
     {
         _logger = logger;
@@ -96,12 +97,12 @@ public class adminController : ControllerBase
         }
     }
 
-/// <summary>
-/// Aktualisiert die Daten eines Users
-/// </summary>
-/// <param name="username">Zu updatender Username</param>
-/// <param name="model">Model mit Daten</param>
-/// <returns></returns>
+    /// <summary>
+    /// Aktualisiert die Daten eines Users
+    /// </summary>
+    /// <param name="username">Zu updatender Username</param>
+    /// <param name="model">Model mit Daten</param>
+    /// <returns></returns>
     [HttpPatch("user/{username}")]
     [Authorize(Roles = "Admin")]
     public ReturnModel UpdateUser(string username, UpdateUserModel model)
@@ -150,11 +151,11 @@ public class adminController : ControllerBase
         }
     }
 
-/// <summary>
-/// Löscht einen User
-/// </summary>
-/// <param name="username">Name des neuen Users</param>
-/// <returns></returns>
+    /// <summary>
+    /// Löscht einen User
+    /// </summary>
+    /// <param name="username">Name des neuen Users</param>
+    /// <returns></returns>
     [HttpDelete("user/{username}")]
     [Authorize(Roles = "Admin")]
     public ReturnModel Delete(string username)
@@ -191,11 +192,11 @@ public class adminController : ControllerBase
         }
     }
 
-/// <summary>
-/// Aktiviert einen zuvor deaktivierten Benutzer
-/// </summary>
-/// <param name="username">Username des Users</param>
-/// <returns></returns>
+    /// <summary>
+    /// Aktiviert einen zuvor deaktivierten Benutzer
+    /// </summary>
+    /// <param name="username">Username des Users</param>
+    /// <returns></returns>
     [HttpPost("user/{username}/activate")]
     [Authorize(Roles = "Admin")]
     public ReturnModel Post(string username)
@@ -243,10 +244,10 @@ public class adminController : ControllerBase
         }
     }
 
-/// <summary>
-/// Gibt die gesamte Userliste zurück
-/// </summary>
-/// <returns>Liste aller User mit Daten</returns>
+    /// <summary>
+    /// Gibt die gesamte Userliste zurück
+    /// </summary>
+    /// <returns>Liste aller User mit Daten</returns>
     [HttpGet("users")]
     [Authorize(Roles = "Admin")]
     public PublicUser[] Get()
@@ -264,10 +265,10 @@ public class adminController : ControllerBase
         }
     }
 
-/// <summary>
-/// Gibt die Rollenauflistung zurück
-/// </summary>
-/// <returns>Dict aus Rollen-ID und Beschreibung</returns>
+    /// <summary>
+    /// Gibt die Rollenauflistung zurück
+    /// </summary>
+    /// <returns>Dict aus Rollen-ID und Beschreibung</returns>
     [HttpGet("roles")]
     [Authorize(Roles = "Admin")]
     public Dictionary<int, string> GetRoles()
@@ -286,12 +287,12 @@ public class adminController : ControllerBase
         }
     }
 
-/// <summary>
-/// Ändert das Passwort eines Users
-/// </summary>
-/// <param name="username">Username</param>
-/// <param name="password">Hash des Passworts</param>
-/// <returns></returns>
+    /// <summary>
+    /// Ändert das Passwort eines Users
+    /// </summary>
+    /// <param name="username">Username</param>
+    /// <param name="password">Hash des Passworts</param>
+    /// <returns></returns>
     [HttpPatch("user/{username}/password")]
     [Authorize(Roles = "Admin")]
     public ReturnModel ChangePassword(string username, [FromBody] string password)

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace awl_raumreservierung
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public partial class User
     {
@@ -63,10 +63,11 @@ namespace awl_raumreservierung
         public UserRole? Role { get; set; }
     }
 
-/// <summary>
-/// Mögliche Userrollen
-/// </summary>
-    public enum UserRole {
+    /// <summary>
+    /// Mögliche Userrollen
+    /// </summary>
+    public enum UserRole
+    {
         /// Standardbenutzer
         User,
 

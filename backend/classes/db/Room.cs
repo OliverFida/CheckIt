@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 namespace awl_raumreservierung
 {
-   /// <summary>
-   /// DB-Raum
-   /// </summary>
+    /// <summary>
+    /// DB-Raum
+    /// </summary>
     public partial class Room
     {
-      /// <summary>
-      /// Raum-ID
-      /// </summary>
-      /// <value></value>
+        /// <summary>
+        /// Raum-ID
+        /// </summary>
+        /// <value></value>
         public long Id { get; set; }
 
         /// <summary>
@@ -30,24 +30,24 @@ namespace awl_raumreservierung
         /// Aktivstatus
         /// </summary>
         /// <value></value>
-        public bool Active {get; set; }
+        public bool Active { get; set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
-      public Room() { }
+        public Room() { }
 
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="number"></param>
-      /// <param name="name"></param>
-      /// <param name="active"></param>
-      public Room(string? number, string? name, bool active)
-      {
-         Number = number;
-         Name = name;
-         Active = active;
-      }
-   }
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="name"></param>
+        /// <param name="active"></param>
+        public Room(string? number, string? name, bool active)
+        {
+            Number = number;
+            Name = name;
+            Active = active;
+        }
+    }
 }
