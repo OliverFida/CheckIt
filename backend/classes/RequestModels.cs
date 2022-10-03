@@ -38,6 +38,17 @@ namespace awl_raumreservierung
         public string? Password { get; set; }
     }
 
+    public class LoginUserModel
+    {
+        public string Username {get; set;}
+        public string Password {get; set;}
+
+        public LoginUserModel(string username, string password){
+            Username = username;
+            Password = password;
+        }
+    }
+
     public class UpdateUserModel
     {
         public string? FirstName { get; set; }
