@@ -103,7 +103,7 @@ namespace awl_raumreservierung
 /// <summary>
 /// Checkt, ob ein Booking sich mit einem anderen überschneidet
 /// </summary>
-/// <param name="model">Bookingmodel</param>
+/// <param name="booking">Booking</param>
 /// <returns></returns>
         public static bool BookingOverlaps(Booking booking)
         {

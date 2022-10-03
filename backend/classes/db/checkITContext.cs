@@ -5,22 +5,50 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace awl_raumreservierung
 {
+    /// <summary>
+    /// 
+    /// </summary>
 #pragma warning disable IDE1006 // Naming Styles
     public partial class checkITContext : DbContext
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public checkITContext()
         {
         }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="options"></param>
         public checkITContext(DbContextOptions<checkITContext> options)
             : base(options)
         {
         }
+/// <summary>
+/// 
+/// </summary>
+/// <value></value>
 
         public virtual DbSet<Booking> Bookings { get; set; } = null!;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
         public virtual DbSet<Room> Rooms { get; set; } = null!;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <value></value>
         public virtual DbSet<User> Users { get; set; } = null!;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -29,6 +57,10 @@ namespace awl_raumreservierung
             }
         }
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Booking>(entity =>
