@@ -64,7 +64,7 @@ namespace awl_raumreservierung
 		/// <summary>
 		///
 		/// </summary>
-		/// /// <param name="startTime"></param>
+		/// <param name="startTime"></param>
 		/// <param name="endTime"></param>
 		/// <param name="room"></param>
 		/// <param name="userId"></param>
