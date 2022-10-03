@@ -73,51 +73,51 @@ public class roomController : ControllerBase
 			{
 				Message = "Raum nicht gefunden"
 			};
-		room.Number = model.Name;
-		room.Name = model.Name;
-		ctx.SaveChanges();
-		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
-		{
-			Message = "Raum erfolgreich editiert."
-		};
-	}
-	[HttpPost("room/{roomId}")]
-	[Authorize(Roles = "Admin")]
-	public ReturnModel Activate(long roomId)
-	{
-		Room room = Helpers.GetRoom(roomId);
-		if (room is null)
-		{
-			return new ReturnModel(new StatusCodeResult(404))
+		}
+			room.Number = model.Name;
+			room.Name = model.Name;
+			ctx.SaveChanges();
+			return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 			{
-				Message = "Raum wurde nicht gefunden."
+				Message = "Raum erfolgreich editiert."
 			};
 		}
-		room.Active = true;
-		ctx.SaveChanges();
-		return new ReturnModel(new StatusCodeResult(201))
+		[HttpPost("room/{roomId}")]
+		[Authorize(Roles = "Admin")]
+		public ReturnModel Activate(long roomId)
 		{
-			Message = "Raum erfolgreich aktiviert!"
-		};
-	}
-	[HttpPost("room/{roomId}")]
-	[Authorize(Roles = "Admin")]
-	public ReturnModel Deactivate(long roomId)
-	{
-		Room room = Helpers.GetRoom(roomId);
-		if (room is null)
-		{
-			return new ReturnModel(new StatusCodeResult(404))
+			Room room = Helpers.GetRoom(roomId);
+			if (room is null)
 			{
-				Message = "Raum wurde nicht gefunden."
+				return new ReturnModel(new StatusCodeResult(404))
+				{
+					Message = "Raum wurde nicht gefunden."
+				};
+			}
+			room.Active = true;
+			ctx.SaveChanges();
+			return new ReturnModel(new StatusCodeResult(201))
+			{
+				Message = "Raum erfolgreich aktiviert!"
 			};
 		}
-		room.Active = false;
-		ctx.SaveChanges();
-		return new ReturnModel(new StatusCodeResult(200))
+		[HttpPost("room/{roomId}")]
+		[Authorize(Roles = "Admin")]
+		public ReturnModel Deactivate(long roomId)
 		{
-			Message = "Raum erfolgreich deaktiviert!"
-		};
-	}
-
+			Room room = Helpers.GetRoom(roomId);
+			if (room is null)
+			{
+				return new ReturnModel(new StatusCodeResult(404))
+				{
+					Message = "Raum wurde nicht gefunden."
+				};
+			}
+			room.Active = false;
+			ctx.SaveChanges();
+			return new ReturnModel(new StatusCodeResult(200))
+			{
+				Message = "Raum erfolgreich deaktiviert!"
+			};
+		}
 }
