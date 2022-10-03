@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -22,6 +23,7 @@ public class userController : ControllerBase
 
 	[HttpGet("{idOrUsername}")]
 	[Authorize()]
+	[SwaggerOperation("Holt die öffentlichen Daten eines Nutzers")]
 	public PublicUser? GetByID(string idOrUsername)
 	{
 		User? user;
@@ -45,6 +47,7 @@ public class userController : ControllerBase
 
 	[HttpPatch("password")]
 	[Authorize]
+	[SwaggerOperation("Ändert das Password des angemeldeten Users")]
 	public ReturnModel PostChangePassword(string password)
 	{
 		try

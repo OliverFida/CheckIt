@@ -21,7 +21,13 @@ public class bookingController : ControllerBase
 		ctx = new checkITContext();
 		_logger = logger;
 	}
-
+	/// <summary>
+	/// Liefert ein Array von Buchungen fuer den angegebenen Raum in der Woche des angegebenen Tags.
+	/// 
+	/// </summary>
+	/// <param name="roomId">Raum ID des Raums fuer den Buchungen ausgegeben werden.</param>
+	/// <param name="date">Ein Tag der Woche fuer die Buchungen ausgegeben werden.</param>
+	/// <returns> 'PublicBooking' Array fuer den Raum und Woche.</returns>
 	[HttpGet("room/{roomId}")]
 	[Authorize]
 	public PublicBooking[] Get(int roomId, DateTime? date)
@@ -55,10 +61,19 @@ public class bookingController : ControllerBase
 			return Array.Empty<PublicBooking>();
 		}
 	}
-
+	/// <summary>
+	/// Erstellt eine neue Buchung laut dem uebergebeben Models fuer den angegebenen Benutzer.
+	/// Ist der Benutzer 'null' wird die Buchung fuer den aktuellen Benutzer erstellt. Wenn nicht muss der aktuelle
+	/// Benutzer ein Admin sein.
+	/// Ist der Raum nicht existent oder aktiv, oder ueberlappt die Buchung sich mit einer bereits existierenden
+	/// Buchung wird eine Fehlermeldung ausgegeben.
+	/// </summary>
+	/// <param name="model">Model der Buchung die erstellt werden soll.</param>
+	/// <param name="username"></param>
+	/// <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
 	[HttpPut("book")]
 	[Authorize]
-	public ReturnModel Book(CreateBookingModel model)
+	public ReturnModel Book(CreateBookingModel model,string? username)
 	{
 		try
 		{
@@ -72,7 +87,6 @@ public class bookingController : ControllerBase
 				};
 			}
 
-
 			bool roomActive = room.Active;
 			if (!roomActive)
 			{
@@ -84,7 +98,6 @@ public class bookingController : ControllerBase
 
 			}
 
-
 			bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
 
 			if (overlapsWithOtherBookings)
@@ -95,13 +108,39 @@ public class bookingController : ControllerBase
 					Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
 				};
 			}
+			long userId;
+			User? currUser = User.GetUser();
+			if (currUser is null || !currUser.Active)
+			{
+				return new ReturnModel(new StatusCodeResult(404))
+				{
+					Message = $"Benutzer {username} konnte nicht gefunden werden oder ist inaktiv!"
+				};
+			}
+
+			if (username is null)
+			{
+				userId = User.GetUser()?.Id ?? 0L;
+			}
+			else
+			{
+				User? user =Helpers.GetUser(username);
+				if (user is null || !user.Active)
+				{
+					return new ReturnModel(new StatusCodeResult(404))
+					{
+						Message = $"Benutzer {username} konnte nicht gefunden werden oder ist inaktiv!"
+					};
+				}
+				userId = user.Id;
+			}
 
 			Booking book = new()
 			{
 				StartTime = model.StartTime,
 				EndTime = model.EndTime,
 				Room = model.RoomID,
-				UserId = User.GetUser()?.Id ?? 0L,
+				UserId = userId,
 				CreateTime = DateTime.Now,
 				CreatedBy = User.GetUser()?.Id,
 				Note = model.Note
@@ -129,7 +168,11 @@ public class bookingController : ControllerBase
 			};
 		}
 	}
-
+	/// <summary>
+	/// Entfernt eine Buchung aus der Datebank.
+	/// </summary>
+	/// <param name="bookingId">ID der Buchung die entfernt werden soll.</param>
+	/// <returns>ReturnModel mit Statusnachricht.</returns>
 	[HttpDelete("{bookingId}")]
 	[Authorize]
 	public ReturnModel Remove(int bookingId)
@@ -178,39 +221,13 @@ public class bookingController : ControllerBase
 			};
 		}
 	}
-	[HttpPut("bookAsAdmin")]
-	[Authorize(Roles = "Admin")]
-	public ReturnModel BookAsAdmin(CreateBookingModel model)
-	{
-		bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
-		if (overlapsWithOtherBookings)
-		{
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel(new StatusCodeResult(400))
-			{
-				Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
-			};
-		}
-		Booking booking = new()
-		{
-			StartTime = model.StartTime,
-			EndTime = model.EndTime,
-			Room = model.RoomID,
-			UserId = User.GetUser()?.Id ?? 0L,
-			CreateTime = DateTime.Now,
-			CreatedBy = User.GetUser()?.Id,
-			Note = model.Note
-		};
-
-		ctx.Bookings.Add(booking);
-		ctx.SaveChanges();
-		return new ReturnModel()
-		{
-			Message = "Buchung erfolgreich",
-			Data = booking.ToPublicBooking()
-		};
-	}
-	[HttpPost("{bookingId}/edit")]
+	/// <summary>
+	/// Bearbeitet den Endzeitpunkt einer existierenden Buchung.
+	/// </summary>
+	/// <param name="bookingId">ID der Buchung die bearbeitet werden soll.</param>
+	/// <param name="EndTime">Neue Endzeit der Buchung.</param>
+	/// <returns>ReturnModel mit Statusnachricht und PublicBooking der bearbeiteten Buchung in "Data".</returns>
+	[HttpPatch("{bookingId}/edit")]
 	public ReturnModel Edit(long bookingId, DateTime EndTime)
 	{
 		Booking? booking = Helpers.GetBooking(bookingId);
@@ -257,6 +274,12 @@ public class bookingController : ControllerBase
 			Message = "Buchung erfolgreich bearbeitet!"
 		};
 	}
+	/// <summary>
+	/// Bearbeitet die Notiz einer existierenden Buchung.
+	/// </summary>
+	/// <param name="bookingId">ID der Buchung deren Notiz bearbeitet werden soll.</param>
+	/// <param name="note">Notiz welche die existierende Notiz ersetzt.</param>
+	/// <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
 	[HttpPost("{bookingId}/editnote")]
 	public ReturnModel EditNote(long bookingId, string note)
 	{
