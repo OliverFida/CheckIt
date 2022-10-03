@@ -104,7 +104,8 @@ public class bookingController : ControllerBase
 				Room = model.RoomID,
 				UserId = User.GetUser()?.Id ?? 0L,
 				CreateTime = DateTime.Now,
-				CreatedBy = User.GetUser()?.Id
+				CreatedBy = User.GetUser()?.Id,
+				Note = model.Note
 			};
 			ctx.Bookings.Add(book);
 
@@ -198,7 +199,8 @@ public class bookingController : ControllerBase
 			Room = model.RoomID,
 			UserId = User.GetUser()?.Id ?? 0L,
 			CreateTime = DateTime.Now,
-			CreatedBy = User.GetUser()?.Id
+			CreatedBy = User.GetUser()?.Id,
+			Note = model.Note
 		};
 
 		ctx.Bookings.Add(booking);
@@ -208,7 +210,7 @@ public class bookingController : ControllerBase
 			Message = "Buchung erfolgreich"
 		};
 	}
-	[HttpPost("edit")]
+	[HttpPost("{bookingId}/edit")]
 	public ReturnModel Edit(long bookingId, DateTime EndTime)
 	{
 		Booking? booking = Helpers.GetBooking(bookingId);
@@ -250,8 +252,39 @@ public class bookingController : ControllerBase
 		booking.EndTime = EndTime;
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201))
-		{ 
+		{
+			Data = booking.ToPublicBooking(),
 			Message = "Buchung erfolgreich bearbeitet!"
 		};
 	}
+	[HttpPost("{bookingId}/editnote")]
+	public ReturnModel EditNote(long bookingId, string note)
+	{
+		Booking? booking = Helpers.GetBooking(bookingId);
+		if (booking is null)
+		{
+			Response.StatusCode = StatusCodes.Status404NotFound;
+			return new ReturnModel(new StatusCodeResult(404))
+			{
+				Message = "Buchung konnte nicht gefunden werden!"
+			};
+		}
+		// user auth
+		if (booking.UserId != User.GetUser()?.Id && !User.IsInRole("Admin"))
+		{
+			return new ReturnModel(new StatusCodeResult(401))
+			{
+				Message = "Keine Berechtigung!"
+			};
+		}
+		// booking in future check
+
+		booking.Note = note;
+		ctx.SaveChanges();
+		return new ReturnModel(new StatusCodeResult(201))
+		{
+			Message = "Buchung erfolgreich bearbeitet!"
+		};
+	}
+
 }

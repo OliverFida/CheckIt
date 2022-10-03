@@ -12,9 +12,10 @@ namespace awl_raumreservierung
         public long UserId { get; set; }
         public DateTime? CreateTime { get; set; }
         public long? CreatedBy { get; set; }
+        public string? Note { get; set; }
 
         public Booking() { }
-        public Booking(DateTime? startTime, DateTime? endTime, long room, long userId, DateTime? createTime, long? createdBy)
+        public Booking(DateTime? startTime, DateTime? endTime, long room, long userId, DateTime? createTime, long? createdBy, string note)
         {
             StartTime = startTime;
             EndTime = endTime;
@@ -22,6 +23,7 @@ namespace awl_raumreservierung
             UserId = userId;
             CreateTime = createTime;
             CreatedBy = createdBy;
+            Note = note;
         }
     }
 }
