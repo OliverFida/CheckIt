@@ -31,7 +31,7 @@ public class loginController : ControllerBase
         {
             Login.LoginMessage.InactiveUser => StatusCodes.Status401Unauthorized,
             Login.LoginMessage.InvalidCredentials => StatusCodes.Status401Unauthorized,
-            Login.LoginMessage.Success => StatusCodes.Status200OK,
+            Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin => StatusCodes.Status200OK,
             _ => StatusCodes.Status400BadRequest
         };
 
