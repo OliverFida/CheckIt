@@ -73,7 +73,6 @@ public class bookingController : ControllerBase
 			}
 
 
-			// TODO : Check if room is active
 			bool roomActive = room.Active;
 			if (!roomActive)
 			{
@@ -207,7 +206,8 @@ public class bookingController : ControllerBase
 		ctx.SaveChanges();
 		return new ReturnModel()
 		{
-			Message = "Buchung erfolgreich"
+			Message = "Buchung erfolgreich",
+			Data = booking.ToPublicBooking()
 		};
 	}
 	[HttpPost("{bookingId}/edit")]
@@ -283,7 +283,8 @@ public class bookingController : ControllerBase
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201))
 		{
-			Message = "Buchung erfolgreich bearbeitet!"
+			Message = "Buchung erfolgreich bearbeitet!",
+			Data = booking.ToPublicBooking()
 		};
 	}
 
