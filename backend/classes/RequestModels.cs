@@ -35,10 +35,10 @@ namespace awl_raumreservierung
             Message = string.Empty;
         }
 
-/// <summary>
-/// Statuscode
-/// </summary>
-/// <value></value>
+        /// <summary>
+        /// Statuscode
+        /// </summary>
+        /// <value></value>
         public int Status { get; set; }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace awl_raumreservierung
         public object? Data { get; set; }
     }
 
-/// <summary>
-/// Useranlagemodel
-/// </summary>
+    /// <summary>
+    /// Useranlagemodel
+    /// </summary>
     public class CreateUserModel
     {
         /// <summary>
@@ -96,37 +96,38 @@ namespace awl_raumreservierung
         public string? Password { get; set; }
     }
 
-/// <summary>
-/// Loginmodel
-/// </summary>
+    /// <summary>
+    /// Loginmodel
+    /// </summary>
     public class LoginUserModel
     {
         /// <summary>
         /// Username
         /// </summary>
         /// <value></value>
-        public string Username {get; set;}
+        public string Username { get; set; }
 
         /// <summary>
         /// Passwort
         /// </summary>
         /// <value></value>
-        public string Password {get; set;}
+        public string Password { get; set; }
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="username"></param>
-/// <param name="password"></param>
-        public LoginUserModel(string username, string password){
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        public LoginUserModel(string username, string password)
+        {
             Username = username;
             Password = password;
         }
     }
 
-/// <summary>
-/// Userupdatemodel
-/// </summary>
+    /// <summary>
+    /// Userupdatemodel
+    /// </summary>
     public class UpdateUserModel
     {
         /// <summary>
@@ -148,9 +149,9 @@ namespace awl_raumreservierung
         public UserRole Role { get; set; }
     }
 
-/// <summary>
-/// Bucungsmodel
-/// </summary>
+    /// <summary>
+    /// Bucungsmodel
+    /// </summary>
     public class CreateBookingModel
     {
         /// <summary>
@@ -178,35 +179,33 @@ namespace awl_raumreservierung
         public string? Note { get; set; }
     }
 
-/// <summary>
-/// Raummodel
-/// </summary>
-	public class CreateRoomModel
-	{
+    /// <summary>
+    /// Raummodel
+    /// </summary>
+    public class CreateRoomModel
+    {
         /// <summary>
         /// Raum-ID
         /// </summary>
         /// <value></value>
-		public long Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Raumnummer
         /// </summary>
         /// <value></value>
-		public string? Number { get; set; }
+        public string? Number { get; set; }
 
         /// <summary>
-        /// Raumname
+        /// /// Raumname
         /// </summary>
         /// <value></value>
-		public string? Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Aktivstatus
         /// </summary>
         /// <value></value>
-		public bool Active { get; set; }
-	}
-
-
+        public bool Active { get; set; }
+    }
 }

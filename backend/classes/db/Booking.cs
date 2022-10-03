@@ -36,7 +36,7 @@ namespace awl_raumreservierung
         /// ID des Bucher
         /// </summary>
         /// <value></value>
-        public long UserId { get; set;}
+        public long UserId { get; set; }
 
         /// <summary>
         /// Erstellungsdatum
@@ -56,22 +56,30 @@ namespace awl_raumreservierung
         /// <value></value>
         public string? Note { get; set; }
 
-/// <summary>
-/// 
-/// </summary>
-        public Booking() { }
-        
         /// <summary>
-        /// 
+        ///
         /// </summary>
-        /// <param name="startTime"></param>
+        public Booking() { }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <param name="room"></param>
         /// <param name="userId"></param>
         /// <param name="createTime"></param>
         /// <param name="createdBy"></param>
         /// <param name="note"></param>
-        public Booking(DateTime? startTime, DateTime? endTime, long room, long userId, DateTime? createTime, long? createdBy, string note)
+        public Booking(
+            DateTime? startTime,
+            DateTime? endTime,
+            long room,
+            long userId,
+            DateTime? createTime,
+            long? createdBy,
+            string note
+        )
         {
             StartTime = startTime;
             EndTime = endTime;

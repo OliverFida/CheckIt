@@ -19,8 +19,8 @@ namespace awl_raumreservierung
             checkITContext ctx = new();
 
             var user = ctx.Users
-                            .Where(u => u.Username.ToLower() == username.ToLower())
-                            .FirstOrDefault();
+                .Where(u => u.Username.ToLower() == username.ToLower())
+                .FirstOrDefault();
 
             if (user != null)
             {
@@ -32,15 +32,18 @@ namespace awl_raumreservierung
             return user switch
             {
                 { Active: false } => LoginMessage.InactiveUser,
-                { Passwd: var pw, Role: var role } when pw == password => (role == UserRole.Admin) ? LoginMessage.SuccessAsAdmin : LoginMessage.Success,
+                { Passwd: var pw, Role: var role } when pw == password
+                    => (role == UserRole.Admin)
+                        ? LoginMessage.SuccessAsAdmin
+                        : LoginMessage.Success,
                 { Passwd: var pw } when pw == password => LoginMessage.Success,
                 _ => LoginMessage.InvalidCredentials
             };
         }
 
-    /// <summary>
-    /// Mögliche Loginrückgabemeldungen
-    /// </summary>
+        /// <summary>
+        /// Mögliche Loginrückgabemeldungen
+        /// </summary>
         public enum LoginMessage
         {
             /// Ungültige Anmeldedaten
