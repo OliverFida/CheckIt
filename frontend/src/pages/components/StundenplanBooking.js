@@ -6,7 +6,7 @@ import { HomePageContext } from '../../contexts/HomePageContext';
 
 export default function StundenplanBooking({day, lesson}){
     const username = "dageorg";
-    const {hpContext} = useContext(HomePageContext);
+    const {hpContext, setHpContext} = useContext(HomePageContext);
     const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null});
 
     useEffect(() => {
@@ -29,11 +29,11 @@ export default function StundenplanBooking({day, lesson}){
     }, [hpContext.bookings, hpContext.weekOffset]);
 
     const onBuchen = () => {
-        console.log(`Buchen ${day} ${lesson.key}`);
+        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, editMode: false}});
     };
     
     const onAusbuchen = () => {
-        console.log(`Ausbuchen ${day} ${lesson.key}`);
+        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, editMode: true}});
     };
 
     return(
