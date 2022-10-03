@@ -20,6 +20,7 @@
         {
             get { return CreateTime.ToUtc(); }
         }
+        public string? Note { get; set; }
 
         public PublicBooking(Booking booking)
         {
@@ -29,6 +30,7 @@
             this.Room = Helpers.GetRoom(booking.Room).ToPublicRoom();
             this.User = Helpers.GetUser(booking.UserId.ToInt()).ToPublicUser();
             this.CreateTime = booking.CreateTime;
+            this.Note = booking.Note;
         }
     }
 }

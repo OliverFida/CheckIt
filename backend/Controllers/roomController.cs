@@ -49,23 +49,22 @@ public class roomController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Remove(int roomId)
 	{
-		var db = new checkITContext();
-		var room = db.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
+		var room = ctx.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
 		if (room != null)
 		{
-			db.Rooms.Remove(room);
-			db.SaveChanges();
+			ctx.Rooms.Remove(room);
+			ctx.SaveChanges();
 		}
 		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 		{
 			Message = "Raum erfolgreich entfernt."
 		};
 	}
-	[HttpPost("edit")]
+	[HttpPost("room/{roomId}/edit")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Edit(long roomId, CreateRoomModel model)
 	{
-		Room room = Helpers.GetRoom(roomId);
+		Room? room = Helpers.GetRoom(roomId);
 
 		if (room is null)
 		{
@@ -82,11 +81,11 @@ public class roomController : ControllerBase
 				Message = "Raum erfolgreich editiert."
 			};
 		}
-		[HttpPost("room/{roomId}")]
+		[HttpPost("room/{roomId}/activate")]
 		[Authorize(Roles = "Admin")]
 		public ReturnModel Activate(long roomId)
 		{
-			Room room = Helpers.GetRoom(roomId);
+			Room? room = Helpers.GetRoom(roomId);
 			if (room is null)
 			{
 				return new ReturnModel(new StatusCodeResult(404))
@@ -101,11 +100,11 @@ public class roomController : ControllerBase
 				Message = "Raum erfolgreich aktiviert!"
 			};
 		}
-		[HttpPost("room/{roomId}")]
+		[HttpPost("room/{roomId}/deactivate")]
 		[Authorize(Roles = "Admin")]
 		public ReturnModel Deactivate(long roomId)
 		{
-			Room room = Helpers.GetRoom(roomId);
+			Room? room = Helpers.GetRoom(roomId);
 			if (room is null)
 			{
 				return new ReturnModel(new StatusCodeResult(404))
