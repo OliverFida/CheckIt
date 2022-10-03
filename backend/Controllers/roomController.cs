@@ -40,7 +40,8 @@ public class roomController : ControllerBase
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201))
 		{
-			Message = "Raum erfolgreich erstellt."
+			Message = "Raum erfolgreich erstellt.",
+			Data = room.ToPublicRoom()
 		};
 	}
 
@@ -73,11 +74,12 @@ public class roomController : ControllerBase
 				Message = "Raum nicht gefunden"
 			};
 		}
-			room.Number = model.Name;
+			room.Number = model.Number;
 			room.Name = model.Name;
 			ctx.SaveChanges();
 			return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 			{
+				Data = room.ToPublicRoom(),
 				Message = "Raum erfolgreich editiert."
 			};
 		}
@@ -97,6 +99,7 @@ public class roomController : ControllerBase
 			ctx.SaveChanges();
 			return new ReturnModel(new StatusCodeResult(201))
 			{
+				Data = room.ToPublicRoom(),
 				Message = "Raum erfolgreich aktiviert!"
 			};
 		}
@@ -116,6 +119,7 @@ public class roomController : ControllerBase
 			ctx.SaveChanges();
 			return new ReturnModel(new StatusCodeResult(200))
 			{
+				Data = room.ToPublicRoom(),
 				Message = "Raum erfolgreich deaktiviert!"
 			};
 		}
