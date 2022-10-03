@@ -8,20 +8,35 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace awl_raumreservierung.Controllers;
 
+/// <summary>
+///
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 #pragma warning disable IDE1006 // Naming Styles
 public class loginController : ControllerBase
 #pragma warning restore IDE1006 // Naming Styles
 {
+    /// <summary>
+    ///
+    /// </summary>
     public static WebApplicationBuilder? builder;
     private readonly ILogger<loginController> _logger;
 
+    /// <summary>
+    ///
+    /// /// </summary>
+    /// <param name="logger"></param>
     public loginController(ILogger<loginController> logger)
     {
         _logger = logger;
     }
 
+    /// <summary>
+    /// Prüft den Login und stellt einen JWT bereit
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpPost(Name = "login")]
     public IResult Post(LoginUserModel model)
     {
@@ -31,7 +46,9 @@ public class loginController : ControllerBase
         {
             Login.LoginMessage.InactiveUser => StatusCodes.Status401Unauthorized,
             Login.LoginMessage.InvalidCredentials => StatusCodes.Status401Unauthorized,
-            Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin => StatusCodes.Status200OK,
+            Login.LoginMessage.Success
+            or Login.LoginMessage.SuccessAsAdmin
+                => StatusCodes.Status200OK,
             _ => StatusCodes.Status400BadRequest
         };
 
@@ -95,12 +112,26 @@ public class loginController : ControllerBase
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var stringToken = tokenHandler.WriteToken(token);
-            return Results.Ok(stringToken);
+            return Results.Ok(
+                new
+                {
+                    Role = res switch
+                    {
+                        Login.LoginMessage.SuccessAsAdmin => UserRole.Admin,
+                        Login.LoginMessage.Success => UserRole.User,
+                        _ => throw new Exception()
+                    },
+                    stringToken
+                }
+            );
         }
 
         return Results.Unauthorized();
     }
 
+    /// <summary>
+    /// Macht nichts
+    /// </summary>
     [HttpPost("logout")]
     [Authorize]
     public void PostLogout()

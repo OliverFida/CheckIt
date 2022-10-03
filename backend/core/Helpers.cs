@@ -3,8 +3,16 @@ using System.Runtime.CompilerServices;
 
 namespace awl_raumreservierung
 {
+    /// <summary>
+    /// Stellt Helfermothoden bereit
+    /// </summary>
     public class Helpers
     {
+        /// <summary>
+        /// Holt einen User aus der Datenbank
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <returns></returns>
         public static User? GetUser(string username)
         {
             try
@@ -20,6 +28,11 @@ namespace awl_raumreservierung
             }
         }
 
+/// <summary>
+/// Holt einen User aus der Datenbank
+/// </summary>
+/// <param name="id">User-ID</param>
+/// <returns></returns>
         public static User? GetUser(int id)
         {
             try
@@ -33,6 +46,11 @@ namespace awl_raumreservierung
             }
         }
 
+/// <summary>
+/// Holt einen Raum aus der DB
+/// </summary>
+/// <param name="id">ID des Raums</param>
+/// <returns></returns>
         public static Room? GetRoom(long id)
         {
             try
@@ -46,6 +64,11 @@ namespace awl_raumreservierung
             }
         }
 
+/// <summary>
+/// Holt ein Booking aus der DB
+/// </summary>
+/// <param name="id">Booking-ID</param>
+/// <returns></returns>
         public static Booking? GetBooking(long id)
         {
             try
@@ -59,7 +82,12 @@ namespace awl_raumreservierung
             }
         }
 
-        public static Boolean BookingOverlaps(CreateBookingModel model)
+/// <summary>
+/// Checkt, ob ein Booking sich mit einem anderen überschneidet
+/// </summary>
+/// <param name="model">Bookingmodel</param>
+/// <returns></returns>
+        public static bool BookingOverlaps(CreateBookingModel model)
         {
             var room = GetRoom(model.RoomID);
             if (room is null)
@@ -72,7 +100,12 @@ namespace awl_raumreservierung
             return overlapsWithOtherBookings;
         }
 
-        public static Boolean BookingOverlaps(Booking booking)
+/// <summary>
+/// Checkt, ob ein Booking sich mit einem anderen überschneidet
+/// </summary>
+/// <param name="model">Bookingmodel</param>
+/// <returns></returns>
+        public static bool BookingOverlaps(Booking booking)
         {
             var room = GetRoom(booking.Id);
             if (room is null)

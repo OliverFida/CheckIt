@@ -3,8 +3,17 @@ using Microsoft.AspNetCore.Identity;
 
 namespace awl_raumreservierung
 {
+    /// <summary>
+    /// Loginklasse
+    /// </summary>
     public static class Login
     {
+        /// <summary>
+        /// Prüft den Login eines Nutzers
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="password">Gehashtes Passwort</param>
+        /// <returns></returns>
         public static LoginMessage CheckLogin(string username, string password)
         {
             checkITContext ctx = new();
@@ -29,11 +38,21 @@ namespace awl_raumreservierung
             };
         }
 
+    /// <summary>
+    /// Mögliche Loginrückgabemeldungen
+    /// </summary>
         public enum LoginMessage
         {
+            /// Ungültige Anmeldedaten
             InvalidCredentials,
+
+            /// Erfolgreich angemeldet als normaler User
             Success,
+
+            /// User ist inaktiv
             InactiveUser,
+
+            /// Erfolgreich angemeldet als Admin
             SuccessAsAdmin
         }
     }
