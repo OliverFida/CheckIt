@@ -3,6 +3,8 @@ import React, {useEffect, useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Nav, Button, NavDropdown} from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
+
+import AppNavUser from './AppNavUser';
 // API imports
 import RoomsAPI from '../../api/rooms';
 import LoginAPI from '../../api/login';
@@ -15,12 +17,12 @@ export default function AppNavBooking(){
         navigate("/login");
     };
 
+   
+
     return(
         <Nav>
             <RoomDropDown />
-            <Nav.Item>
-                <Button onClick={onLogout}>Abmelden</Button>
-            </Nav.Item>
+            <AppNavUser />
         </Nav>
     );
 };

@@ -2,6 +2,7 @@
 import React, { useState} from 'react';
 import {Stack, Button, Form, Modal, Table} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
+import AppNavUser from './components/AppNavUser';
 
 import '../css/components/UserPage.css';
 
@@ -25,7 +26,10 @@ export default function UserEdit(){
     return(
         <>
             <Stack direction='vertical'>
-                <AppNavBar />
+                <AppNavBar>
+                    <AppNavUser />
+                </AppNavBar>
+                
             </Stack>
        
        <Table>
@@ -46,6 +50,9 @@ export default function UserEdit(){
                         </Button>
                         <Button className="my-1 me-2">
                             Passwort zurücksetzen
+                        </Button>
+                        <Button className="my-1 me-2" variant="danger">
+                            Benutzer deaktivieren
                         </Button>                       
                     </td>
                 </tr>
@@ -55,7 +62,7 @@ export default function UserEdit(){
             Neuen Benutzer erstellen
         </Button>
 
-        <Modal show={show === 'modal-one'} onHide={handleClose}>
+        <Modal show={show === 'modal-one'} onHide={handleClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Name ändern</Modal.Title>
             </Modal.Header>

@@ -34,7 +34,7 @@ function LoginProtectedRoute({children}){
 }
 
 function AdminProtectedRoute({children}){
-  var isAdmin = false;
+  var isAdmin = true;
   if(isAdmin) return(<LoginProtectedRoute>{children}</LoginProtectedRoute>);
   return(<Navigate to="/noperm" />);
 }

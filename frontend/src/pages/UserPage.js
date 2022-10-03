@@ -22,16 +22,13 @@ export default function UserPage(){
             </Stack>
 
             <div>
-                <div>
-                    <span>Vorname Nachname</span>
-                </div>
                 <Button onClick={handleShow}>
                     Passwort ändern
                 </Button>
             </div>
 
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Passwort ändern</Modal.Title>
             </Modal.Header>

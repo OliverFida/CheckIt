@@ -1,6 +1,6 @@
 // Component imports
 import React, {useState, useEffect, useContext} from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import {HomePageContext} from '../../contexts/HomePageContext';
 
 export default function BookingModal(){
@@ -33,12 +33,27 @@ export default function BookingModal(){
     };
 
     return(
-        <Modal show={state !== null} onHide={onCancel}>
+        <Modal show={state !== null} onHide={onCancel} centered>
             <Modal.Header>
                 <Modal.Title>Buchung</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Stunden: {state?.duration} <br />
+                <p> 
+                <Form>
+                    <Form.Group className="mb-3" controlId="bookingDuration">
+                        <Form.Label>Stunden {state?.duration}</Form.Label>
+                        <Form.Select aria-label="stundenauswahl">
+                            <option>Dauer auswählen</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group controlId="bookingNotes">
+                        <Form.Label>Notizen</Form.Label>
+                        <Form.Control as="textarea" row={3} />
+                    </Form.Group>
+                </Form><br />
                 Day: {state?.day} <br />
                 Lesson: {state?.lesson} <br />
                 EditMode: {state?.editMode ? "true" : "false"} <br /></p>
