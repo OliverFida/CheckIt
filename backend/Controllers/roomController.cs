@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+ï»¿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static awl_raumreservierung.Controllers.adminController;
 
@@ -24,9 +24,9 @@ public class roomsController : ControllerBase
 		ctx = new checkITContext();
 	}
 	/// <summary>
-	/// Liefert ein Array der Räume in der Datenbank.
+	/// Liefert ein Array der RÃ¤ume in der Datenbank.
 	/// </summary>
-	/// <returns>Array der Räume in der Datenbank</returns>
+	/// <returns>Array der RÃ¤ume in der Datenbank</returns>
 	[HttpGet()]
 	[Authorize]
 	public Room[] GetRooms()
@@ -84,7 +84,7 @@ public class roomsController : ControllerBase
 	/// Ersetzt die Raumdaten eines Raums mit neuen Daten.
 	/// </summary>
 	/// <param name="roomId">Die ID des Raums der bearbeitet werden soll.</param>
-	/// <param name="model">Die neuen Daten für den Raum.</param>
+	/// <param name="model">Die neuen Daten fÃ¼r den Raum.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
 	[HttpPatch("{roomId}")]
 	[Authorize(Roles = "Admin")]
@@ -102,8 +102,7 @@ public class roomsController : ControllerBase
 		}
 		room.Number = model.Number;
 		room.Name = model.Name;
-		ctx.Rooms.Update(room);
-		ctx.SaveChanges();
+		ctx.Rooms.		ctx.SaveChanges();
 		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 		{
 			Data = room.ToPublicRoom(),
@@ -111,7 +110,7 @@ public class roomsController : ControllerBase
 		};
 	}
 	/// <summary>
-	/// Aktiviert einen Raum für Buchungen.
+	/// Aktiviert einen Raum fÃ¼r Buchungen.
 	/// </summary>
 	/// <param name="roomId">Die ID des Raums der aktiviert werden soll.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
@@ -138,7 +137,7 @@ public class roomsController : ControllerBase
 
 	}
 	/// <summary>
-	/// Deaktiviert einen Raum für Buchungen.
+	/// Deaktiviert einen Raum fÃ¼r Buchungen.
 	/// </summary>
 	/// <param name="roomId">Die ID des Raums der deaktiviert werden soll.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>

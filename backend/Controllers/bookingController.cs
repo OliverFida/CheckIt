@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
@@ -30,12 +30,12 @@ public class bookingsController : ControllerBase
 		_logger = logger;
 	}
 	/// <summary>
-	/// Liefert ein Array von Buchungen f�r den angegebenen Raum in der Woche des angegebenen Tags.
+	/// Liefert ein Array von Buchungen für den angegebenen Raum in der Woche des angegebenen Tags.
 	/// 
 	/// </summary>
-	/// <param name="roomId">Raum ID des Raums f�r den Buchungen ausgegeben werden.</param>
-	/// <param name="date">Ein Tag der Woche f�r die Buchungen ausgegeben werden.</param>
-	/// <returns> 'PublicBooking' Array f�r den Raum und Woche.</returns>
+	/// <param name="roomId">Raum ID des Raums für den Buchungen ausgegeben werden.</param>
+	/// <param name="date">Ein Tag der Woche für die Buchungen ausgegeben werden.</param>
+	/// <returns> 'PublicBooking' Array für den Raum und Woche.</returns>
 	[HttpGet("/rooms/{roomId}/bookings")]
 	[Authorize]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,7 +71,7 @@ public class bookingsController : ControllerBase
 		}
 	}
 	/// <summary>
-	/// Erstellt eine neue Buchung laut dem �bergebeben Models f�r den angegebenen Benutzer.
+	/// Erstellt eine neue Buchung laut dem übergebeben Models für den angegebenen Benutzer.
 	/// </summary>
 	/// <param name="model">Model der Buchung die erstellt werden soll.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
@@ -113,7 +113,7 @@ public class bookingsController : ControllerBase
 				Response.StatusCode = StatusCodes.Status400BadRequest;
 				return new ReturnModel(new StatusCodeResult(400))
 				{
-					Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
+					Message = "Die angegebene Buchung Ã¼berschneidet sich mit einer bereits bestehenden!"
 				};
 			}
 			long userId;
@@ -160,7 +160,7 @@ public class bookingsController : ControllerBase
 			Response.StatusCode = StatusCodes.Status201Created;
 			return new ReturnModel(new StatusCodeResult(201))
 			{
-				Message = $"Raum {room.Number} wurde erfolgreich für den {model.StartTime:d} gebucht.",
+				Message = $"Raum {room.Number} wurde erfolgreich fÃ¼r den {model.StartTime:d} gebucht.",
 				Data = book.ToPublicBooking()
 			};
 		}
@@ -205,7 +205,7 @@ public class bookingsController : ControllerBase
 				Response.StatusCode = StatusCodes.Status401Unauthorized;
 				return new ReturnModel(new StatusCodeResult(401))
 				{
-					Message = "Es können nur eigene Buchungen gelöscht werden!"
+					Message = "Es kÃ¶nnen nur eigene Buchungen gelÃ¶scht werden!"
 				};
 			}
 
@@ -215,7 +215,7 @@ public class bookingsController : ControllerBase
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel
 			{
-				Message = $"Buchung erfolgreich gelöscht!"
+				Message = $"Buchung erfolgreich gelÃ¶scht!"
 			};
 		}
 		catch (Exception ex)
@@ -274,7 +274,7 @@ public class bookingsController : ControllerBase
 			Response.StatusCode = StatusCodes.Status400BadRequest;
 			return new ReturnModel(new StatusCodeResult(400))
 			{
-				Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
+				Message = "Die angegebene Buchung Ã¼berschneidet sich mit einer bereits bestehenden!"
 			};
 		}
 		booking.Note = model.Note;
