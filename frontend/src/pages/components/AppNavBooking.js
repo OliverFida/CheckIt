@@ -46,6 +46,7 @@ function RoomDropDown(){
     }, [elements]);
 
     const onRoomSelect = (name, id) => {
+        // OFDO: BUG: wiederholtes auswählen des selben Raumes zeigt keine Bookings mehr an
         setHpContext({...hpContext, roomName: name, roomId: id});
     };
 
