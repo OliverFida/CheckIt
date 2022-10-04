@@ -15,16 +15,27 @@ export default function StundenplanBooking({day, lesson}){
       );
 
     useEffect(() => {
-        var targetHour = lesson.start.substring(0, 2);
-        var targetMinute = lesson.start.substring(3, 5);
-        var targetDate = moment().weekday(1).add(hpContext.weekOffset, 'weeks').add(day - 1, 'days');
-        targetDate.set('hours', targetHour).set('minutes', targetMinute).set('seconds', 1).set('milliseconds', 0);
+        var targetHourStart = lesson.start.substring(0, 2);
+        var targetMinuteStart = lesson.start.substring(3, 5);
+        var targetDateStart = moment().weekday(1).add(hpContext.weekOffset, 'weeks').add(day - 1, 'days');
+        targetDateStart.set('hours', targetHourStart).set('minutes', targetMinuteStart).set('seconds', 1).set('milliseconds', 0);
+        var targetHourEnd = lesson.end.substring(0, 2);
+        var targetMinuteEnd = lesson.end.substring(3, 5);
+        var targetDateEnd = moment(targetDateStart);
+        targetDateEnd.set('hours', targetHourEnd).set('minutes', targetMinuteEnd).set('seconds', 0).set('milliseconds', 0);
     
         var timeOver = false;
-        if(targetDate.isBefore(moment())) timeOver = true;
+        if(targetDateStart.isBefore(moment())) timeOver = true;
+        
+        var foundBooking = hpContext.bookings.find(booking => {
+            if(targetDateStart.add(1, 'second').isBetween(moment.utc(booking.startTimeUTC), moment.utc(booking.endTimeUTC).add(1, 'second'))
+            && targetDateEnd.subtract(1, 'second').isBetween(moment.utc(booking.startTimeUTC), moment.utc(booking.endTimeUTC).add(1, 'second'))){
+                return true;
+            }
+            return false;
+        });
         
         var loginUsername = localStorage.getItem('loginUsername');
-        var foundBooking = hpContext.bookings.find(booking => moment.utc(booking.startTimeUTC).isSame(targetDate));
         if(!foundBooking){
             setState({...state, variant: 'light', disabled: timeOver, onClick: onBuchen, text: "Buchen", user: null});
         }else if(loginUsername !== foundBooking.user.username){
