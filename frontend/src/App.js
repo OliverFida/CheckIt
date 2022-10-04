@@ -38,6 +38,6 @@ function LoginProtectedRoute({children, reverse = false}){
 
 function AdminProtectedRoute({children}){
   var isAdmin = localStorage.getItem('loginAdmin');
-  if(isAdmin) return(<LoginProtectedRoute>{children}</LoginProtectedRoute>);
+  if(isAdmin === "true") return(<LoginProtectedRoute>{children}</LoginProtectedRoute>);
   return(<Navigate to="/noperm" />);
 }

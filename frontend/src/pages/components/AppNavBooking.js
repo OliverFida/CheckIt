@@ -1,10 +1,8 @@
 // Component imports
 import React, {useEffect, useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Nav, Button, NavDropdown} from 'react-bootstrap';
+import {Nav, NavDropdown} from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
-
-import AppNavUser from './AppNavUser';
 // API imports
 import RoomsAPI from '../../api/rooms';
 import LoginAPI from '../../api/login';
@@ -22,7 +20,6 @@ export default function AppNavBooking(){
     return(
         <Nav>
             <RoomDropDown />
-            <AppNavUser />
         </Nav>
     );
 };

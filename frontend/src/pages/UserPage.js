@@ -2,7 +2,6 @@
 import React, { useState} from 'react';
 import {Stack, Button, Form, Modal, Table} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
-import AppNavUser from './components/AppNavUser';
 
 import '../css/components/UserPage.css';
 
@@ -15,11 +14,8 @@ export default function UserPage(){
 
     return(
         <>
-            <Stack direction='vertical'>
-                <AppNavBar>
-                    <AppNavUser />
-                </AppNavBar>
-            </Stack>
+            <AppNavBar>
+            </AppNavBar>
 
             <div>
                 <Button onClick={handleShow}>

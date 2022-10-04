@@ -22,9 +22,9 @@ export default function AppNavBooking(){
     };
 
     return(
-        <NavDropdown title="Vorname Nachname">
+        <NavDropdown title="Vorname Nachname" align={'end'}>
             <NavDropdown.Item onClick={clickProfile}>Profil</NavDropdown.Item>
-            <NavDropdown.Item onClick={clickUserEdit}>Benutzerverwaltung</NavDropdown.Item>
+            {localStorage.getItem("loginAdmin") === "true" ? <NavDropdown.Item onClick={clickUserEdit}>Benutzerverwaltung</NavDropdown.Item> : null}
             <NavDropdown.Item onClick={onLogout}>Abmelden</NavDropdown.Item>
         </NavDropdown>
     );

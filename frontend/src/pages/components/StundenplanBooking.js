@@ -12,7 +12,7 @@ export default function StundenplanBooking({day, lesson}){
         var targetHour = lesson.start.substring(0, 2);
         var targetMinute = lesson.start.substring(3, 5);
         var targetDate = moment().weekday(1).add(hpContext.weekOffset, 'weeks').add(day - 1, 'days');
-        targetDate.set('hours', targetHour).set('minutes', targetMinute).set('seconds', 0).set('milliseconds', 0);
+        targetDate.set('hours', targetHour).set('minutes', targetMinute).set('seconds', 1).set('milliseconds', 0);
     
         var timeOver = false;
         if(targetDate.isBefore(moment())) timeOver = true;
