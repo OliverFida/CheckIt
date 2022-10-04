@@ -215,17 +215,63 @@ public class adminController : ControllerBase
                 };
             }
 
-			bool newStatus = !user.Active;
-			user.Active = newStatus;
-			user.Lastchange = DateTime.Now;
-			ctx.Users.Update(user);
-			ctx.SaveChanges();
+            Helpers.SetUserStatus(user, true);
 
             Response.StatusCode = StatusCodes.Status200OK;
             return new ReturnModel()
             {
                 Status = 200,
-                Message = $"Benutzer {username} wurde {(newStatus ? "re" : "de")}aktiviert!",
+                Message = $"Benutzer {username} wurde aktiviert!",
+                Data = user.ToPublicUser()
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Fehler aufgetreten: ", ex);
+
+            Response.StatusCode = StatusCodes.Status400BadRequest;
+            return new ReturnModel()
+            {
+                Status = 400,
+                StatusMessage = "error",
+                Message = "Es ist ein Fehler aufgetreten!"
+            };
+        }
+    }
+
+    	/// <summary>
+	/// Deaktiviert einen Benutzer
+	/// </summary>
+	/// <param name="username">Username des Users</param>
+	/// <returns></returns>
+	[HttpPost("user/{username}/deactivate")]
+	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(200)]
+	public ReturnModel PostDeactivate(string username)
+	{
+		try
+		{
+			var user = Helpers.GetUser(username);
+
+            if (user is null)
+            {
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                return new ReturnModel()
+                {
+                    Status = 404,
+                    StatusMessage = "error",
+                    Message = $"Benutzer {username} wurde nicht gefunden!"
+                };
+            }
+
+            Helpers.SetUserStatus(user, false);
+
+            Response.StatusCode = StatusCodes.Status200OK;
+            return new ReturnModel()
+            {
+                Status = 200,
+                Message = $"Benutzer {username} wurde deaktiviert!",
                 Data = user.ToPublicUser()
             };
         }
