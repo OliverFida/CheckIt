@@ -2,7 +2,7 @@ table.useredit td {
     text-align: center;
 }
 
-td {
+table.userprofile td {
     padding: 10px 0;
     width: 50%;
    vertical-align: middle;

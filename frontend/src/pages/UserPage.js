@@ -20,7 +20,7 @@ export default function UserPage(){
             <Row className="justify-content-center align-items-center" style={{ height: '80vh' }}>
                 <Col md={5}>
                     <h2 className="text-center">Profil</h2>
-                    <Table bordered>
+                    <Table bordered className='userprofile'>
                         <tbody>
                             <tr>
                                 <td>Vorname:</td>

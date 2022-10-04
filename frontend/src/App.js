@@ -1,7 +1,7 @@
 // Component imports
 import React from 'react';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
-import {Container} from 'react-bootstrap';
+
 // Style imports
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Page imports
@@ -14,8 +14,7 @@ import UserEdit from './pages/UserEdit';
 
 export default function App() {
   return (
-    <div id="App">
-      <Container>
+    <div id="App">     
         <BrowserRouter>
           <Routes>
             <Route exact path='/' element={<Navigate to='/login' />} />
@@ -28,7 +27,6 @@ export default function App() {
             <Route path='*' element={<Navigate to="/home" />} />
           </Routes>
         </BrowserRouter>
-      </Container>
     </div>
   );
 };
