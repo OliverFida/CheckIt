@@ -239,7 +239,7 @@ public class bookingsController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking der bearbeiteten Buchung in "Data".</returns>
 	[HttpPatch("{bookingId}")]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public ReturnModel Edit(long bookingId, CreateBookingModel model)
+	public ReturnModel Edit(long bookingId, UpdateBookingModel model)
 	{
 		Booking? booking = Helpers.GetBooking(bookingId);
 		if (booking is null)

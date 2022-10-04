@@ -184,7 +184,7 @@ namespace awl_raumreservierung
 		public string? Username { get; set; }
 	}
 	/// <summary>
-	/// Buchungsmodel
+	/// Update Buchungsmodel
 	/// </summary>
 	public class UpdateBookingModel
 	{
