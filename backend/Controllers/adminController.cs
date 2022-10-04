@@ -34,6 +34,8 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPut("user")]
 	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(201)]
 	public ReturnModel Put(CreateUserModel model)
 	{
 		try
@@ -101,6 +103,9 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPatch("user/{username}")]
 	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(200)]
 	public ReturnModel UpdateUser(string username, UpdateUserModel model)
 	{
 		try
@@ -150,6 +155,9 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpDelete("user/{username}")]
 	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(200)]
 	public ReturnModel Delete(string username)
 	{
 		try
@@ -188,6 +196,8 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPost("user/{username}/activate")]
 	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(200)]
 	public ReturnModel Post(string username)
 	{
 		try
@@ -239,6 +249,8 @@ public class adminController : ControllerBase
 	/// <returns>Liste aller User mit Daten</returns>
 	[HttpGet("users")]
 	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(500)]
 	public PublicUser[] Get()
 	{
 		try
@@ -260,6 +272,8 @@ public class adminController : ControllerBase
 	/// <returns>Dict aus Rollen-ID und Beschreibung</returns>
 	[HttpGet("roles")]
 	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(500)]
 	public Dictionary<int, string> GetRoles()
 	{
 		try
@@ -282,6 +296,9 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPatch("user/{username}/password")]
 	[Authorize(Roles = "Admin")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(400)]
 	public ReturnModel ChangePassword(string username, [FromBody] string password)
 	{
 		try
