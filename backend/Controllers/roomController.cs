@@ -102,7 +102,8 @@ public class roomsController : ControllerBase
 		}
 		room.Number = model.Number;
 		room.Name = model.Name;
-		ctx.Rooms.		ctx.SaveChanges();
+		ctx.Rooms.Update(room);
+		ctx.SaveChanges();
 		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 		{
 			Data = room.ToPublicRoom(),
