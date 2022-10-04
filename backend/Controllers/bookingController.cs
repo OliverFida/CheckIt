@@ -25,12 +25,12 @@ public class bookingsController : ControllerBase
 		_logger = logger;
 	}
 	/// <summary>
-	/// Liefert ein Array von Buchungen fuer den angegebenen Raum in der Woche des angegebenen Tags.
+	/// Liefert ein Array von Buchungen für den angegebenen Raum in der Woche des angegebenen Tags.
 	/// 
 	/// </summary>
-	/// <param name="roomId">Raum ID des Raums fuer den Buchungen ausgegeben werden.</param>
-	/// <param name="date">Ein Tag der Woche fuer die Buchungen ausgegeben werden.</param>
-	/// <returns> 'PublicBooking' Array fuer den Raum und Woche.</returns>
+	/// <param name="roomId">Raum ID des Raums für den Buchungen ausgegeben werden.</param>
+	/// <param name="date">Ein Tag der Woche für die Buchungen ausgegeben werden.</param>
+	/// <returns> 'PublicBooking' Array für den Raum und Woche.</returns>
 	[HttpGet("/rooms/{roomId}/bookings")]
 	[Authorize]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -66,10 +66,9 @@ public class bookingsController : ControllerBase
 		}
 	}
 	/// <summary>
-	/// Erstellt eine neue Buchung laut dem uebergebeben Models fuer den angegebenen Benutzer.
+	/// Erstellt eine neue Buchung laut dem übergebeben Models für den angegebenen Benutzer.
 	/// </summary>
 	/// <param name="model">Model der Buchung die erstellt werden soll.</param>
-	/// <param name="username"></param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
 	[HttpPut()]
 	[Authorize]
