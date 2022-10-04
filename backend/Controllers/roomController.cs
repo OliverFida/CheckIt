@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using static awl_raumreservierung.Controllers.adminController;
 
 namespace awl_raumreservierung.Controllers;
-
+/// <summary>
+/// 
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 #pragma warning disable IDE1006 // Naming Styles
@@ -12,7 +14,10 @@ public class roomsController : ControllerBase
 {
 	private readonly ILogger<roomsController> _logger;
 	private readonly checkITContext ctx;
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="logger"></param>
 	public roomsController(ILogger<roomsController> logger)
 	{
 		_logger = logger;

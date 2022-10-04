@@ -9,7 +9,9 @@ using StatusCodeResult = Microsoft.AspNetCore.Mvc.StatusCodeResult;
 
 namespace awl_raumreservierung.Controllers;
 
-
+/// <summary>
+/// 
+/// </summary>
 [ApiController]
 [Route("[controller]")]
 #pragma warning disable IDE1006 // Naming Styles
@@ -18,7 +20,10 @@ public class bookingsController : ControllerBase
 {
 	private readonly ILogger<bookingsController> _logger;
 	private readonly checkITContext ctx;
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="logger"></param>
 	public bookingsController(ILogger<bookingsController> logger)
 	{
 		ctx = new checkITContext();
