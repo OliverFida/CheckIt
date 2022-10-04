@@ -22,11 +22,10 @@
 		/// </summary>
 		/// <value></value>
 		public string? Name { get; set; }
-
 		/// <summary>
-		///
+		/// Raumstatus
 		/// </summary>
-		/// <param name="room"></param>
+		/// <value></value>
 		public bool Active { get; set; }
 
 		/// <summary>
