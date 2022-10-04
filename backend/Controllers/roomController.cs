@@ -19,9 +19,9 @@ public class roomsController : ControllerBase
 		ctx = new checkITContext();
 	}
 	/// <summary>
-	/// Liefert ein Array der Raeume in der Datenbank.
+	/// Liefert ein Array der Räume in der Datenbank.
 	/// </summary>
-	/// <returns>Array der Raeume in der Datenbank</returns>
+	/// <returns>Array der Räume in der Datenbank</returns>
 	[HttpGet()]
 	[Authorize]
 	public Room[] GetRooms()
@@ -79,9 +79,9 @@ public class roomsController : ControllerBase
 	/// Ersetzt die Raumdaten eines Raums mit neuen Daten.
 	/// </summary>
 	/// <param name="roomId">Die ID des Raums der bearbeitet werden soll.</param>
-	/// <param name="model">Die neuen Daten fuer den Raum.</param>
+	/// <param name="model">Die neuen Daten für den Raum.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
-	[HttpPost("{roomId}")]
+	[HttpPatch("{roomId}")]
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Edit(long roomId, CreateRoomModel model)
@@ -105,11 +105,11 @@ public class roomsController : ControllerBase
 		};
 	}
 	/// <summary>
-	/// Aktiviert einen Raum fuer Buchungen.
+	/// Aktiviert einen Raum für Buchungen.
 	/// </summary>
 	/// <param name="roomId">Die ID des Raums der aktiviert werden soll.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
-	[HttpPost("{roomId}/activate")]
+	[HttpPatch("{roomId}/activate")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Activate(long roomId)
 	{
@@ -131,11 +131,11 @@ public class roomsController : ControllerBase
 
 	}
 	/// <summary>
-	/// Deaktiviert einen Raum fuer Buchungen.
+	/// Deaktiviert einen Raum für Buchungen.
 	/// </summary>
 	/// <param name="roomId">Die ID des Raums der deaktiviert werden soll.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
-	[HttpPost("{roomId}/deactivate")]
+	[HttpPatch("{roomId}/deactivate")]
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Deactivate(long roomId)
