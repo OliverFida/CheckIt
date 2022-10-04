@@ -16,7 +16,7 @@ export default function StundenplanBooking({day, lesson}){
         var targetHourEnd = lesson.end.substring(0, 2);
         var targetMinuteEnd = lesson.end.substring(3, 5);
         var targetDateEnd = moment(targetDateStart);
-        targetDateEnd.set('hours', targetHourEnd).set('minutes', targetMinuteEnd - 1).set('seconds', 59).set('milliseconds', 0);
+        targetDateEnd.set('hours', targetHourEnd).set('minutes', targetMinuteEnd).set('seconds', 0).set('milliseconds', 0);
     
         var timeOver = false;
         if(targetDateStart.isBefore(moment())) timeOver = true;
@@ -28,6 +28,7 @@ export default function StundenplanBooking({day, lesson}){
             }
             return false;
         });
+        
         var loginUsername = localStorage.getItem('loginUsername');
         if(!foundBooking){
             setState({...state, variant: 'light', disabled: timeOver, onClick: onBuchen, text: "Buchen", user: null});
