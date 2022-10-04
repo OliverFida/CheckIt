@@ -279,6 +279,7 @@ public class bookingsController : ControllerBase
 		}
 		booking.Note = model.Note;
 		booking.EndTime = model.EndTime;
+		ctx.Bookings.Update(booking);
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201))
 		{

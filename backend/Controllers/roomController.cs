@@ -102,6 +102,7 @@ public class roomsController : ControllerBase
 		}
 		room.Number = model.Number;
 		room.Name = model.Name;
+		ctx.Rooms.Update(room);
 		ctx.SaveChanges();
 		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
 		{
@@ -127,6 +128,7 @@ public class roomsController : ControllerBase
 			};
 		}
 		room.Active = true;
+		ctx.Rooms.Update(room);
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201))
 		{
@@ -154,6 +156,7 @@ public class roomsController : ControllerBase
 			};
 		}
 		room.Active = false;
+		ctx.Rooms.Update(room);
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(200))
 		{
