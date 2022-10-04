@@ -8,6 +8,8 @@ namespace awl_raumreservierung
 	/// </summary>
 	public partial class Booking
 	{
+		private DateTime? endTime;
+
 		/// <summary>
 		/// Booking-ID
 		/// </summary>
@@ -21,10 +23,10 @@ namespace awl_raumreservierung
 		public DateTime? StartTime { get; set; }
 
 		/// <summary>
-		/// Endzeit
+		/// Endzeit, eine Sekunde wird abgezogen.
 		/// </summary>
 		/// <value></value>
-		public DateTime? EndTime { get; set; }
+		public DateTime? EndTime { get => endTime; set => endTime = value?.Subtract(new TimeSpan(0,0,1)); }
 
 		/// <summary>
 		/// Raum-ID

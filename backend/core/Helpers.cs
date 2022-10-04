@@ -93,7 +93,7 @@ namespace awl_raumreservierung
 				return false;
 			}
 
-			bool overlapsWithOtherBookings = room.GetBookings().Any(b => b.StartTime <= model.EndTime && model.StartTime <= b.EndTime);
+			bool overlapsWithOtherBookings = room.GetBookings().Any(b => b.StartTime <= model.EndTime.Subtract(new TimeSpan(0,0,1)) && model.StartTime <= b.EndTime);
 			return overlapsWithOtherBookings;
 		}
 
