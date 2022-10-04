@@ -27,6 +27,12 @@
 		///
 		/// </summary>
 		/// <param name="room"></param>
+		public bool Active { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="room"></param>
 		public PublicRoom(Room? room)
 		{
 			if (room != null)
@@ -34,7 +40,9 @@
 				this.Id = room.Id.ToInt();
 				this.Number = room.Number;
 				this.Name = room.Name;
+				this.Active = room.Active;
 			}
 		}
+
 	}
 }
