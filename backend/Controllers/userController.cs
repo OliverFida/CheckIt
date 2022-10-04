@@ -36,6 +36,8 @@ public class userController : ControllerBase
     /// <returns></returns>
     [HttpGet("{idOrUsername}")]
     [Authorize()]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(200)]
     public PublicUser? GetByID(string idOrUsername)
     {
         User? user;
@@ -64,6 +66,9 @@ public class userController : ControllerBase
     /// <returns></returns>
     [HttpPatch("password")]
     [Authorize]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
     public ReturnModel PostChangePassword([FromBody] string password)
     {
         try

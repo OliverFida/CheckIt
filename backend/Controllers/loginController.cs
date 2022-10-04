@@ -38,6 +38,10 @@ public class loginController : ControllerBase
 	/// <param name="model"></param>
 	/// <returns></returns>
 	[HttpPost(Name = "login")]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(200)]
+
 	public IResult Post(LoginUserModel model)
 	{
 		var res = Login.CheckLogin(model.Username, model.Password);
@@ -119,7 +123,7 @@ public class loginController : ControllerBase
 	/// <summary>
 	/// Macht nichts
 	/// </summary>
-	[HttpPost("logout")]
+	[HttpPost("/logout")]
 	[Authorize]
 	public void PostLogout()
 	{
