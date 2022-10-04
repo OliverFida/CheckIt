@@ -53,12 +53,12 @@ public class roomController : ControllerBase
 		};
 	}
 
-	//(Roles = "Adminstrator")
+	
 	/// <summary>
-	/// 
+	/// Entfernt einen Raum aus der Datebank.
 	/// </summary>
-	/// <param name="roomId"></param>
-	/// <returns></returns>
+	/// <param name="roomId">ID des Raums der entfernt werden soll.</param>
+	/// <returns>Return Model mit Statusnachricht.</returns>
 	[HttpDelete("remove")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Remove(int roomId)
@@ -75,12 +75,12 @@ public class roomController : ControllerBase
 		};
 	}
 	/// <summary>
-	/// 
+	/// Ersetzt die Raumdaten eines Raums mit neuen Daten.
 	/// </summary>
-	/// <param name="roomId"></param>
-	/// <param name="model"></param>
-	/// <returns></returns>
-	[HttpPost("room/{roomId}/edit")]
+	/// <param name="roomId">Die ID des Raums der bearbeitet werden soll.</param>
+	/// <param name="model">Die neuen Daten fuer den Raum.</param>
+	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
+	[HttpPost("{roomId}/edit")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Edit(long roomId, CreateRoomModel model)
 	{
@@ -103,11 +103,11 @@ public class roomController : ControllerBase
 		};
 	}
 	/// <summary>
-	/// 
+	/// Aktiviert einen Raum fuer Buchungen.
 	/// </summary>
-	/// <param name="roomId"></param>
-	/// <returns></returns>
-	[HttpPost("room/{roomId}/activate")]
+	/// <param name="roomId">Die ID des Raums der aktiviert werden soll.</param>
+	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
+	[HttpPost("{roomId}/activate")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Activate(long roomId)
 	{
@@ -129,11 +129,11 @@ public class roomController : ControllerBase
 
 	}
 	/// <summary>
-	/// 
+	/// Deaktiviert einen Raum fuer Buchungen.
 	/// </summary>
-	/// <param name="roomId"></param>
-	/// <returns></returns>
-	[HttpPost("room/{roomId}/deactivate")]
+	/// <param name="roomId">Die ID des Raums der deaktiviert werden soll.</param>
+	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
+	[HttpPost("{roomId}/deactivate")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Deactivate(long roomId)
 	{
