@@ -3,7 +3,7 @@ table.useredit td {
 }
 
 table.userprofile td {
-    padding: 10px 0;
+    padding: 10px 10px;
     width: 50%;
-   vertical-align: middle;
+    vertical-align: middle;
 }

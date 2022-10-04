@@ -16,6 +16,10 @@ export default function AppNavBooking(){
         navigate("/user-edit");
     };
 
+    const clickRooms = () => {
+        navigate("/rooms");
+    }
+
     const onLogout = () => {
         LoginAPI.logout();
         navigate("/login");
@@ -25,6 +29,7 @@ export default function AppNavBooking(){
         <NavDropdown title="Vorname Nachname" align={'end'}>
             <NavDropdown.Item onClick={clickProfile}>Profil</NavDropdown.Item>
             {localStorage.getItem("loginAdmin") === "true" ? <NavDropdown.Item onClick={clickUserEdit}>Benutzerverwaltung</NavDropdown.Item> : null}
+            {localStorage.getItem("loginAdmin") === "true" ? <NavDropdown.Item onClick={clickRooms}>Raumverwaltung</NavDropdown.Item> : null}
             <NavDropdown.Item onClick={onLogout} className="border-top">Abmelden</NavDropdown.Item>
         </NavDropdown>
     );

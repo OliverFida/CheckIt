@@ -26,7 +26,9 @@ export default function UserEdit(){
         <>
             <Stack direction='vertical'>
                 <AppNavBar>
-                    
+                    <Button onClick={handleShowModalTwo} className="my-1">
+                        Neuen Benutzer erstellen
+                    </Button>
                 </AppNavBar>
                 
             </Stack>
@@ -56,10 +58,7 @@ export default function UserEdit(){
                     </td>
                 </tr>
             </tbody>
-        </Table>
-        <Button onClick={handleShowModalTwo} className="my-1">
-            Neuen Benutzer erstellen
-        </Button>
+        </Table>       
 
         <Modal show={show === 'modal-one'} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -106,15 +105,7 @@ export default function UserEdit(){
                     <Form.Group className="mb-3" controlId="newLastName">
                         <Form.Label>Nachname</Form.Label>
                         <Form.Control type="text"/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="newPassword">
-                        <Form.Label>Passwort</Form.Label>
-                        <Form.Control type="password"/>
-                    </Form.Group> 
-                    <Form.Group className="mb-3" controlId="newPasswordConfirm">
-                        <Form.Label>Passwort wiederholen</Form.Label>
-                        <Form.Control type="password"/>
-                    </Form.Group>                                      
+                    </Form.Group>                                                         
                 </Form> 
             </Modal.Body>
             <Modal.Footer>

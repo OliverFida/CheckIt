@@ -1,6 +1,6 @@
 // Component imports
 import React, { useState} from 'react';
-import {Stack, Button, Form, Modal, Row, Col, Table} from 'react-bootstrap';
+import {Button, Form, Modal, Row, Col, Table} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 
 import '../css/components/UserPage.css';
@@ -29,6 +29,10 @@ export default function UserPage(){
                             <tr>
                                 <td>Nachname:</td>
                                 <td>Nachname</td>
+                            </tr>
+                            <tr>
+                                <td>Letzter Login:</td>
+                                <td>04.10.2022</td>
                             </tr>
                             <tr>
                                 <td>Passwort ändern: </td>
