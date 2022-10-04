@@ -259,7 +259,7 @@ public class bookingsController : ControllerBase
 			};
 		}
 		// booking in future check
-		bool inPast = booking.EndTime > DateTime.Now;
+		bool inPast = booking.EndTime < DateTime.Now;
 		if (inPast)
 		{
 			return new ReturnModel(new StatusCodeResult(400))
