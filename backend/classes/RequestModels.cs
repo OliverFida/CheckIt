@@ -177,6 +177,11 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <value></value>
 		public string? Note { get; set; }
+		/// <summary>
+		/// Notiz
+		/// </summary>
+		/// <value></value>
+		public string? Username { get; set; }
 	}
 
 	/// <summary>

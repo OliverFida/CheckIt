@@ -77,7 +77,7 @@ public class bookingsController : ControllerBase
 		"Wenn nicht muss der aktuelle Benutzer ein Admin sein. Ist der Raum nicht existent oder aktiv, oder ueberlappt die " +
 		"Buchung sich mit einer bereits existierenden Buchung wird eine Fehlermeldung ausgegeben.")]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public ReturnModel Book(CreateBookingModel model,string? username)
+	public ReturnModel Book(CreateBookingModel model)
 	{
 		try
 		{
@@ -118,22 +118,22 @@ public class bookingsController : ControllerBase
 			{
 				return new ReturnModel(new StatusCodeResult(404))
 				{
-					Message = $"Benutzer {username} konnte nicht gefunden werden oder ist inaktiv!"
+					Message = $"Benutzer konnte nicht gefunden werden oder ist inaktiv!"
 				};
 			}
 
-			if (username is null)
+			if (model.Username is null)
 			{
 				userId = User.GetUser()?.Id ?? 0L;
 			}
 			else
 			{
-				User? user =Helpers.GetUser(username);
+				User? user =Helpers.GetUser(model.Username);
 				if (user is null || !user.Active)
 				{
 					return new ReturnModel(new StatusCodeResult(404))
 					{
-						Message = $"Benutzer {username} konnte nicht gefunden werden oder ist inaktiv!"
+						Message = $"Benutzer {model.Username} konnte nicht gefunden werden oder ist inaktiv!"
 					};
 				}
 				userId = user.Id;
@@ -227,14 +227,15 @@ public class bookingsController : ControllerBase
 		}
 	}
 	/// <summary>
-	/// Bearbeitet den Endzeitpunkt einer existierenden Buchung.
+	/// Bearbeitet eine existierenden Buchung.
 	/// </summary>
 	/// <param name="bookingId">ID der Buchung die bearbeitet werden soll.</param>
 	/// <param name="EndTime">Neue Endzeit der Buchung.</param>
+	/// <param name="note">Notiz welche die existierende Notiz ersetzt.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking der bearbeiteten Buchung in "Data".</returns>
 	[HttpPatch("{bookingId}")]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public ReturnModel Edit(long bookingId, DateTime EndTime)
+	public ReturnModel Edit(long bookingId, DateTime EndTime, string? note)
 	{
 		Booking? booking = Helpers.GetBooking(bookingId);
 		if (booking is null)
@@ -272,6 +273,7 @@ public class bookingsController : ControllerBase
 				Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
 			};
 		}
+		booking.Note = note;
 		booking.EndTime = EndTime;
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201))
@@ -280,41 +282,4 @@ public class bookingsController : ControllerBase
 			Message = "Buchung erfolgreich bearbeitet!"
 		};
 	}
-	/// <summary>
-	/// Bearbeitet die Notiz einer existierenden Buchung.
-	/// </summary>
-	/// <param name="bookingId">ID der Buchung deren Notiz bearbeitet werden soll.</param>
-	/// <param name="note">Notiz welche die existierende Notiz ersetzt.</param>
-	/// <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
-	[HttpPost("{bookingId}/editnote")]
-	public ReturnModel EditNote(long bookingId, string note)
-	{
-		Booking? booking = Helpers.GetBooking(bookingId);
-		if (booking is null)
-		{
-			Response.StatusCode = StatusCodes.Status404NotFound;
-			return new ReturnModel(new StatusCodeResult(404))
-			{
-				Message = "Buchung konnte nicht gefunden werden!"
-			};
-		}
-		// user auth
-		if (booking.UserId != User.GetUser()?.Id && !User.IsInRole("Admin"))
-		{
-			return new ReturnModel(new StatusCodeResult(401))
-			{
-				Message = "Keine Berechtigung!"
-			};
-		}
-		// booking in future check
-
-		booking.Note = note;
-		ctx.SaveChanges();
-		return new ReturnModel(new StatusCodeResult(201))
-		{
-			Message = "Buchung erfolgreich bearbeitet!",
-			Data = booking.ToPublicBooking()
-		};
-	}
-
 }
