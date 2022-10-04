@@ -32,7 +32,7 @@ export default function UserEdit(){
                 
             </Stack>
        
-       <Table>
+       <Table className='useredit'>
             <thead>
                 <tr>                        
                     <th>Vorname</th>

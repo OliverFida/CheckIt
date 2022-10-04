@@ -1,6 +1,6 @@
 // Component imports
 import React, { useState} from 'react';
-import {Stack, Button, Form, Modal, Table} from 'react-bootstrap';
+import {Stack, Button, Form, Modal, Row, Col, Table} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 
 import '../css/components/UserPage.css';
@@ -17,11 +17,31 @@ export default function UserPage(){
             <AppNavBar>
             </AppNavBar>
 
-            <div>
-                <Button onClick={handleShow}>
-                    Passwort ändern
-                </Button>
-            </div>
+            <Row className="justify-content-center align-items-center" style={{ height: '80vh' }}>
+                <Col md={5}>
+                    <h2 className="text-center">Profil</h2>
+                    <Table bordered>
+                        <tbody>
+                            <tr>
+                                <td>Vorname:</td>
+                                <td>Vorname</td>
+                            </tr>
+                            <tr>
+                                <td>Nachname:</td>
+                                <td>Nachname</td>
+                            </tr>
+                            <tr>
+                                <td>Passwort ändern: </td>
+                                <td>
+                                    <Button onClick={handleShow}>
+                                        Passwort ändern
+                                    </Button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </Table>                    
+                </Col>
+            </Row>
 
 
             <Modal show={show} onHide={handleClose} centered>
