@@ -180,6 +180,7 @@ public class bookingsController : ControllerBase
 	[HttpDelete("{bookingId}")]
 	[Authorize]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Remove(int bookingId)
 	{
 		try

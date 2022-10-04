@@ -61,6 +61,7 @@ public class roomsController : ControllerBase
 	/// <returns>Return Model mit Statusnachricht.</returns>
 	[HttpDelete("{roomId}")]
 	[Authorize(Roles = "Admin")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Remove(int roomId)
 	{
 		var room = ctx.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
@@ -82,6 +83,7 @@ public class roomsController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
 	[HttpPost("{roomId}")]
 	[Authorize(Roles = "Admin")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Edit(long roomId, CreateRoomModel model)
 	{
 		Room? room = Helpers.GetRoom(roomId);
@@ -135,6 +137,7 @@ public class roomsController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
 	[HttpPost("{roomId}/deactivate")]
 	[Authorize(Roles = "Admin")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Deactivate(long roomId)
 	{
 		Room? room = Helpers.GetRoom(roomId);
