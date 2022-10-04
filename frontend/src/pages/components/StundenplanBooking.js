@@ -5,7 +5,6 @@ import { Button } from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
 
 export default function StundenplanBooking({day, lesson}){
-    const username = "dageorg";
     const {hpContext, setHpContext} = useContext(HomePageContext);
     const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null});
 
@@ -18,13 +17,14 @@ export default function StundenplanBooking({day, lesson}){
         var timeOver = false;
         if(targetDate.isBefore(moment())) timeOver = true;
         
+        var loginUsername = localStorage.getItem('loginUsername');
         var foundBooking = hpContext.bookings.find(booking => moment.utc(booking.startTimeUTC).isSame(targetDate));
         if(!foundBooking){
             setState({...state, variant: 'light', disabled: timeOver, onClick: onBuchen, text: "Buchen", user: null});
-        }else if(username !== foundBooking.user.username){
+        }else if(loginUsername !== foundBooking.user.username){
             setState({...state, variant: 'danger', disabled: true, onClick: null, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`});
         }else{
-            setState({...state, variant: 'success', disabled: timeOver, onClick: onAusbuchen, text: "Gebucht", user: null});
+            setState({...state, variant: 'success', disabled: timeOver, onClick: onAusbuchen, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`});
         }
     }, [hpContext.bookings, hpContext.weekOffset]);
 

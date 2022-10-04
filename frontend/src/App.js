@@ -17,7 +17,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route exact path='/' element={<Navigate to='/login' />} />
-          <Route path='/login' element={<LoginPage />} />
+          <Route path='/login' element={<LoginProtectedRoute reverse><LoginPage /></LoginProtectedRoute>} />
           <Route path='/rooms' element={<RoomsPage />}/>
           <Route path='/noperm' element={<NoPersmissionsPage />} />
           <Route path='/home' element={<LoginProtectedRoute><HomePage /></LoginProtectedRoute>} />
@@ -30,13 +30,14 @@ export default function App() {
   );
 };
 
-function LoginProtectedRoute({children}){
-  if(localStorage.getItem("loginToken") !== null) return(<>{children}</>);
-  return(<Navigate to="/login" />);
+function LoginProtectedRoute({children, reverse = false}){
+  if(!reverse && localStorage.getItem("loginToken") === null) return(<Navigate to="/login" />);
+  if(reverse && localStorage.getItem("loginToken") !== null) return(<Navigate to="/home" />);
+  return(<>{children}</>);
 }
 
 function AdminProtectedRoute({children}){
-  var isAdmin = true;
+  var isAdmin = localStorage.getItem('loginAdmin');
   if(isAdmin) return(<LoginProtectedRoute>{children}</LoginProtectedRoute>);
   return(<Navigate to="/noperm" />);
 }

@@ -36,9 +36,9 @@ export default function StundenplanHead(){
             <tr>
                 <th key="th_0">
                     <ButtonGroup>
-                        <Button disabled={hpContext.weekOffset == 0 ? true : false} onClick={onToday}>Heute</Button>
-                        <Button disabled={hpContext.weekOffset == 0 ? true : false} onClick={onEarlier}>Früher</Button>
-                        <Button disabled={hpContext.weekOffset == 5 ? true : false} onClick={onLater}>Später</Button>
+                        <Button disabled={hpContext.weekOffset === 0 ? true : false} onClick={onEarlier}>Früher</Button>
+                        <Button disabled={hpContext.weekOffset === 0 ? true : false} onClick={onToday}>Heute</Button>
+                        <Button disabled={hpContext.weekOffset === 5 ? true : false} onClick={onLater}>Später</Button>
                     </ButtonGroup>
                 </th>
                 {elements}

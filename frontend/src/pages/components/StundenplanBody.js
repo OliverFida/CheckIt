@@ -19,8 +19,11 @@ export default function StundenplanBody(){
     }, []);
 
     useEffect(() => {
-        var temp = BookingsAPI.getBookings(hpContext.roomId);
-        if(hpContext.bookings) setHpContext({...hpContext, bookings: temp});
+        async function doAsync(){
+            var temp = await BookingsAPI.getBookings(hpContext.roomId);
+            if(hpContext.bookings) await setHpContext({...hpContext, bookings: temp});
+        }
+        doAsync();
     }, [hpContext.roomId]);
 
     return(

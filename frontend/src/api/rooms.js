@@ -1,3 +1,5 @@
+const apiRequest = require('./base').apiRequest;
+
 const rooms = [
     {
         "id": 0,
@@ -16,7 +18,8 @@ const rooms = [
     },
 ];
 
-function getRooms(){
+async function getRooms(){
+    return await apiRequest('room/get', "GET", null);
     return rooms;
 }
 

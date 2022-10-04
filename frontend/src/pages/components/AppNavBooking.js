@@ -33,11 +33,15 @@ function RoomDropDown(){
     const [elements, setElements] = useState([]);
 
     useEffect(() => {
-        setRooms(RoomsAPI.getRooms());
+        async function doAsync(){
+            var tempRooms = await RoomsAPI.getRooms();
+            await setRooms(tempRooms.data);
+        };
+        doAsync();
     }, []);
 
     useEffect(() => {
-        setElements(rooms.map(room => <NavDropdown.Item key={`room_${room.number}`} onClick={() => {onRoomSelect(room.name, room.id)}}>{room.name}</NavDropdown.Item>));
+        setElements(rooms.map(room => room.active ? <NavDropdown.Item key={`room_${room.number}`} onClick={() => {onRoomSelect(room.name, room.id)}}>{room.name}</NavDropdown.Item> : null));
     }, [rooms]);
     
     useEffect(() => {

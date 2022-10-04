@@ -1,22 +1,12 @@
 // Component imports
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Stack, Button, Form, Container, Row, Col} from 'react-bootstrap';
-import LoginContextProvider, { LoginContext } from '../contexts/LoginContext';
 import AppNavBar from './components/AppNavBar';
 // API imports
 import LoginAPI from '../api/login';
 
 export default function LoginPage(){
-    return(
-        <LoginContextProvider>
-            <LoginPageContent />
-        </LoginContextProvider>
-    );
-};
-
-function LoginPageContent(){
-    const {loginContext, setLoginContext} = useContext(LoginContext);
     const [values, setValues] = useState({username: "", password: ""});
     const navigate = useNavigate();
 
@@ -24,11 +14,10 @@ function LoginPageContent(){
         setValues({...values, [event.target.name]: event.target.value});
     };
 
-    const onLogin = () => {
-        var response = LoginAPI.login(values.username.toLowerCase(), values.password);
-        if(response.statusCode === 200){
-            // setLoginContext({...loginContext, username: values.username.toLowerCase(), loginToken: response.value});
-            localStorage.setItem("loginToken", response.value);
+    const onLogin = async () => {
+        var response = await LoginAPI.login(values.username.toLowerCase(), values.password);
+        
+        if(response.status === 200){
             navigate("/home");
         }else{
             setValues({...values, password: ""});
@@ -55,8 +44,6 @@ function LoginPageContent(){
                                 Einloggen
                             </Button>
                         </Form>
-                        <p><b>Debug Username:</b> dageorg<br />
-                        <b>Debug Password:</b> linux</p>
                     </Col>
                 </Row>
             </Container>
