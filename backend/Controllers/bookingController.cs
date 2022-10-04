@@ -235,12 +235,11 @@ public class bookingsController : ControllerBase
 	/// Bearbeitet eine existierenden Buchung.
 	/// </summary>
 	/// <param name="bookingId">ID der Buchung die bearbeitet werden soll.</param>
-	/// <param name="EndTime">Neue Endzeit der Buchung.</param>
-	/// <param name="note">Notiz welche die existierende Notiz ersetzt.</param>
+	/// <param name="model">Model mit den neuen Werten.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking der bearbeiteten Buchung in "Data".</returns>
 	[HttpPatch("{bookingId}")]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public ReturnModel Edit(long bookingId, DateTime EndTime, string? note)
+	public ReturnModel Edit(long bookingId, CreateBookingModel model)
 	{
 		Booking? booking = Helpers.GetBooking(bookingId);
 		if (booking is null)
@@ -278,8 +277,8 @@ public class bookingsController : ControllerBase
 				Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!"
 			};
 		}
-		booking.Note = note;
-		booking.EndTime = EndTime;
+		booking.Note = model.Note;
+		booking.EndTime = model.EndTime;
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201))
 		{
