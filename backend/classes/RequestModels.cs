@@ -5,33 +5,52 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace awl_raumreservierung
 {
-	public class ReturnModel
-	{
-        public ReturnModel() : this (new StatusCodeResult(200)) {
-		  }
-        public ReturnModel(StatusCodeResult statusCode) {
-            status = statusCode.StatusCode;
-				if (status is < 300 and > 199) {
-					statusMessage = "success";
-				} else {
-					statusMessage = ReasonPhrases.GetReasonPhrase(status);
-				}
+    public class ReturnModel
+    {
+        public ReturnModel() : this(new StatusCodeResult(200)) { }
+        public ReturnModel(StatusCodeResult statusCode)
+        {
+            Status = statusCode.StatusCode;
+            if (Status is < 300 and > 199)
+            {
+                StatusMessage = "success";
+            }
+            else
+            {
+                StatusMessage = ReasonPhrases.GetReasonPhrase(Status);
+            }
 
-				message = string.Empty;
+            Message = string.Empty;
         }
 
-		public int status { get; set; }
-		public string statusMessage { get; set; }
-		public string message { get; set; }
-	}
+        public int Status { get; set; }
+        public string StatusMessage { get; set; }
+        public string Message { get; set; }
+        public object? Data { get; set; }
+    }
 
-    public class CreateUserModel {
+    public class CreateUserModel
+    {
+        public string? Username { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public UserRole Role { get; set; }
+        public string? Password { get; set; }
+    }
 
-        public string username {get; set;}
-        public string firstname {get; set;}
-        public string lastname {get; set;} 
-        public UserRole rolle {get; set;}
-        public string password {get; set;}
+    public class UpdateUserModel
+    {
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public UserRole Role { get; set; }
+    }
+
+
+    public class CreateBookingModel
+    {
+        public int RoomID { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 
 }

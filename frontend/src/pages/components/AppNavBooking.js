@@ -3,22 +3,26 @@ import React, {useEffect, useState, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {Nav, Button, NavDropdown} from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
+
+import AppNavUser from './AppNavUser';
 // API imports
 import RoomsAPI from '../../api/rooms';
+import LoginAPI from '../../api/login';
 
 export default function AppNavBooking(){
     const navigate = useNavigate();
     
     const onLogout = () => {
+        LoginAPI.logout();
         navigate("/login");
     };
+
+   
 
     return(
         <Nav>
             <RoomDropDown />
-            <Nav.Item>
-                <Button onClick={onLogout}>Abmelden</Button>
-            </Nav.Item>
+            <AppNavUser />
         </Nav>
     );
 };
@@ -35,6 +39,10 @@ function RoomDropDown(){
     useEffect(() => {
         setElements(rooms.map(room => <NavDropdown.Item key={`room_${room.number}`} onClick={() => {onRoomSelect(room.name, room.id)}}>{room.name}</NavDropdown.Item>));
     }, [rooms]);
+    
+    useEffect(() => {
+        if(rooms.length > 0) onRoomSelect(rooms[0].name, rooms[0].id);
+    }, [elements]);
 
     const onRoomSelect = (name, id) => {
         setHpContext({...hpContext, roomName: name, roomId: id});

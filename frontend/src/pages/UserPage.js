@@ -1,70 +1,59 @@
 // Component imports
 import React, { useState} from 'react';
+import {Stack, Button, Form, Modal, Table} from 'react-bootstrap';
+import AppNavBar from './components/AppNavBar';
+import AppNavUser from './components/AppNavUser';
 
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
-import Table from 'react-bootstrap/Table';
+import '../css/components/UserPage.css';
 
 
-export default function UserPage(){
+export default function UserPage(){      
 
     const [show, setShow] = useState(false);
-
-    const editUserClose = () => setShow(false);
-    const editUserShow = () => setShow(true);   
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     return(
         <>
-            <Table>
-                <thead>
-                    <tr>
-                        <th>Vorname</th>
-                        <th>Nachname</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td valign='middle'>Name</td>
-                        <td valign='middle'>Nachname</td>
-                        <td>
-                            <Button onClick={editUserShow} className="me-2 my-1">
-                                Name Ändern
-                            </Button>
-                            <Button className="my-1">
-                                Passwort zurücksetzen
-                            </Button>
-                        </td>
-                    </tr>
-                </tbody>
-            </Table>
+            <Stack direction='vertical'>
+                <AppNavBar>
+                    <AppNavUser />
+                </AppNavBar>
+            </Stack>
 
-            <Modal show={show} onHide={editUserClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Name ändern</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group className="mb-3" controlId="formNewFirstName">
-                            <Form.Label>Neuer Vorname</Form.Label>
-                            <Form.Control type="text"/>
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="formNewLastName">
-                            <Form.Label>Neuer Nachname</Form.Label>
-                            <Form.Control type="text"/>
-                        </Form.Group>                                      
-                    </Form> 
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={editUserClose}>
-                        Abbrechen
-                    </Button>
-                    <Button variant="primary" onClick={editUserClose}>
-                        Änderungen Speichern
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            <div>
+                <Button onClick={handleShow}>
+                    Passwort ändern
+                </Button>
+            </div>
+
+
+            <Modal show={show} onHide={handleClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Passwort ändern</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form>
+                    <Form.Group className="mb-3" controlId="changePassword">
+                        <Form.Label>Neues Passwort</Form.Label>
+                        <Form.Control type="text"/>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="changePasswordConfirm">
+                        <Form.Label>Neues Passwort wiederholen</Form.Label>
+                        <Form.Control type="text"/>
+                    </Form.Group>                                      
+                </Form> 
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Abbrechen
+                </Button>
+                <Button variant="primary" onClick={handleClose}>
+                    Änderungen Speichern
+                </Button>
+            </Modal.Footer>
+        </Modal>
+
         </>
     );
 };

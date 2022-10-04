@@ -33,7 +33,7 @@ public class loginController : ControllerBase
 			_ => StatusCodes.Status400BadRequest
 		};
 
-		StatusCode(statuscode);
+		Response.StatusCode = statuscode;
 
 		if(res == Login.LoginMessage.InactiveUser) {
 			return Results.BadRequest( new {
@@ -59,6 +59,10 @@ public class loginController : ControllerBase
 			}
 
 			claims.Add(new Claim(ClaimTypes.Role, "User"));
+
+			if(builder is null){
+				throw new Exception("Builder is null uff 🙀");
+			}
 
 			var issuer = builder.Configuration["Jwt:Issuer"];
 			var audience = builder.Configuration["Jwt:Audience"];

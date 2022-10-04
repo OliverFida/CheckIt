@@ -5,9 +5,9 @@ import { Button } from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
 
 export default function StundenplanBooking({day, lesson}){
-    const userId = 0;
-    const {hpContext} = useContext(HomePageContext);
-    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: ""});
+    const username = "dageorg";
+    const {hpContext, setHpContext} = useContext(HomePageContext);
+    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null});
 
     useEffect(() => {
         var targetHour = lesson.start.substring(0, 2);
@@ -18,27 +18,28 @@ export default function StundenplanBooking({day, lesson}){
         var timeOver = false;
         if(targetDate.isBefore(moment())) timeOver = true;
         
-        var foundBooking = hpContext.bookings.find(booking => moment.utc(booking.startTime).isSame(targetDate));
+        var foundBooking = hpContext.bookings.find(booking => moment.utc(booking.startTimeUTC).isSame(targetDate));
         if(!foundBooking){
-            setState({...state, variant: 'light', disabled: timeOver, onClick: onBuchen, text: "Buchen"});
+            setState({...state, variant: 'light', disabled: timeOver, onClick: onBuchen, text: "Buchen", user: null});
+        }else if(username !== foundBooking.user.username){
+            setState({...state, variant: 'danger', disabled: true, onClick: null, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`});
         }else{
-            if(userId !== foundBooking.createdBy) var fremdGebucht = true;
-            setState({...state, variant: 'danger', disabled: timeOver || fremdGebucht, onClick: onAusbuchen, text: "Gebucht"});
+            setState({...state, variant: 'success', disabled: timeOver, onClick: onAusbuchen, text: "Gebucht", user: null});
         }
     }, [hpContext.bookings, hpContext.weekOffset]);
 
     const onBuchen = () => {
-        console.log(`Buchen ${day} ${lesson.key}`);
+        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, editMode: false}});
     };
     
     const onAusbuchen = () => {
-        console.log(`Ausbuchen ${day} ${lesson.key}`);
+        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, editMode: true}});
     };
 
     return(
         <td>
             <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
-                {state.text}
+                {state.text}<br />{state.user}
             </Button>
         </td>
     );
