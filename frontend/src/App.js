@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import UserPage from './pages/UserPage';
+import RoomsPage from './pages/RoomsPage';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path='/login' element={<LoginPage />} />
           <Route path='/home' element={<HomePage />} />
           <Route path='/user' element={<UserPage />} />
+          <Route path='/rooms' element={<RoomsPage />}/>
         </Routes>
       </BrowserRouter>
     </div>
