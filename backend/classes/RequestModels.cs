@@ -183,7 +183,23 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public string? Username { get; set; }
 	}
+	/// <summary>
+	/// Buchungsmodel
+	/// </summary>
+	public class UpdateBookingModel
+	{
+		/// <summary>
+		/// Endzeit
+		/// </summary>
+		/// <value></value>
+		public DateTime EndTime { get; set; }
 
+		/// <summary>
+		/// Notiz
+		/// </summary>
+		/// <value></value>
+		public string? Note { get; set; }
+	}
 	/// <summary>
 	/// Raummodel
 	/// </summary>
