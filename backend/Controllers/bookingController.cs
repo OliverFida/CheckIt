@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
@@ -105,7 +106,13 @@ public class bookingsController : ControllerBase
 				};
 
 			}
-
+			if (model.EndTime < model.StartTime)
+			{
+				return new ReturnModel(new StatusCodeResult(400))
+				{
+					Message = "Endzeit darf nicht vor Startzeit sein!"
+				};
+			}
 			bool overlapsWithOtherBookings = Helpers.BookingOverlaps(model);
 
 			if (overlapsWithOtherBookings)
@@ -259,6 +266,13 @@ public class bookingsController : ControllerBase
 			};
 		}
 		// booking in future check
+		if (model.EndTime < booking.StartTime)
+		{
+			return new ReturnModel(new StatusCodeResult(400))
+			{
+				Message = "Neue Endzeit darf nicht vor Buchungsbeginn sein"
+			};
+		}
 		bool inPast = booking.EndTime < DateTime.Now;
 		if (inPast)
 		{

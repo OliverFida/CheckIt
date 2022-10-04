@@ -110,10 +110,27 @@ namespace awl_raumreservierung
 				return false;
 			}
 
-			bool overlapsWithOtherBookings = room.GetBookings().Any(b => b.StartTime <= booking.EndTime && booking.StartTime <= b.EndTime);
+			bool overlapsWithOtherBookings = room.GetBookings().Any(b => b.StartTime <= booking.EndTime?.Subtract(new TimeSpan(0, 0, 1)) && booking.StartTime <= b.EndTime);
 			return overlapsWithOtherBookings;
 		}
-
+		/// <summary>
+		/// Checkt ob die Zeiten einer Buchung valide sind.
+		/// </summary>
+		/// <param name="booking">Booking</param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
+		public static bool checkBookingTime(Booking booking)
+		{
+			if (booking.StartTime > booking.EndTime)
+			{
+				throw new ArgumentException("Endzeit vor Startzeit");
+			}
+			if (BookingOverlaps(booking))
+			{
+				throw new ArgumentException("Buchung überlappt mit anderer Buchung");
+		}
+			return true;
+		}
 		/// <summary>
 		/// Setzt den Aktivstatus eines Users
 		/// </summary>
