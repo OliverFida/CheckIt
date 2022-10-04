@@ -3,6 +3,8 @@ import React, {useState, useEffect, useContext} from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import {HomePageContext} from '../../contexts/HomePageContext';
 
+import '../../css/components/UserPage.css';
+
 export default function BookingModal(){
     const {hpContext, setHpContext} = useContext(HomePageContext);
     const [state, setState] = useState(null);
@@ -51,7 +53,7 @@ export default function BookingModal(){
                     </Form.Group>
                     <Form.Group controlId="bookingNotes">
                         <Form.Label>Notizen</Form.Label>
-                        <Form.Control as="textarea" row={3} />
+                        <Form.Control as="textarea" rows={3} className="bookingNotes" />
                     </Form.Group>
                 </Form><br />
                 Day: {state?.day} <br />

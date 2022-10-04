@@ -1,12 +1,18 @@
 // Component imports
 import React, {useState, useEffect, useContext} from 'react';
 import moment from 'moment';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
 
 export default function StundenplanBooking({day, lesson}){
     const {hpContext, setHpContext} = useContext(HomePageContext);
     const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null});
+
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+          Tooltip Beispiel
+        </Tooltip>
+      );
 
     useEffect(() => {
         var targetHour = lesson.start.substring(0, 2);
@@ -38,9 +44,11 @@ export default function StundenplanBooking({day, lesson}){
 
     return(
         <td>
-            <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
-                {state.text}<br />{state.user}
-            </Button>
+            <OverlayTrigger overlay={renderTooltip}>
+                <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
+                    {state.text}<br />{state.user}                   
+                </Button>
+            </OverlayTrigger>
         </td>
     );
 }

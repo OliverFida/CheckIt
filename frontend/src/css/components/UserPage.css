@@ -7,3 +7,7 @@ table.userprofile td {
     width: 50%;
     vertical-align: middle;
 }
+
+.bookingNotes {
+    max-height: 200px;
+}
