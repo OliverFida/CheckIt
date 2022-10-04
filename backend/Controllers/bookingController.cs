@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
+using System.Web.Http.Results;
 using static awl_raumreservierung.Controllers.adminController;
+using StatusCodeResult = Microsoft.AspNetCore.Mvc.StatusCodeResult;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -10,13 +13,13 @@ namespace awl_raumreservierung.Controllers;
 [ApiController]
 [Route("[controller]")]
 #pragma warning disable IDE1006 // Naming Styles
-public class bookingController : ControllerBase
+public class bookingsController : ControllerBase
 #pragma warning restore IDE1006 // Naming Styles
 {
-	private readonly ILogger<bookingController> _logger;
+	private readonly ILogger<bookingsController> _logger;
 	private readonly checkITContext ctx;
 
-	public bookingController(ILogger<bookingController> logger)
+	public bookingsController(ILogger<bookingsController> logger)
 	{
 		ctx = new checkITContext();
 		_logger = logger;
@@ -28,8 +31,9 @@ public class bookingController : ControllerBase
 	/// <param name="roomId">Raum ID des Raums fuer den Buchungen ausgegeben werden.</param>
 	/// <param name="date">Ein Tag der Woche fuer die Buchungen ausgegeben werden.</param>
 	/// <returns> 'PublicBooking' Array fuer den Raum und Woche.</returns>
-	[HttpGet("room/{roomId}")]
+	[HttpGet("/rooms/{roomId}/bookings")]
 	[Authorize]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public PublicBooking[] Get(int roomId, DateTime? date)
 	{
 		try
@@ -63,16 +67,16 @@ public class bookingController : ControllerBase
 	}
 	/// <summary>
 	/// Erstellt eine neue Buchung laut dem uebergebeben Models fuer den angegebenen Benutzer.
-	/// Ist der Benutzer 'null' wird die Buchung fuer den aktuellen Benutzer erstellt. Wenn nicht muss der aktuelle
-	/// Benutzer ein Admin sein.
-	/// Ist der Raum nicht existent oder aktiv, oder ueberlappt die Buchung sich mit einer bereits existierenden
-	/// Buchung wird eine Fehlermeldung ausgegeben.
 	/// </summary>
 	/// <param name="model">Model der Buchung die erstellt werden soll.</param>
 	/// <param name="username"></param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
-	[HttpPut("book")]
+	[HttpPut()]
 	[Authorize]
+	[SwaggerOperation(Description ="Ist der Benutzer 'null' wird die Buchung fuer den aktuellen Benutzer erstellt. " +
+		"Wenn nicht muss der aktuelle Benutzer ein Admin sein. Ist der Raum nicht existent oder aktiv, oder ueberlappt die " +
+		"Buchung sich mit einer bereits existierenden Buchung wird eine Fehlermeldung ausgegeben.")]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public ReturnModel Book(CreateBookingModel model,string? username)
 	{
 		try
@@ -175,6 +179,7 @@ public class bookingController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht.</returns>
 	[HttpDelete("{bookingId}")]
 	[Authorize]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public ReturnModel Remove(int bookingId)
 	{
 		try
@@ -227,7 +232,8 @@ public class bookingController : ControllerBase
 	/// <param name="bookingId">ID der Buchung die bearbeitet werden soll.</param>
 	/// <param name="EndTime">Neue Endzeit der Buchung.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking der bearbeiteten Buchung in "Data".</returns>
-	[HttpPatch("{bookingId}/edit")]
+	[HttpPatch("{bookingId}")]
+	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public ReturnModel Edit(long bookingId, DateTime EndTime)
 	{
 		Booking? booking = Helpers.GetBooking(bookingId);

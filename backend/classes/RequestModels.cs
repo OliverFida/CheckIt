@@ -185,12 +185,6 @@ namespace awl_raumreservierung
 	public class CreateRoomModel
 	{
 		/// <summary>
-		/// Raum-ID
-		/// </summary>
-		/// <value></value>
-		public long Id { get; set; }
-
-		/// <summary>
 		/// Raumnummer
 		/// </summary>
 		/// <value></value>

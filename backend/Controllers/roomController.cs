@@ -7,13 +7,13 @@ namespace awl_raumreservierung.Controllers;
 [ApiController]
 [Route("[controller]")]
 #pragma warning disable IDE1006 // Naming Styles
-public class roomController : ControllerBase
+public class roomsController : ControllerBase
 #pragma warning restore IDE1006 // Naming Styles
 {
-	private readonly ILogger<roomController> _logger;
+	private readonly ILogger<roomsController> _logger;
 	private readonly checkITContext ctx;
 
-	public roomController(ILogger<roomController> logger)
+	public roomsController(ILogger<roomsController> logger)
 	{
 		_logger = logger;
 		ctx = new checkITContext();
@@ -22,7 +22,7 @@ public class roomController : ControllerBase
 	/// Liefert ein Array der Raeume in der Datenbank.
 	/// </summary>
 	/// <returns>Array der Raeume in der Datenbank</returns>
-	[HttpGet("get")]
+	[HttpGet()]
 	[Authorize]
 	public Room[] GetRooms()
 	{
@@ -33,7 +33,7 @@ public class roomController : ControllerBase
 	/// </summary>
 	/// <param name="model">RoomModel des Raums der erstellt werden soll.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom, wenn erfolgreich, in "Data".</returns>
-	[HttpPut("add")]
+	[HttpPut()]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Add(CreateRoomModel model)
 	{
@@ -53,13 +53,13 @@ public class roomController : ControllerBase
 		};
 	}
 
-	
+
 	/// <summary>
 	/// Entfernt einen Raum aus der Datebank.
 	/// </summary>
 	/// <param name="roomId">ID des Raums der entfernt werden soll.</param>
 	/// <returns>Return Model mit Statusnachricht.</returns>
-	[HttpDelete("remove")]
+	[HttpDelete("{roomId}")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Remove(int roomId)
 	{
@@ -80,7 +80,7 @@ public class roomController : ControllerBase
 	/// <param name="roomId">Die ID des Raums der bearbeitet werden soll.</param>
 	/// <param name="model">Die neuen Daten fuer den Raum.</param>
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
-	[HttpPost("{roomId}/edit")]
+	[HttpPost("{roomId}")]
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Edit(long roomId, CreateRoomModel model)
 	{
