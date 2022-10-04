@@ -1,28 +1,18 @@
 // Component imports
 import React, {useEffect, useState} from 'react';
 import {Stack, Navbar, Button, NavDropdown, Table} from 'react-bootstrap';
+import AppNavBar from './components/AppNavBar';
 // API imports
 import BookingsAPI from '../api/bookings';
 
 export default function RoomsPage(){
     return(
         <Stack direction='vertical'>
-            <RoomsNavBar />
+            <AppNavBar>
+                <Button>Raum erstellen</Button>
+            </AppNavBar>
             <RoomsList />
         </Stack>
-    );
-}
-
-function RoomsNavBar(){
-    return(
-        <Navbar bg='light' expand='lg'>
-            <Stack direction='horizontal' style={{width: '100%', justifyContent: 'space-between'}}>
-                <Navbar.Brand>Räume</Navbar.Brand>
-                <Stack direction='horizontal' gap={3}>
-                    <Button>Raum erstellen</Button>
-                </Stack>
-            </Stack>
-        </Navbar>
     );
 }
 
