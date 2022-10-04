@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.VisualBasic;
 
 namespace awl_raumreservierung
 {
@@ -154,6 +155,9 @@ namespace awl_raumreservierung
 	/// </summary>
 	public class CreateBookingModel
 	{
+		private DateTime startTime;
+		private DateTime endTime;
+
 		/// <summary>
 		/// Raum-ID
 		/// </summary>
@@ -164,13 +168,13 @@ namespace awl_raumreservierung
 		/// Startzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime StartTime { get; set; }
+		public DateTime StartTime { get => startTime; set => startTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
 
 		/// <summary>
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get; set; }
+		public DateTime EndTime { get => endTime; set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
 
 		/// <summary>
 		/// Notiz
@@ -188,11 +192,13 @@ namespace awl_raumreservierung
 	/// </summary>
 	public class UpdateBookingModel
 	{
+		private DateTime endTime;
+
 		/// <summary>
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get; set; }
+		public DateTime EndTime { get => endTime; set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
 
 		/// <summary>
 		/// Notiz
