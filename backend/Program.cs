@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using awl_raumreservierung.Controllers;
 using System.Reflection;
-using Microsoft.Data.Sqlite;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 loginController.builder = builder;
@@ -194,6 +194,32 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddSwaggerGen(setup =>
+{
+    OpenApiSecurityScheme jwtSecurityScheme = new()
+    {
+        BearerFormat = "JWT",
+        Name = "JWT Authentification",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "Setze hier den JWT Token ein",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+    setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+});
 
 var app = builder.Build();
 
