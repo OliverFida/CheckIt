@@ -32,28 +32,10 @@ namespace awl_raumreservierung
 		public DateTime? LastLogon { get; set; }
 
 		/// <summary>
-		/// Letzte Loginzeit in UTC
-		/// </summary>
-		/// <value></value>
-		public DateTime? LastLogonUTC
-		{
-			get { return LastLogon.ToUtc(); }
-		}
-
-		/// <summary>
 		/// Letzte Änderung der Nutzerdaten in Localtime
 		/// </summary>
 		/// <value></value>
 		public DateTime? Lastchange { get; set; }
-
-		/// <summary>
-		/// Letzte Änderung der Userdaten in UTC
-		/// </summary>
-		/// <value></value>
-		public DateTime? LastchangeUTC
-		{
-			get { return Lastchange.ToUtc(); }
-		}
 
 		/// <summary>
 		/// Rolle des Users

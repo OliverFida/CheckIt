@@ -18,28 +18,10 @@
 		public DateTime? StartTime { get; set; }
 
 		/// <summary>
-		/// Startzeit in UTC
-		/// </summary>
-		/// <value></value>
-		public DateTime? StartTimeUTC
-		{
-			get { return StartTime.ToUtc(); }
-		}
-
-		/// <summary>
 		/// Endzeit in Serverzeit
 		/// </summary>
 		/// <value></value>
 		public DateTime? EndTime { get; set; }
-
-		/// <summary>
-		/// Endzeit in UTC
-		/// </summary>
-		/// <value></value>
-		public DateTime? EndTimeUTC
-		{
-			get { return EndTime.ToUtc(); }
-		}
 
 		/// <summary>
 		/// Raum
@@ -60,15 +42,6 @@
 		public DateTime? CreateTime { get; set; }
 
 		/// <summary>
-		/// Erstellungsdatum in UTC
-		/// </summary>
-		/// <value></value>
-		public DateTime? CreateTimeUTC
-		{
-			get { return CreateTime.ToUtc(); }
-		}
-
-		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
@@ -84,7 +57,20 @@
 			this.StartTime = booking.StartTime;
 			this.EndTime = booking.EndTime;
 			this.Room = Helpers.GetRoom(booking.Room).ToPublicRoom();
-			this.User = Helpers.GetUser(booking.UserId.ToInt()).ToPublicUser();
+
+			var user = Helpers.GetUser(booking.UserId.ToInt()).ToPublicUser();
+
+			if (user.Username is null)
+			{
+				user = new PublicUser(new User { })
+				{
+					FirstName = "Gelöschter",
+					Lastname = "Benutzer",
+					Username = "deleted"
+				};
+			}
+
+			this.User = user;
 			this.CreateTime = booking.CreateTime;
 			this.Note = booking.Note;
 		}
