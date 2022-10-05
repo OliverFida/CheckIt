@@ -1,7 +1,10 @@
 const apiRequest = require('./base').apiRequest;
 
-async function getBookings(roomId){
-  var response = await apiRequest(`rooms/${roomId}/bookings`, "GET", null);
+async function getBookings(roomId, startDate, endDate){
+  var response = await apiRequest(`rooms/${roomId}/bookings`, "POST", {
+    startDate: startDate,
+    endDate: endDate
+  });
   return response.data;
 }
 
@@ -9,7 +12,7 @@ async function book(roomId, startTime, endTime, note){
   var returnValue;
 
   await apiRequest("bookings", "PUT", {
-    roodID: roomId,
+    roomID: roomId,
     startTime: startTime,
     endTime: endTime,
     note: note,

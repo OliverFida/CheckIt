@@ -18,7 +18,7 @@ export default function AppNavUser(){
     };
 
     return(
-        <NavDropdown title="Vorname Nachname" align={'end'}>
+        <NavDropdown title={`${localStorage.getItem("loginFirstName")} ${localStorage.getItem("loginLastName")}`} align={'end'}>
             <NavDropdown.Item onClick={clickProfile}>Profil</NavDropdown.Item>
             {localStorage.getItem("loginAdmin") === "true" ? <AppNavUserAdmin /> : null}
             <NavDropdown.Item onClick={onLogout} className="border-top">Abmelden</NavDropdown.Item>

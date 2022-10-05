@@ -7,7 +7,7 @@ import AppNavUser from './AppNavUser';
 export default function AppNavBar({children}){
     const navigate = useNavigate();
 
-    const clickHome = () => {
+    const onHome = () => {
         navigate("/home");
     }
 
@@ -16,9 +16,7 @@ export default function AppNavBar({children}){
             <Stack direction='horizontal' style={{width: '100%', justifyContent: 'space-between'}}>
                 <Navbar.Brand href='/home'>
                     CHECK-IT
-                    <Button onClick={clickHome} className='ms-2' size='sm'>
-                        Buchungsübersicht
-                    </Button>
+                    <Button onClick={onHome} className='ms-2' size='sm'>Buchungsübersicht</Button>
                 </Navbar.Brand>
                 <Stack direction='horizontal' style={{gap: '10px'}}>
                     {children}

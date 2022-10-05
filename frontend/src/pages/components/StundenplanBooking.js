@@ -1,18 +1,12 @@
 // Component imports
 import React, {useState, useEffect, useContext} from 'react';
 import moment from 'moment';
-import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
 
 export default function StundenplanBooking({day, lesson}){
     const {hpContext, setHpContext} = useContext(HomePageContext);
-    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null});
-
-    const renderTooltip = (props) => (
-        <Tooltip id="button-tooltip" {...props}>
-          Tooltip Beispiel
-        </Tooltip>
-      );
+    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null, tooltip: "", booking: null});
 
     useEffect(() => {
         var targetHourStart = lesson.start.substring(0, 2);
@@ -28,8 +22,8 @@ export default function StundenplanBooking({day, lesson}){
         if(targetDateStart.isBefore(moment())) timeOver = true;
         
         var foundBooking = hpContext.bookings.find(booking => {
-            if(targetDateStart.add(1, 'second').isBetween(moment.utc(booking.startTimeUTC), moment.utc(booking.endTimeUTC).add(1, 'second'))
-            && targetDateEnd.subtract(1, 'second').isBetween(moment.utc(booking.startTimeUTC), moment.utc(booking.endTimeUTC).add(1, 'second'))){
+            if(targetDateStart.add(1, 'second').isBetween(moment.utc(booking.startTime), moment.utc(booking.endTime).add(1, 'second'))
+            && targetDateEnd.subtract(1, 'second').isBetween(moment.utc(booking.startTime), moment.utc(booking.endTime).add(1, 'second'))){
                 return true;
             }
             return false;
@@ -37,39 +31,23 @@ export default function StundenplanBooking({day, lesson}){
         
         var loginUsername = localStorage.getItem('loginUsername');
         if(!foundBooking){
-            setState({...state, variant: 'light', disabled: timeOver, onClick: onBuchen, text: "Buchen", user: null});
+            setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false)}, text: "Buchen", user: null, tooltip: ""});
         }else if(loginUsername !== foundBooking.user.username){
-            setState({...state, variant: 'danger', disabled: true, onClick: null, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`});
+            setState({...state, variant: 'danger', disabled: timeOver, onClick: null, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note});
         }else{
-            setState({...state, variant: 'success', disabled: timeOver, onClick: onAusbuchen, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`});
+            setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
         }
     }, [hpContext.bookings, hpContext.weekOffset]);
 
-    const onBuchen = () => {
-        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, editMode: false}});
-    };
-    
-    const onAusbuchen = () => {
-        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, editMode: true}});
-    };
-
-    if(state.user != null){
-        return(
-            <td>
-                <OverlayTrigger overlay={renderTooltip}>
-                    <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
-                        {state.text}<br />{state.user}                   
-                    </Button>
-                </OverlayTrigger>                
-            </td>
-        );
-    } else {
-        return (
-            <td>
-                <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
-                    {state.text}<br />{state.user}                   
-                </Button>                
-            </td>
-        );
+    const onClick = (editMode) => {
+        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, booking: state.booking, editMode: editMode}});
     }
+
+    return(
+        <td>
+            <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
+                {state.text}<br />{state.user}                   
+            </Button>                
+        </td>
+    );
 }
