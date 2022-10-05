@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using System.Web.Http.Results;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Swashbuckle.AspNetCore.Annotations;
 using static awl_raumreservierung.Controllers.adminController;
 using StatusCodeResult = Microsoft.AspNetCore.Mvc.StatusCodeResult;
 
@@ -30,17 +31,18 @@ public class bookingsController : ControllerBase
 		ctx = new checkITContext();
 		_logger = logger;
 	}
+
 	/// <summary>
 	/// Liefert ein Array von Buchungen für den angegebenen Raum in der Woche des angegebenen Tags.
 	/// 
 	/// </summary>
 	/// <param name="roomId">Raum ID des Raums für den Buchungen ausgegeben werden.</param>
-	/// <param name="date">Ein Tag der Woche für die Buchungen ausgegeben werden.</param>
+	/// <param name="model">Model der Daten</param>
 	/// <returns> 'PublicBooking' Array für den Raum und Woche.</returns>
-	[HttpGet("/rooms/{roomId}/bookings")]
+	[HttpPost("/rooms/{roomId}/bookings")]
 	[Authorize]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public PublicBooking[] Get(int roomId, DateTime? date)
+	public PublicBooking[] Get(int roomId, GetBookingModel model)
 	{
 		try
 		{
@@ -51,16 +53,15 @@ public class bookingsController : ControllerBase
 				return Array.Empty<PublicBooking>();
 			}
 
-			if (date == null)
+			if (model.EndDate is null)
 			{
-				date = DateTime.Now.StartOfWeek();
+				model.EndDate = model.StartDate + new TimeSpan(6, 0, 0, 0);
 			}
-			date = date.Value.StartOfWeek();
 
 			return room.GetBookings()
 						  .Where(b =>
-								 b.StartTime >= date.Value &&
-								 b.EndTime <= date.Value.AddDays(6)
+								 b.StartTime >= model.StartDate &&
+								 b.EndTime <= model.EndDate
 							).Select(b => b.ToPublicBooking()).ToArray();
 		}
 		catch (Exception ex)
@@ -78,7 +79,7 @@ public class bookingsController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
 	[HttpPut()]
 	[Authorize]
-	[SwaggerOperation(Description ="Ist der Benutzer 'null' wird die Buchung fuer den aktuellen Benutzer erstellt. " +
+	[SwaggerOperation(Description = "Ist der Benutzer 'null' wird die Buchung fuer den aktuellen Benutzer erstellt. " +
 		"Wenn nicht muss der aktuelle Benutzer ein Admin sein. Ist der Raum nicht existent oder aktiv, oder ueberlappt die " +
 		"Buchung sich mit einer bereits existierenden Buchung wird eine Fehlermeldung ausgegeben.")]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -139,7 +140,7 @@ public class bookingsController : ControllerBase
 			}
 			else
 			{
-				User? user =Helpers.GetUser(model.Username);
+				User? user = Helpers.GetUser(model.Username);
 				if (user is null || !user.Active)
 				{
 					return new ReturnModel(new StatusCodeResult(404))
