@@ -144,7 +144,6 @@ if (!File.Exists(builder.Configuration.GetConnectionString("SqlConnection")))
 }
 
 // Add services to the container.
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -160,7 +159,6 @@ builder.Services
         o.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         //o.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
     });
-
 builder.Services
     .AddAuthentication(options =>
     {
@@ -240,7 +238,6 @@ app.UseCors(
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
 
 app.MapControllers();
 
