@@ -31,6 +31,10 @@ export default function UserPage(){
                                 <td>Nachname</td>
                             </tr>
                             <tr>
+                                <td>Rolle:</td>
+                                <td>Benutzerrolle</td>
+                            </tr>
+                            <tr>
                                 <td>Letzter Login:</td>
                                 <td>04.10.2022</td>
                             </tr>

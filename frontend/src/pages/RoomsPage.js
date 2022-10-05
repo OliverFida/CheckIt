@@ -27,7 +27,7 @@ export default function RoomsPage(){
         <>
         <Stack direction='vertical'>
             <AppNavBar>
-                <Button onClick={handleShowModalOne}>Raum erstellen</Button>
+                <Button onClick={handleShowModalOne}>Neuen Raum erstellen</Button>
             </AppNavBar>
             
                 <Table className='rooms'>
@@ -64,7 +64,7 @@ export default function RoomsPage(){
 
             <Modal show={show === 'modal-one'} onHide={handleClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Raum erstellen</Modal.Title>
+                <Modal.Title>Neuen Raum erstellen</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
