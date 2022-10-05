@@ -36,7 +36,7 @@ export default function BookingModal(){
 
     return(
         <Modal show={state !== null} onHide={onCancel} centered>
-            <Modal.Header>
+            <Modal.Header closeButton>
                 <Modal.Title>Buchung</Modal.Title>
             </Modal.Header>
             <Modal.Body>
