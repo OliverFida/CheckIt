@@ -23,6 +23,10 @@ export default function UserPage(){
                     <Table bordered className='userprofile'>
                         <tbody>
                             <tr>
+                                <td>Benutzername:</td>
+                                <td>Username</td>
+                            </tr>
+                            <tr>
                                 <td>Vorname:</td>
                                 <td>Vorname</td>
                             </tr>
