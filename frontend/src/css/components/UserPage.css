@@ -1,5 +1,8 @@
-table.useredit td {
-    text-align: center;
+table {
+    margin: 0 10px;
+}
+table.useredit th {
+    text-align: left;
 }
 
 table.userprofile td {

@@ -53,13 +53,23 @@ export default function StundenplanBooking({day, lesson}){
         setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, editMode: true}});
     };
 
-    return(
-        <td>
-            <OverlayTrigger overlay={renderTooltip}>
+    if(state.user != null){
+        return(
+            <td>
+                <OverlayTrigger overlay={renderTooltip}>
+                    <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
+                        {state.text}<br />{state.user}                   
+                    </Button>
+                </OverlayTrigger>                
+            </td>
+        );
+    } else {
+        return (
+            <td>
                 <Button className="buchenBtn" variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
                     {state.text}<br />{state.user}                   
-                </Button>
-            </OverlayTrigger>
-        </td>
-    );
+                </Button>                
+            </td>
+        );
+    }
 }

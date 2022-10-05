@@ -16,7 +16,7 @@ export default function UserPage(){
         <>
             <AppNavBar>
             </AppNavBar>
-
+            
             <Row className="justify-content-center align-items-center" style={{ height: '80vh' }}>
                 <Col md={5}>
                     <h2 className="text-center">Profil</h2>
