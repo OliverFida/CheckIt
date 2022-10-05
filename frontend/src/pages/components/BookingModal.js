@@ -22,7 +22,6 @@ export default function BookingModal(){
     }, [hpContext.selectedBooking]);
 
     useEffect(() => {
-        console.log(state); 
         if(state === null) return;
         if(state.booking === null){
             setState({...state, booking: {}});
