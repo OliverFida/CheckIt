@@ -13,7 +13,7 @@ namespace awl_raumreservierung.Controllers;
 #pragma warning disable IDE1006 // Naming Styles
 public class adminController : ControllerBase
 {
-    private readonly ILogger<adminController> _logger;
+	private readonly ILogger<adminController> _logger;
 
 	private readonly checkITContext ctx;
 
@@ -34,8 +34,8 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPut("user")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(201)]
+	[ProducesResponseType(400)]
+	[ProducesResponseType(201)]
 	public ReturnModel Put(CreateUserModel model)
 	{
 		try
@@ -51,7 +51,7 @@ public class adminController : ControllerBase
 				};
 			}
 
-            var existingUser = Helpers.GetUser(model.Username ?? "");
+			var existingUser = Helpers.GetUser(model.Username ?? "");
 
 			if (existingUser != null)
 			{
@@ -103,9 +103,9 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPatch("user/{username}")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(200)]
+	[ProducesResponseType(404)]
+	[ProducesResponseType(400)]
+	[ProducesResponseType(200)]
 	public ReturnModel UpdateUser(string username, UpdateUserModel model)
 	{
 		try
@@ -123,13 +123,13 @@ public class adminController : ControllerBase
 				};
 			}
 
-            user.Firstname = model.FirstName;
-            user.Lastname = model.LastName;
-            user.Role = model.Role;
-            user.Lastchange = DateTime.Now;
+			user.Firstname = model.FirstName;
+			user.Lastname = model.LastName;
+			user.Role = model.Role;
+			user.Lastchange = DateTime.Now;
 
-            ctx.Users.Update(user);
-            ctx.SaveChanges();
+			ctx.Users.Update(user);
+			ctx.SaveChanges();
 
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel() { Message = $"Benutzer {username} erfolgreich bearbeitet!", Data = user.ToPublicUser() };
@@ -138,15 +138,15 @@ public class adminController : ControllerBase
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-            Response.StatusCode = StatusCodes.Status400BadRequest;
-            return new ReturnModel()
-            {
-                Status = 400,
-                StatusMessage = "error",
-                Message = "Es ist ein Fehler aufgetreten!"
-            };
-        }
-    }
+			Response.StatusCode = StatusCodes.Status400BadRequest;
+			return new ReturnModel()
+			{
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
 
 	/// <summary>
 	/// Löscht einen User
@@ -155,13 +155,18 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpDelete("user/{username}")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(200)]
+	[ProducesResponseType(404)]
+	[ProducesResponseType(400)]
+	[ProducesResponseType(200)]
 	public ReturnModel Delete(string username)
 	{
 		try
 		{
+			if (username == User.GetUsername())
+			{
+				throw new ArgumentException("User kann sich nicht selbst deaktivieren.");
+			}
+
 			var user = Helpers.GetUser(username);
 
 			if (user is null)
@@ -196,98 +201,103 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPost("user/{username}/activate")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	[ProducesResponseType(200)]
 	public ReturnModel Post(string username)
 	{
 		try
 		{
 			var user = Helpers.GetUser(username);
 
-            if (user is null)
-            {
-                Response.StatusCode = StatusCodes.Status404NotFound;
-                return new ReturnModel()
-                {
-                    Status = 404,
-                    StatusMessage = "error",
-                    Message = $"Benutzer {username} wurde nicht gefunden!"
-                };
-            }
+			if (user is null)
+			{
+				Response.StatusCode = StatusCodes.Status404NotFound;
+				return new ReturnModel()
+				{
+					Status = 404,
+					StatusMessage = "error",
+					Message = $"Benutzer {username} wurde nicht gefunden!"
+				};
+			}
 
-            Helpers.SetUserStatus(user, true);
+			Helpers.SetUserStatus(user, true);
 
-            Response.StatusCode = StatusCodes.Status200OK;
-            return new ReturnModel()
-            {
-                Status = 200,
-                Message = $"Benutzer {username} wurde aktiviert!",
-                Data = user.ToPublicUser()
-            };
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Fehler aufgetreten: ", ex);
+			Response.StatusCode = StatusCodes.Status200OK;
+			return new ReturnModel()
+			{
+				Status = 200,
+				Message = $"Benutzer {username} wurde aktiviert!",
+				Data = user.ToPublicUser()
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
 
-            Response.StatusCode = StatusCodes.Status400BadRequest;
-            return new ReturnModel()
-            {
-                Status = 400,
-                StatusMessage = "error",
-                Message = "Es ist ein Fehler aufgetreten!"
-            };
-        }
-    }
+			Response.StatusCode = StatusCodes.Status400BadRequest;
+			return new ReturnModel()
+			{
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
 
-    	/// <summary>
+	/// <summary>
 	/// Deaktiviert einen Benutzer
 	/// </summary>
 	/// <param name="username">Username des Users</param>
 	/// <returns></returns>
 	[HttpPost("user/{username}/deactivate")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(200)]
+	[ProducesResponseType(400)]
+	[ProducesResponseType(200)]
 	public ReturnModel PostDeactivate(string username)
 	{
 		try
 		{
+			if (username == User.GetUsername())
+			{
+				throw new ArgumentException("User kann sich nicht selbst deaktivieren.");
+			}
+
 			var user = Helpers.GetUser(username);
 
-            if (user is null)
-            {
-                Response.StatusCode = StatusCodes.Status404NotFound;
-                return new ReturnModel()
-                {
-                    Status = 404,
-                    StatusMessage = "error",
-                    Message = $"Benutzer {username} wurde nicht gefunden!"
-                };
-            }
+			if (user is null)
+			{
+				Response.StatusCode = StatusCodes.Status404NotFound;
+				return new ReturnModel()
+				{
+					Status = 404,
+					StatusMessage = "error",
+					Message = $"Benutzer {username} wurde nicht gefunden!"
+				};
+			}
 
-            Helpers.SetUserStatus(user, false);
+			Helpers.SetUserStatus(user, false);
 
-            Response.StatusCode = StatusCodes.Status200OK;
-            return new ReturnModel()
-            {
-                Status = 200,
-                Message = $"Benutzer {username} wurde deaktiviert!",
-                Data = user.ToPublicUser()
-            };
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Fehler aufgetreten: ", ex);
+			Response.StatusCode = StatusCodes.Status200OK;
+			return new ReturnModel()
+			{
+				Status = 200,
+				Message = $"Benutzer {username} wurde deaktiviert!",
+				Data = user.ToPublicUser()
+			};
+		}
+		catch (Exception ex)
+		{
+			_logger.LogError("Fehler aufgetreten: ", ex);
 
-            Response.StatusCode = StatusCodes.Status400BadRequest;
-            return new ReturnModel()
-            {
-                Status = 400,
-                StatusMessage = "error",
-                Message = "Es ist ein Fehler aufgetreten!"
-            };
-        }
-    }
+			Response.StatusCode = StatusCodes.Status400BadRequest;
+			return new ReturnModel()
+			{
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
 
 	/// <summary>
 	/// Gibt die gesamte Userliste zurück
@@ -295,8 +305,8 @@ public class adminController : ControllerBase
 	/// <returns>Liste aller User mit Daten</returns>
 	[HttpGet("users")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(500)]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(500)]
 	public PublicUser[] Get()
 	{
 		try
@@ -318,8 +328,8 @@ public class adminController : ControllerBase
 	/// <returns>Dict aus Rollen-ID und Beschreibung</returns>
 	[HttpGet("roles")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(500)]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(500)]
 	public Dictionary<int, string> GetRoles()
 	{
 		try
@@ -342,9 +352,9 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpPatch("user/{username}/password")]
 	[Authorize(Roles = "Admin")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(404)]
-    [ProducesResponseType(400)]
+	[ProducesResponseType(200)]
+	[ProducesResponseType(404)]
+	[ProducesResponseType(400)]
 	public ReturnModel ChangePassword(string username, [FromBody] string password)
 	{
 		try
@@ -369,13 +379,25 @@ public class adminController : ControllerBase
 		{
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
-            Response.StatusCode = StatusCodes.Status400BadRequest;
-            return new ReturnModel()
-            {
-                Status = 400,
-                StatusMessage = "error",
-                Message = "Es ist ein Fehler aufgetreten!"
-            };
-        }
-    }
+			Response.StatusCode = StatusCodes.Status400BadRequest;
+			return new ReturnModel()
+			{
+				Status = 400,
+				StatusMessage = "error",
+				Message = "Es ist ein Fehler aufgetreten!"
+			};
+		}
+	}
+
+#if DEBUG
+	/// <summary>
+	/// Yeet bookings
+	/// </summary>
+	[HttpPatch("/bookings/yeet")]
+	[Authorize(Roles = "Admin")]
+	public void DeleteBookings(){
+		ctx.Bookings.RemoveRange(ctx.Bookings);
+		ctx.SaveChanges();
+	}
 }
+#endif

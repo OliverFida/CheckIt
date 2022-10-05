@@ -229,4 +229,22 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public bool Active { get; set; }
 	}
+
+	/// <summary>
+	/// Model zum Holen von Bookings
+	/// </summary>
+	public class GetBookingModel
+	{
+		/// <summary>
+		/// Startdatum der Abfrage, default Montag der aktuellen Woche
+		/// </summary>
+		/// <value></value>
+		public DateTime StartDate { get; set; } = DateTime.Now.StartOfWeek();
+
+		/// <summary>
+		/// Enddatum der Abfrage, default das Ende der Woche von Startdate
+		/// </summary>
+		/// <returns></returns>
+		public DateTime? EndDate { get; set; }
+	}
 }
