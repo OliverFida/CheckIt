@@ -2,7 +2,8 @@ const axios = require('axios').default;
 
 const SERVER_CONF = {
     PROTOCOL: "https",
-    ADDRESS: "10.0.5.57",
+    // ADDRESS: "10.0.5.57",
+    ADDRESS: "localhost",
     PORT: "7061"
 };
 

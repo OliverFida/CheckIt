@@ -387,6 +387,7 @@ public class adminController : ControllerBase
 				Message = "Es ist ein Fehler aufgetreten!"
 			};
 		}
+	}
 #if DEBUG
 	/// <summary>
 	/// Yeet bookings
@@ -398,5 +399,4 @@ public class adminController : ControllerBase
 		ctx.SaveChanges();
 	}
 #endif
-	}
 }
