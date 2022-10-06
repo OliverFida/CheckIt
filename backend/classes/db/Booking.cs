@@ -8,7 +8,7 @@ namespace awl_raumreservierung
 	/// </summary>
 	public partial class Booking
 	{
-		private DateTime? endTime;
+		private DateTime endTime;
 
 		/// <summary>
 		/// Booking-ID
@@ -20,13 +20,13 @@ namespace awl_raumreservierung
 		/// Startzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime? StartTime { get; set; }
+		public DateTime StartTime { get; set; }
 
 		/// <summary>
 		/// Endzeit, eine Sekunde wird abgezogen.
 		/// </summary>
 		/// <value></value>
-		public DateTime? EndTime { get => endTime; set => endTime = value?.Subtract(new TimeSpan(0,0,1)); }
+		public DateTime EndTime { get => endTime; set => endTime = value.Subtract(new TimeSpan(0,0,1)); }
 
 		/// <summary>
 		/// Raum-ID
@@ -44,7 +44,7 @@ namespace awl_raumreservierung
 		/// Erstellungsdatum
 		/// </summary>
 		/// <value></value>
-		public DateTime? CreateTime { get; set; }
+		public DateTime CreateTime { get; set; }
 
 		/// <summary>
 		/// Ersteller
@@ -73,7 +73,7 @@ namespace awl_raumreservierung
 		/// <param name="createTime"></param>
 		/// <param name="createdBy"></param>
 		/// <param name="note"></param>
-		public Booking(DateTime? startTime, DateTime? endTime, long room, long userId, DateTime? createTime, long? createdBy, string note)
+		public Booking(DateTime startTime, DateTime endTime, long room, long userId, DateTime createTime, long? createdBy, string note)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
