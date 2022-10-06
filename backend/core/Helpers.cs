@@ -45,7 +45,7 @@ namespace awl_raumreservierung
 		/// <returns></returns>
 		public static bool DoesUserExist(int userID)
 		{
-			return new checkITContext().Users.Find(userID) is null;
+			return new checkITContext().Users.Find(userID) is not null;
 		}
 
 		/// <summary>
@@ -85,6 +85,16 @@ namespace awl_raumreservierung
 		}
 
 		/// <summary>
+		/// Checkt, ob ein Raum existiert
+		/// </summary>
+		/// <param name="id">ID des Raums</param>
+		/// <returns></returns>
+		public static bool DoesRoomExist(long id){
+			using checkITContext ctx = new();
+			return ctx.Rooms.Find(id) is not null;
+		}
+
+		/// <summary>
 		/// Holt ein Booking aus der DB
 		/// </summary>
 		/// <param name="id">Booking-ID</param>
@@ -100,6 +110,17 @@ namespace awl_raumreservierung
 			}
 
 			return booking;
+		}
+
+		/// <summary>
+		/// Checkt, ob ein spezifisches Booking existiert
+		/// </summary>
+		/// <param name="id">ID des Bookings</param>
+		/// <returns></returns>
+		public static bool DoesBookingExist(long id){
+			using checkITContext ctx = new();
+
+			return ctx.Bookings.Find(id) is not null;
 		}
 
 		/// <summary>
