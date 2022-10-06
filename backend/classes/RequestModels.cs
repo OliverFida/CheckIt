@@ -136,13 +136,13 @@ namespace awl_raumreservierung
 		/// Vorname
 		/// </summary>
 		/// <value></value>
-		public string? FirstName { get; set; }
+		public string FirstName { get; set; } = null!;
 
 		/// <summary>
 		/// Nachname
 		/// </summary>
 		/// <value></value>
-		public string? LastName { get; set; }
+		public string LastName { get; set; } = null!;
 
 		/// <summary>
 		/// Rolle
