@@ -71,19 +71,19 @@ namespace awl_raumreservierung
 		/// Username
 		/// </summary>
 		/// <value></value>
-		public string? Username { get; set; }
+		public string Username { get; set; } = null!;
 
 		/// <summary>
 		/// Vorname
 		/// </summary>
 		/// <value></value>
-		public string? FirstName { get; set; }
+		public string FirstName { get; set; } = null!;
 
 		/// <summary>
 		/// Nachname
 		/// </summary>
 		/// <value></value>
-		public string? LastName { get; set; }
+		public string LastName { get; set; } = null!;
 
 		/// <summary>
 		/// Rolle
@@ -95,7 +95,7 @@ namespace awl_raumreservierung
 		/// Password
 		/// </summary>
 		/// <value></value>
-		public string? Password { get; set; }
+		public string Password { get; set; } = null!;
 	}
 
 	/// <summary>
@@ -195,7 +195,16 @@ namespace awl_raumreservierung
 		/// Notiz
 		/// </summary>
 		/// <value></value>
-		public string? Username { get; set; }
+		public string Username { get; set; }
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="username"></param>
+		public CreateBookingModel(string username)
+		{
+			Username = username;
+		}
 	}
 
 	/// <summary>
@@ -231,13 +240,24 @@ namespace awl_raumreservierung
 		/// Raumnummer
 		/// </summary>
 		/// <value></value>
-		public string? Number { get; set; }
+		public string Number { get; set; }
 
 		/// <summary>
 		/// /// Raumname
 		/// </summary>
 		/// <value></value>
-		public string? Name { get; set; }
+		public string Name { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="number"></param>
+		public CreateRoomModel(string name, string number)
+		{
+			Name = name;
+			Number = number;
+		}
 
 		/// <summary>
 		/// Aktivstatus

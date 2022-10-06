@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 
 namespace awl_raumreservierung
 {
@@ -54,7 +56,7 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="usr"></param>
 		/// <returns></returns>
-		public static PublicUser ToPublicUser(this User? usr)
+		public static PublicUser ToPublicUser(this User usr)
 		{
 			return new PublicUser(usr);
 		}
@@ -64,7 +66,7 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="room"></param>
 		/// <returns></returns>
-		public static PublicRoom ToPublicRoom(this Room? room)
+		public static PublicRoom ToPublicRoom(this Room room)
 		{
 			return new PublicRoom(room);
 		}
@@ -151,5 +153,24 @@ namespace awl_raumreservierung
 				return new List<Booking>().ToArray();
 			}
 		}
+
+
+	/// <summary>
+	/// Erstellt ein Fehlerreturnmodel
+	/// </summary>
+	/// <param name="controller"></param>
+	/// <param name="ex">Exception</param>
+	/// <returns></returns>
+	public static ReturnModel GetErrorModel(this ControllerBase controller, Exception ex)
+	{
+		Debug.WriteLine("Fehler aufgetreten: ", ex);
+
+		controller.Response.StatusCode = StatusCodes.Status400BadRequest;
+		return new ReturnModel()
+		{
+			Status = 400,
+			Message = $"{ex}"
+		};
+	}
 	}
 }

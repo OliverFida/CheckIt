@@ -11,19 +11,19 @@ namespace awl_raumreservierung
 		/// Username
 		/// </summary>
 		/// <value></value>
-		public string? Username { get; set; }
+		public string Username { get; set; }
 
 		/// <summary>
 		/// Vorname
 		/// </summary>
 		/// <value></value>
-		public string? FirstName { get; set; }
+		public string FirstName { get; set; }
 
 		/// <summary>
 		/// Nachname
 		/// </summary>
 		/// <value></value>
-		public string? Lastname { get; set; }
+		public string Lastname { get; set; }
 
 		/// <summary>
 		/// Letzte Loginzeit in Localtime
@@ -41,33 +41,30 @@ namespace awl_raumreservierung
 		/// Rolle des Users
 		/// </summary>
 		/// <value></value>
-		public UserRole? Role { get; set; }
+		public UserRole Role { get; set; }
 
 		/// <summary>
 		/// Wahr, falsch der User aktivgesetzt ist
 		/// </summary>
 		/// <value></value>
-		public bool? Active { get; set; }
+		public bool Active { get; set; }
 
 		/// <summary>
 		///
 		/// /// </summary>
 		/// <param name="user"></param>
-		public PublicUser(awl_raumreservierung.User? user)
+		public PublicUser(awl_raumreservierung.User user)
 		{
-			if (user != null)
-			{
-				Username = user.Username;
-				FirstName = user.Firstname;
-				Lastname = user.Lastname;
-				LastLogon = user.Lastlogon;
-				Lastchange = user.Lastchange;
-				Role = user.Role;
-				Active = user.Active;
-			}
+			Username = user.Username;
+			FirstName = user.Firstname;
+			Lastname = user.Lastname;
+			LastLogon = user.Lastlogon;
+			Lastchange = user.Lastchange;
+			Role = user.Role;
+			Active = user.Active;
 
-				DateTime.SpecifyKind(Lastchange?? DateTime.Now, DateTimeKind.Utc);
-				DateTime.SpecifyKind(LastLogon ?? DateTime.Now, DateTimeKind.Utc);
+			DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
+			DateTime.SpecifyKind(LastLogon ?? DateTime.Now, DateTimeKind.Utc);
 		}
 	}
 }

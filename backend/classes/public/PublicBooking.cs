@@ -1,4 +1,6 @@
-﻿namespace awl_raumreservierung
+﻿using System.Diagnostics;
+
+namespace awl_raumreservierung
 {
 	/// <summary>
 	/// Öffentliche Daten einer Buchung
@@ -15,13 +17,13 @@
 		/// Startzeit in Serverzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime? StartTime { get; set; }
+		public DateTime StartTime { get; set; }
 
 		/// <summary>
 		/// Endzeit in Serverzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime? EndTime { get; set; }
+		public DateTime EndTime { get; set; }
 
 		/// <summary>
 		/// Raum
@@ -39,7 +41,7 @@
 		/// Erstellungsdatum in Serverzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime? CreateTime { get; set; }
+		public DateTime CreateTime { get; set; }
 
 		/// <summary>
 		/// Notiz
@@ -58,16 +60,21 @@
 			this.EndTime = booking.EndTime;
 			this.Room = Helpers.GetRoom(booking.Room).ToPublicRoom();
 
-			var user = Helpers.GetUser(booking.UserId.ToInt()).ToPublicUser();
+			PublicUser user;
 
-			if (user.Username is null)
+			try
 			{
+				user = Helpers.GetUser(booking.UserId.ToInt()).ToPublicUser();
+			}
+			catch (Exception ex) { 
 				user = new PublicUser(new User { })
 				{
 					FirstName = "Gelöschter",
 					Lastname = "Benutzer",
 					Username = "deleted"
 				};
+
+				Debug.WriteLine(ex);
 			}
 
 			this.User = user;
