@@ -51,9 +51,7 @@ public class adminController : ControllerBase
 				};
 			}
 
-			var existingUser = Helpers.GetUser(model.Username ?? "");
-
-			if (existingUser != null)
+			if (Helpers.DoesUserExist(model.Username))
 			{
 				Response.StatusCode = StatusCodes.Status400BadRequest;
 				return new ReturnModel()
@@ -67,10 +65,10 @@ public class adminController : ControllerBase
 			ctx.Add(
 				new User
 				{
-					Username = model.Username ?? "",
+					Username = model.Username,
 					Firstname = model.FirstName,
 					Lastname = model.LastName,
-					Passwd = model.Password ?? "",
+					Passwd = model.Password,
 					Lastchange = DateTime.Now,
 					Role = model.Role,
 					Active = true
@@ -83,15 +81,7 @@ public class adminController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError("Fehler aufgetreten: ", ex);
-
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel()
-			{
-				Status = 400,
-				StatusMessage = "error",
-				Message = "Es ist ein Fehler aufgetreten!"
-			};
+			return this.GetErrorModel(ex);
 		}
 	}
 
@@ -110,9 +100,7 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-			var user = Helpers.GetUser(username);
-
-			if (user is null)
+			if (!Helpers.DoesUserExist(username))
 			{
 				Response.StatusCode = 404;
 				return new ReturnModel
@@ -122,6 +110,7 @@ public class adminController : ControllerBase
 					Message = "Benutzer konnte nicht gefunden werden!"
 				};
 			}
+			var user = Helpers.GetUser(username);
 
 			user.Firstname = model.FirstName;
 			user.Lastname = model.LastName;
@@ -136,15 +125,7 @@ public class adminController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError("Fehler aufgetreten: ", ex);
-
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel()
-			{
-				Status = 400,
-				StatusMessage = "error",
-				Message = "Es ist ein Fehler aufgetreten!"
-			};
+			return this.GetErrorModel(ex);
 		}
 	}
 
@@ -155,7 +136,6 @@ public class adminController : ControllerBase
 	/// <returns></returns>
 	[HttpDelete("user/{username}")]
 	[Authorize(Roles = "Admin")]
-	[ProducesResponseType(404)]
 	[ProducesResponseType(400)]
 	[ProducesResponseType(200)]
 	public ReturnModel Delete(string username)
@@ -169,11 +149,6 @@ public class adminController : ControllerBase
 
 			var user = Helpers.GetUser(username);
 
-			if (user is null)
-			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
-				return new ReturnModel(new StatusCodeResult(404)) { Message = $"Benutzer {username} wurde nicht gefunden!" };
-			}
 			ctx.Users.Remove(user);
 			ctx.SaveChanges();
 
@@ -182,15 +157,7 @@ public class adminController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError("Fehler aufgetreten: ", ex);
-
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel()
-			{
-				Status = 400,
-				StatusMessage = "error",
-				Message = "Es ist ein Fehler aufgetreten!"
-			};
+			return this.GetErrorModel(ex);
 		}
 	}
 
@@ -209,17 +176,6 @@ public class adminController : ControllerBase
 		{
 			var user = Helpers.GetUser(username);
 
-			if (user is null)
-			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
-				return new ReturnModel()
-				{
-					Status = 404,
-					StatusMessage = "error",
-					Message = $"Benutzer {username} wurde nicht gefunden!"
-				};
-			}
-
 			Helpers.SetUserStatus(user, true);
 
 			Response.StatusCode = StatusCodes.Status200OK;
@@ -232,15 +188,7 @@ public class adminController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError("Fehler aufgetreten: ", ex);
-
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel()
-			{
-				Status = 400,
-				StatusMessage = "error",
-				Message = "Es ist ein Fehler aufgetreten!"
-			};
+			return this.GetErrorModel(ex);
 		}
 	}
 
@@ -264,17 +212,6 @@ public class adminController : ControllerBase
 
 			var user = Helpers.GetUser(username);
 
-			if (user is null)
-			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
-				return new ReturnModel()
-				{
-					Status = 404,
-					StatusMessage = "error",
-					Message = $"Benutzer {username} wurde nicht gefunden!"
-				};
-			}
-
 			Helpers.SetUserStatus(user, false);
 
 			Response.StatusCode = StatusCodes.Status200OK;
@@ -287,15 +224,7 @@ public class adminController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError("Fehler aufgetreten: ", ex);
-
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel()
-			{
-				Status = 400,
-				StatusMessage = "error",
-				Message = "Es ist ein Fehler aufgetreten!"
-			};
+			return this.GetErrorModel(ex);
 		}
 	}
 
@@ -362,12 +291,6 @@ public class adminController : ControllerBase
 			var isAdmin = User.IsInRole("Admin");
 			var user = Helpers.GetUser(username);
 
-			if (user is null)
-			{
-				Response.StatusCode = StatusCodes.Status404NotFound;
-				return new ReturnModel(new StatusCodeResult(404)) { Message = $"Benutzer {username} wurde nicht gefunden!" };
-			}
-
 			user.Passwd = password;
 			user.Lastchange = DateTime.Now;
 			ctx.Users.Update(user);
@@ -377,15 +300,7 @@ public class adminController : ControllerBase
 		}
 		catch (Exception ex)
 		{
-			_logger.LogError("Fehler aufgetreten: ", ex);
-
-			Response.StatusCode = StatusCodes.Status400BadRequest;
-			return new ReturnModel()
-			{
-				Status = 400,
-				StatusMessage = "error",
-				Message = "Es ist ein Fehler aufgetreten!"
-			};
+			return this.GetErrorModel(ex);
 		}
 	}
 #if DEBUG
@@ -394,7 +309,8 @@ public class adminController : ControllerBase
 	/// </summary>
 	[HttpPatch("/bookings/yeet")]
 	[Authorize(Roles = "Admin")]
-	public void DeleteBookings(){
+	public void DeleteBookings()
+	{
 		ctx.Bookings.RemoveRange(ctx.Bookings);
 		ctx.SaveChanges();
 	}

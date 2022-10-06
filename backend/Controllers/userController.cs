@@ -40,7 +40,7 @@ public class userController : ControllerBase
     [ProducesResponseType(200)]
     public PublicUser? GetByID(string idOrUsername)
     {
-        User? user;
+        User user;
         if (int.TryParse(idOrUsername, out int x))
         {
             user = Helpers.GetUser(x);
@@ -48,12 +48,6 @@ public class userController : ControllerBase
         else
         {
             user = Helpers.GetUser(idOrUsername);
-        }
-
-        if (user is null)
-        {
-            Response.StatusCode = StatusCodes.Status404NotFound;
-            return new PublicUser(null);
         }
 
         return user.ToPublicUser();
@@ -74,11 +68,6 @@ public class userController : ControllerBase
         try
         {
             var user = User.GetUser();
-
-            if (user is null)
-            {
-                return new ReturnModel(StatusCode(StatusCodes.Status404NotFound)) { Message = "Benutzer konnte nicht gefunden werden!" };
-            }
 
             user.Passwd = password;
 

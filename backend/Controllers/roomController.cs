@@ -69,9 +69,9 @@ public class roomsController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Remove(int roomId)
 	{
-		var room = ctx.Rooms.Where(b => b.Id == roomId).FirstOrDefault();
-		if (room != null)
+		if (Helpers.DoesRoomExist(roomId))
 		{
+			var room = Helpers.GetRoom(roomId);
 			ctx.Rooms.Remove(room);
 			ctx.SaveChanges();
 		}
@@ -91,15 +91,15 @@ public class roomsController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Edit(long roomId, CreateRoomModel model)
 	{
-		Room? room = Helpers.GetRoom(roomId);
 
-		if (room is null)
+		if (!Helpers.DoesRoomExist(roomId))
 		{
 			return new ReturnModel(new StatusCodeResult(404))
 			{
 				Message = "Raum nicht gefunden"
 			};
 		}
+		Room room = Helpers.GetRoom(roomId);
 		room.Number = model.Number;
 		room.Name = model.Name;
 		ctx.Rooms.Update(room);
@@ -119,14 +119,14 @@ public class roomsController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Activate(long roomId)
 	{
-		Room? room = Helpers.GetRoom(roomId);
-		if (room is null)
+		if (!Helpers.DoesRoomExist(roomId))
 		{
 			return new ReturnModel(new StatusCodeResult(404))
 			{
 				Message = "Raum wurde nicht gefunden."
 			};
 		}
+		Room room = Helpers.GetRoom(roomId);
 		room.Active = true;
 		ctx.Rooms.Update(room);
 		ctx.SaveChanges();
@@ -147,14 +147,14 @@ public class roomsController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Deactivate(long roomId)
 	{
-		Room? room = Helpers.GetRoom(roomId);
-		if (room is null)
+		if (!Helpers.DoesRoomExist(roomId))
 		{
 			return new ReturnModel(new StatusCodeResult(404))
 			{
 				Message = "Raum wurde nicht gefunden."
 			};
 		}
+		Room room = Helpers.GetRoom(roomId);
 		room.Active = false;
 		ctx.Rooms.Update(room);
 		ctx.SaveChanges();

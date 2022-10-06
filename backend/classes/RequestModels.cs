@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -70,19 +71,19 @@ namespace awl_raumreservierung
 		/// Username
 		/// </summary>
 		/// <value></value>
-		public string? Username { get; set; }
+		public string Username { get; set; } = null!;
 
 		/// <summary>
 		/// Vorname
 		/// </summary>
 		/// <value></value>
-		public string? FirstName { get; set; }
+		public string FirstName { get; set; } = null!;
 
 		/// <summary>
 		/// Nachname
 		/// </summary>
 		/// <value></value>
-		public string? LastName { get; set; }
+		public string LastName { get; set; } = null!;
 
 		/// <summary>
 		/// Rolle
@@ -94,7 +95,7 @@ namespace awl_raumreservierung
 		/// Password
 		/// </summary>
 		/// <value></value>
-		public string? Password { get; set; }
+		public string Password { get; set; } = null!;
 	}
 
 	/// <summary>
@@ -135,13 +136,13 @@ namespace awl_raumreservierung
 		/// Vorname
 		/// </summary>
 		/// <value></value>
-		public string? FirstName { get; set; }
+		public string FirstName { get; set; } = null!;
 
 		/// <summary>
 		/// Nachname
 		/// </summary>
 		/// <value></value>
-		public string? LastName { get; set; }
+		public string LastName { get; set; } = null!;
 
 		/// <summary>
 		/// Rolle
@@ -168,25 +169,44 @@ namespace awl_raumreservierung
 		/// Startzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime StartTime { get => startTime; set => startTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+		public DateTime StartTime
+		{
+			get => startTime;
+			set => startTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+		}
 
 		/// <summary>
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get => endTime; set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+		public DateTime EndTime
+		{
+			get => endTime;
+			set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+		}
 
 		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
 		public string? Note { get; set; }
+
 		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
-		public string? Username { get; set; }
+		public string Username { get; set; }
+
+/// <summary>
+/// 
+/// </summary>
+/// <param name="username"></param>
+		public CreateBookingModel(string username)
+		{
+			Username = username;
+		}
 	}
+
 	/// <summary>
 	/// Update Buchungsmodel
 	/// </summary>
@@ -198,7 +218,11 @@ namespace awl_raumreservierung
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get => endTime; set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+		public DateTime EndTime
+		{
+			get => endTime;
+			set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+		}
 
 		/// <summary>
 		/// Notiz
@@ -206,6 +230,7 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public string? Note { get; set; }
 	}
+
 	/// <summary>
 	/// Raummodel
 	/// </summary>
@@ -215,13 +240,24 @@ namespace awl_raumreservierung
 		/// Raumnummer
 		/// </summary>
 		/// <value></value>
-		public string? Number { get; set; }
+		public string Number { get; set; }
 
 		/// <summary>
 		/// /// Raumname
 		/// </summary>
 		/// <value></value>
-		public string? Name { get; set; }
+		public string Name { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="number"></param>
+		public CreateRoomModel(string name, string number)
+		{
+			Name = name;
+			Number = number;
+		}
 
 		/// <summary>
 		/// Aktivstatus
@@ -246,5 +282,27 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <returns></returns>
 		public DateTime? EndDate { get; set; }
+	}
+
+	/// <summary>
+	/// Model für Passwortübergabe
+	/// </summary>
+	public class PasswordModel
+	{
+		/// <summary>
+		/// Passworthash
+		/// </summary>
+		/// <value></value>
+		[Required]
+		public string Password { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="password"></param>
+		public PasswordModel(string password)
+		{
+			Password = password;
+		}
 	}
 }

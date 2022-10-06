@@ -24,13 +24,13 @@ namespace awl_raumreservierung
 		/// Vorname
 		/// </summary>
 		/// <value></value>
-		public string? Firstname { get; set; }
+		public string Firstname { get; set; } = null!;
 
 		/// <summary>
 		/// Nachname
 		/// </summary>
 		/// <value></value>
-		public string? Lastname { get; set; }
+		public string Lastname { get; set; } = null!;
 
 		/// <summary>
 		/// Passwort
@@ -60,7 +60,7 @@ namespace awl_raumreservierung
 		/// Userrolle
 		/// </summary>
 		/// <value></value>
-		public UserRole? Role { get; set; }
+		public UserRole Role { get; set; }
 	}
 
 	/// <summary>
