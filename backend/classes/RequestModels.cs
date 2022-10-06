@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -168,25 +169,35 @@ namespace awl_raumreservierung
 		/// Startzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime StartTime { get => startTime; set => startTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+		public DateTime StartTime
+		{
+			get => startTime;
+			set => startTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+		}
 
 		/// <summary>
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get => endTime; set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+		public DateTime EndTime
+		{
+			get => endTime;
+			set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+		}
 
 		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
 		public string? Note { get; set; }
+
 		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
 		public string? Username { get; set; }
 	}
+
 	/// <summary>
 	/// Update Buchungsmodel
 	/// </summary>
@@ -198,7 +209,11 @@ namespace awl_raumreservierung
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get => endTime; set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); }
+		public DateTime EndTime
+		{
+			get => endTime;
+			set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
+		}
 
 		/// <summary>
 		/// Notiz
@@ -206,6 +221,7 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public string? Note { get; set; }
 	}
+
 	/// <summary>
 	/// Raummodel
 	/// </summary>
@@ -246,5 +262,27 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <returns></returns>
 		public DateTime? EndDate { get; set; }
+	}
+
+	/// <summary>
+	/// Model für Passwortübergabe
+	/// </summary>
+	public class PasswordModel
+	{
+		/// <summary>
+		/// Passworthash
+		/// </summary>
+		/// <value></value>
+		[Required]
+		public string Password { get; set; }
+
+		/// <summary>
+		///
+		/// </summary>
+		/// <param name="password"></param>
+		public PasswordModel(string password)
+		{
+			Password = password;
+		}
 	}
 }

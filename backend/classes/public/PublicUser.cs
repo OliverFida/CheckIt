@@ -65,6 +65,9 @@ namespace awl_raumreservierung
 				Role = user.Role;
 				Active = user.Active;
 			}
+
+				DateTime.SpecifyKind(Lastchange?? DateTime.Now, DateTimeKind.Utc);
+				DateTime.SpecifyKind(LastLogon ?? DateTime.Now, DateTimeKind.Utc);
 		}
 	}
 }
