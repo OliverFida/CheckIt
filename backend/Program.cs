@@ -13,10 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 loginController.builder = builder;
 
 // leere DB inkl Admin User anlegen falls keine existiert
-if (!File.Exists(builder.Configuration.GetConnectionString("SqlConnection")))
+if (!File.Exists("checkIT.db"))
 {
-   checkITContext ctx = new();
-   ctx.Database.ExecuteSqlRaw(@"
+	string sqlComm = @"
 		BEGIN TRANSACTION;
 		CREATE TABLE IF NOT EXISTS '__EFMigrationsHistory' (
 			'MigrationId'	TEXT NOT NULL,
@@ -140,7 +139,16 @@ if (!File.Exists(builder.Configuration.GetConnectionString("SqlConnection")))
 		);
 		INSERT INTO User (Username, Passwd, Active, Role)
 		VALUES ('Admin', 'admin', 1, 1); 
-		COMMIT;");
+		COMMIT;";
+
+	System.Data.SQLite.SQLiteConnection.CreateFile("checkIT.db");
+	System.Data.SQLite.SQLiteConnection dbConn = new System.Data.SQLite.SQLiteConnection(builder.Configuration.GetConnectionString("SqlConnection"));
+	dbConn.Open();
+
+	System.Data.SQLite.SQLiteCommand command = new System.Data.SQLite.SQLiteCommand(sqlComm, dbConn);
+	command.ExecuteNonQuery();
+
+	dbConn.Close();
 }
 
 // Add services to the container.
