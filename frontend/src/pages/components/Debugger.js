@@ -6,11 +6,11 @@ export function HomePageDebugger(){
     const {hpContext, setHpContext} = useContext(HomePageContext);
 
     return(
-        <div style={{position: 'fixed', bottom: 0, left: 0, padding: 5, backgroundColor: '#ee9999'}}>
+        <div style={{position: 'fixed', bottom: 0, left: 0, padding: 5, backgroundColor: '#eebbbb99'}}>
             <h5><b>Debugger</b></h5><br />
             <b>RoomID:</b> {hpContext.roomSelection.id}<br />
             <b>RoomName:</b> {hpContext.roomSelection.name}<br />
-            <b>Bookings:</b> {hpContext.bookings.bookings !== [] ? "true" : "false"}<br />
+            <b>Bookings:</b> {hpContext.bookings.bookings.length > 0 ? "true" : "false"}<br />
             <b>Booking Selected:</b> {hpContext.bookings.selected !== null ? "true" : "false"}<br />
             {hpContext.bookings.selected !== null ?
             <>
