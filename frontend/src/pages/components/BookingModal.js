@@ -25,6 +25,8 @@ export default function BookingModal(){
         if(state === null) return;
         if(state.booking === null){
             setState({...state, booking: {}});
+        }else{
+            console.log(state.booking);
         }
     }, [state]);
 
@@ -38,19 +40,23 @@ export default function BookingModal(){
     
     const onSubmit = () => {
         async function doAsync(){
-            var targetDateStart = moment().weekday(1).add(hpContext.weekOffset, 'weeks').add(state.day - 1, 'days');
-            var lesson = timesMap.find(target => target.key === state.lesson);
-            var lessonHourStart = lesson.start.substring(0, 2);
-            var lessonMinuteStart = lesson.start.substring(3, 5);
-            targetDateStart.set('hour', lessonHourStart);
-            targetDateStart.set('minute', lessonMinuteStart);
-            targetDateStart.set('second', 0).set('millisecond', 0);
-            
-            var targetDateEnd = moment(targetDateStart).add(50, 'minutes');
-
-            await BookingsAPI.book(hpContext.roomId, targetDateStart.toJSON(), targetDateEnd.toJSON(), state.booking.note);
-
-            await setHpContext({...hpContext, selectedBooking: null, reloadBookings: true});
+            if(!state.editMode){
+                var targetDateStart = moment().weekday(1).add(hpContext.weekOffset, 'weeks').add(state.day - 1, 'days');
+                var lesson = timesMap.find(target => target.key === state.lesson);
+                var lessonHourStart = lesson.start.substring(0, 2);
+                var lessonMinuteStart = lesson.start.substring(3, 5);
+                targetDateStart.set('hour', lessonHourStart);
+                targetDateStart.set('minute', lessonMinuteStart);
+                targetDateStart.set('second', 0).set('millisecond', 0);
+                
+                var targetDateEnd = moment(targetDateStart).add(50, 'minutes');
+    
+                await BookingsAPI.book(hpContext.roomId, targetDateStart.toJSON(), targetDateEnd.toJSON(), state.booking.note);
+    
+                await setHpContext({...hpContext, selectedBooking: null, reloadBookings: true});
+            }else{
+                await setHpContext({...hpContext, selectedBooking: null, reloadBookings: true});
+            }
         }
         doAsync();
     };
@@ -68,14 +74,17 @@ export default function BookingModal(){
                 <p>
                     Day: {state?.day} <br />
                     Lesson: {state?.lesson} <br />
-                    EditMode: {state?.editMode ? "true" : "false"}
+                    EditMode: {state?.editMode ? "true" : "false"}<br />
+                    ViewMode: {state?.viewMode ? "true" : "false"}
                 </p>
             </Modal.Body>
+            {!state?.viewMode ?
             <Modal.Footer>
                 <Button variant='ghost' onClick={onCancel}>Abbrechen</Button>
                 {state?.editMode ? <Button variant='danger' onClick={onDelete}>Löschen</Button> : null}
                 <Button variant='primary' onClick={onSubmit}>{state?.editMode ? "Speichern" : "Buchen"}</Button>
             </Modal.Footer>
+            : null}
         </Modal>
     );
 };
@@ -103,7 +112,7 @@ function NoteField({state, setState}){
     return(
         <Form.Group controlId="bookingNotes">
             <Form.Label>Notizen</Form.Label>
-            <Form.Control as="textarea" rows={3} className="bookingNotes" value={state?.booking?.note} onChange={onChange} />
+            <Form.Control as="textarea" rows={3} className="bookingNotes" value={state?.booking?.note} onChange={onChange} disabled={state?.viewMode} />
         </Form.Group>
     );
 }
