@@ -1,6 +1,7 @@
 using System.Configuration;
 using System.Security.Claims;
 using System.Threading;
+using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -25,7 +26,7 @@ public class userController : ControllerBase
     /// <param name="logger"></param>
     public userController(ILogger<userController> logger)
     {
-        ctx = new();
+        ctx = Globals.DbContext;
         _logger = logger;
     }
 

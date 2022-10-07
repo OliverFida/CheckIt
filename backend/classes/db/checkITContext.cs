@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using awl_raumreservierung.Controllers;
+using awl_raumreservierung.core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -49,7 +51,7 @@ namespace awl_raumreservierung
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlite("DataSource=../checkIT.db;");
+				optionsBuilder.UseSqlite(Globals.AppBuilder.Configuration["Database:Path"]);
 			}
 		}
 

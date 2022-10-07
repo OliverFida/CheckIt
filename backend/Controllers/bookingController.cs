@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using System.Web.Http.Results;
+using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -29,7 +30,7 @@ public class bookingsController : ControllerBase
 	/// <param name="logger"></param>
 	public bookingsController(ILogger<bookingsController> logger)
 	{
-		ctx = new checkITContext();
+		ctx = Globals.DbContext;
 		_logger = logger;
 	}
 
