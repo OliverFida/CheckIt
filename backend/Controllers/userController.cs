@@ -56,20 +56,20 @@ public class userController : ControllerBase
     /// <summary>
     /// Ändert das Password des angemeldeten Users
     /// </summary>
-    /// <param name="password">Hash des Passworts</param>
+    /// <param name="model">Model mit Hash des Passworts</param>
     /// <returns></returns>
     [HttpPatch("password")]
     [Authorize]
     [ProducesResponseType(404)]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public ReturnModel PostChangePassword([FromBody] string password)
+    public ReturnModel PostChangePassword(PasswordModel model)
     {
         try
         {
             var user = User.GetUser();
 
-            user.Passwd = password;
+            user.Passwd = model.Password;
 
             ctx.Users.Update(user);
             ctx.SaveChanges();

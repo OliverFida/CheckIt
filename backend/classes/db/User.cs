@@ -61,6 +61,14 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <value></value>
 		public UserRole Role { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+	public User(){
+		DateTime.SpecifyKind(Lastlogon ?? DateTime.Now, DateTimeKind.Utc);
+		DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
+	}
 	}
 
 	/// <summary>
@@ -74,4 +82,5 @@ namespace awl_raumreservierung
 		/// Admin
 		Admin
 	}
+
 }
