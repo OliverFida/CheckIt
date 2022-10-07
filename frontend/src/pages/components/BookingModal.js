@@ -26,7 +26,7 @@ export default function BookingModal(){
         if(state.booking === null){
             setState({...state, booking: {}});
         }else{
-            console.log(state.booking);
+            // TODO: Edit/View Mode
         }
     }, [state]);
 

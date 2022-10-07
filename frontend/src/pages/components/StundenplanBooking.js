@@ -34,20 +34,18 @@ export default function StundenplanBooking({day, lesson}){
         if(!foundBooking){
             setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false, false)}, text: "Buchen", user: null, tooltip: "", booking: null});
         }else if(loginUsername !== foundBooking.user.username){
-            console.log(foundBooking.id);
             setState({...state, variant: 'danger', disabled: timeOver, onClick: ()=> {onClick(false, true)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
         }else{
-            console.log(foundBooking.id);
             setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true, false)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
         }
     }, [hpContext.bookings.bookings, hpContext.weekSelection.offset]);
 
     useEffect(()=> {
-        if(state.booking !== null) console.log("Selected: " + state.booking?.id);
+        if(state.booking !== null) console.log("Assigned: " + state.booking?.id);
     }, [state.booking]);
 
     const onClick = (editMode, viewMode) => {
-        console.log(state.booking);
+        console.log("Button Booking: " + state.booking?.id);
         setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {day: day, lesson: lesson.key, booking: state.booking, editMode: editMode, viewMode: viewMode}}});
     }
 
