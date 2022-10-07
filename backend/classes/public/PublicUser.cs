@@ -7,6 +7,9 @@ namespace awl_raumreservierung
 	/// </summary>
 	public class PublicUser
 	{
+		private DateTime? lastLogon;
+		private DateTime? lastchange;
+
 		/// <summary>
 		/// Username
 		/// </summary>
@@ -29,13 +32,13 @@ namespace awl_raumreservierung
 		/// Letzte Loginzeit in Localtime
 		/// </summary>
 		/// <value></value>
-		public DateTime? LastLogon { get; set; }
+		public DateTime? LastLogon { get => DateTime.SpecifyKind(lastLogon ?? DateTime.MinValue, DateTimeKind.Utc); set => lastLogon = value; }
 
 		/// <summary>
 		/// Letzte Änderung der Nutzerdaten in Localtime
 		/// </summary>
 		/// <value></value>
-		public DateTime? Lastchange { get; set; }
+		public DateTime? Lastchange { get => DateTime.SpecifyKind(lastchange ?? DateTime.MinValue, DateTimeKind.Utc); set => lastchange = value; }
 
 		/// <summary>
 		/// Rolle des Users
@@ -63,8 +66,6 @@ namespace awl_raumreservierung
 			Role = user.Role;
 			Active = user.Active;
 
-			DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
-			DateTime.SpecifyKind(LastLogon ?? DateTime.Now, DateTimeKind.Utc);
 		}
 	}
 }
