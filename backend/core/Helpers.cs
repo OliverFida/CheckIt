@@ -144,7 +144,7 @@ namespace awl_raumreservierung
 		/// <returns></returns>
 		public static bool BookingOverlaps(Booking booking)
 		{
-			var room = GetRoom(booking.Id);
+			var room = GetRoom(booking.Room);
 
 			bool overlapsWithOtherBookings = room.GetBookings().Any(b => b.StartTime <= booking.EndTime.Subtract(new TimeSpan(0, 0, 1)) && booking.StartTime <= b.EndTime);
 			return overlapsWithOtherBookings;
