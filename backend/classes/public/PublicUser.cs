@@ -32,13 +32,13 @@ namespace awl_raumreservierung
 		/// Letzte Loginzeit in Localtime
 		/// </summary>
 		/// <value></value>
-		public DateTime? LastLogon { get => DateTime.SpecifyKind(lastLogon ?? DateTime.MinValue, DateTimeKind.Utc); set => lastLogon = value; }
+		public DateTime? LastLogon { get => DateTime.SpecifyKind(lastLogon ?? DateTime.MinValue, DateTimeKind.Local).ToUniversalTime(); set => lastLogon = value; }
 
 		/// <summary>
 		/// Letzte Änderung der Nutzerdaten in Localtime
 		/// </summary>
 		/// <value></value>
-		public DateTime? Lastchange { get => DateTime.SpecifyKind(lastchange ?? DateTime.MinValue, DateTimeKind.Utc); set => lastchange = value; }
+		public DateTime? Lastchange { get => DateTime.SpecifyKind(lastchange ?? DateTime.MinValue, DateTimeKind.Utc).ToUniversalTime(); set => lastchange = value; }
 
 		/// <summary>
 		/// Rolle des Users
