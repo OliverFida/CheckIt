@@ -13,8 +13,9 @@ export default function Stundenplan(){
     
     return(
         <Stack direction='vertical'>
-            <LoadingSpinner loading={hpContext.roomId === null || !hpContext.bookingsLoaded}>
-                <Table>
+            {hpContext.roomId}
+            <LoadingSpinner loading={!hpContext.bookingsLoaded}>
+                <Table className='stundenplan'>
                     <StundenplanHead />
                     <StundenplanBody />
                 </Table>

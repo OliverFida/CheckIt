@@ -46,14 +46,28 @@ function RoomDropDown(){
     }, [elements]);
 
     const onRoomSelect = (name, id) => {
-        console.log("Select: " + id);
-        // OFDO: BUG: wiederholtes auswählen des selben Raumes zeigt keine Bookings mehr an
         setHpContext({...hpContext, roomName: name, roomId: id});
+        async function doAsync(){
+            var temp = hpContext;
+            console.log("Temp ID: " + temp.roomId);
+            console.log("New ID: " + id);
+            if(id === temp.roomId) return;
+            console.log("Using: " + id);
+            // OFDO: BUG: wiederholtes auswählen des selben Raumes zeigt keine Bookings mehr an
+            temp.roomId = id;
+            await setHpContext(temp);
+            console.log("Context ID: " + hpContext.roomId);
+        }
+        // doAsync();
     };
 
     return(
+        <>
+        {hpContext.roomId}<br />
+        {hpContext.bookings.toString()}
         <NavDropdown title={hpContext.roomName ? hpContext.roomName : "Raum"} align="end">
             {elements}
         </NavDropdown>
+        </>
     );
 }

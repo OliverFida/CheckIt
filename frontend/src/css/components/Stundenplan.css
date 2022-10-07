@@ -1,11 +1,24 @@
-th{
+.stundenplan{
+    table-layout: fixed;
+    width: calc(100% - 20px);
+}
+
+.stundenplan th{
+    /* width: calc((100% / 6)); */
     text-align: center;
 }
+
 .rowTitle{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
+.stundenplan td{
+    height: 80px;
+}
+
 .buchenBtn{
     width: 100%;
+    height: 100%;
 }

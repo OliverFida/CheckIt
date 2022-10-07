@@ -23,14 +23,15 @@ export default function StundenplanBody(){
 
     useEffect(() => {
         async function doAsync(){
-            console.log("RoomID changed: " + hpContext.roomId);
+            console.log("RoomID changed [Body]: " + hpContext.roomId);
+            if(hpContext.roomId === null) return; //TODO: Double reloading
             await setHpContext({...hpContext, bookingsLoaded: false});
-            if(hpContext.roomId === null) return;
+            console.log("Getting Bookings");
             var temp = await BookingsAPI.getBookings(hpContext.roomId, moment().weekday(1).toJSON(), moment().weekday(5).add(amountWeeks - 1, 'weeks').toJSON());
-            await setHpContext({...hpContext, bookingsLoaded: true, bookings: temp});
+            await setHpContext({...hpContext, bookingsLoaded: true, bookings: temp, reloadBookings: false});
         }
         doAsync();
-    }, [hpContext.roomId]);
+    }, [hpContext.roomId, hpContext.reloadBookings]);
 
     return(
         <tbody>

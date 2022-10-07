@@ -9,7 +9,8 @@ export default function StundenplanHead(){
     const [elements, setElements] = useState([]);
 
     useEffect(() => {
-        var dateMonday = moment().weekday(1).add(hpContext.weekOffset, 'weeks');
+            console.log("RoomID changed [Head]: " + hpContext.roomId);
+            var dateMonday = moment().weekday(1).add(hpContext.weekOffset, 'weeks');
         
         var newElements = [];
         for(var day = 1; day <= 5; day++){
@@ -17,7 +18,7 @@ export default function StundenplanHead(){
             newElements.push(<th key={`th_${day}`}>{tempDate.format("DD.MM.YYYY")}</th>);
         }
         setElements(newElements);
-    }, [hpContext]);
+    }, [hpContext.roomId]);
 
     const onToday = () => {
         setHpContext({...hpContext, weekOffset: 0});

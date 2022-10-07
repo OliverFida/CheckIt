@@ -50,7 +50,7 @@ export default function BookingModal(){
 
             await BookingsAPI.book(hpContext.roomId, targetDateStart.toJSON(), targetDateEnd.toJSON(), state.booking.note);
 
-            onCancel();
+            await setHpContext({...hpContext, selectedBooking: null, reloadBookings: true});
         }
         doAsync();
     };
