@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -24,7 +25,7 @@ public class adminController : ControllerBase
 	public adminController(ILogger<adminController> logger)
 	{
 		_logger = logger;
-		ctx = new checkITContext();
+		ctx = Globals.DbContext;
 	}
 
 	/// <summary>
@@ -240,7 +241,7 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-			var users = new checkITContext().Users.Select(u => u.ToPublicUser()).ToArray();
+			var users = Globals.DbContext.Users.Select(u => u.ToPublicUser()).ToArray();
 			return users;
 		}
 		catch (Exception ex)

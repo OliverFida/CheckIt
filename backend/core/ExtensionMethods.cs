@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace awl_raumreservierung
@@ -145,7 +146,7 @@ namespace awl_raumreservierung
 		{
 			try
 			{
-				using checkITContext ctx = new();
+				using checkITContext ctx = Globals.DbContext;
 				return ctx.Bookings.Where(b => b.Room == room.Id).ToArray();
 			}
 			catch
