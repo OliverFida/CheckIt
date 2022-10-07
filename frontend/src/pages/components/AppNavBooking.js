@@ -1,23 +1,11 @@
 // Component imports
 import React, {useEffect, useState, useContext} from 'react';
-import { useNavigate } from 'react-router-dom';
 import {Nav, NavDropdown} from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
 // API imports
 import RoomsAPI from '../../api/rooms';
-import LoginAPI from '../../api/login';
 
-export default function AppNavBooking(){
-    const navigate = useNavigate();
-    
-    const onLogout = () => {
-        LoginAPI.logout();
-        navigate("/login");
-    };
-
-   
-
-    return(
+export default function AppNavBooking(){return(
         <Nav>
             <RoomDropDown />
         </Nav>
@@ -46,26 +34,15 @@ function RoomDropDown(){
     }, [elements]);
 
     const onRoomSelect = (name, id) => {
-        setHpContext({...hpContext, roomName: name, roomId: id});
-        async function doAsync(){
-            var temp = hpContext;
-            console.log("Temp ID: " + temp.roomId);
-            console.log("New ID: " + id);
-            if(id === temp.roomId) return;
-            console.log("Using: " + id);
-            // OFDO: BUG: wiederholtes auswählen des selben Raumes zeigt keine Bookings mehr an
-            temp.roomId = id;
-            await setHpContext(temp);
-            console.log("Context ID: " + hpContext.roomId);
-        }
-        // doAsync();
+        if(hpContext.roomSelection.id === id) return;
+        setHpContext({...hpContext, roomSelection: {...hpContext.roomSelection, name: name, id: id}});
     };
 
     return(
         <>
-        {hpContext.roomId}<br />
-        {hpContext.bookings.toString()}
-        <NavDropdown title={hpContext.roomName ? hpContext.roomName : "Raum"} align="end">
+        {hpContext.roomSelection.id}<br />
+        {hpContext.bookings.bookings.toString()}
+        <NavDropdown title={hpContext.roomSelection.name ? hpContext.roomSelection.name : "Raum"} align="end">
             {elements}
         </NavDropdown>
         </>

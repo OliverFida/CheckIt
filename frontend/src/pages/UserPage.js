@@ -34,7 +34,7 @@ function UserPageContent(){
     }, []);
 
     const onChangePassword = () => {
-        setUpContext({...upContext, showChangePasswordModal: true});
+        setUpContext({...upContext, uiControl: {...upContext.uiControl, changePWModal: true}});
     };
 
     return(
@@ -99,11 +99,11 @@ function ChangePasswordModal(){
     };
 
     const onCancel = () => {
-        setUpContext({...upContext, showChangePasswordModal: false});
+        setUpContext({...upContext, uiControl: {...upContext.uiControl, changePWModal: false}});
     }
 
     return(
-        <Modal show={upContext.showChangePasswordModal} onHide={onCancel} centered>
+        <Modal show={upContext.uiControl.changePWModal} onHide={onCancel} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Passwort ändern</Modal.Title>
             </Modal.Header>

@@ -9,8 +9,7 @@ export default function StundenplanHead(){
     const [elements, setElements] = useState([]);
 
     useEffect(() => {
-            console.log("RoomID changed [Head]: " + hpContext.roomId);
-            var dateMonday = moment().weekday(1).add(hpContext.weekOffset, 'weeks');
+        var dateMonday = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks');
         
         var newElements = [];
         for(var day = 1; day <= 5; day++){
@@ -18,18 +17,18 @@ export default function StundenplanHead(){
             newElements.push(<th key={`th_${day}`}>{tempDate.format("DD.MM.YYYY")}</th>);
         }
         setElements(newElements);
-    }, [hpContext.roomId]);
+    }, [hpContext.weekSelection.offset]);
 
     const onToday = () => {
-        setHpContext({...hpContext, weekOffset: 0});
+        setHpContext({...hpContext, weekSelection: {...hpContext.weekSelection, offset: 0}});
     }
 
     const onEarlier = () => {
-        setHpContext({...hpContext, weekOffset: hpContext.weekOffset - 1});
+        setHpContext({...hpContext, weekSelection: {...hpContext.weekSelection, offset: hpContext.weekSelection.offset - 1}});
     }
-
+    
     const onLater = () => {
-        setHpContext({...hpContext, weekOffset: hpContext.weekOffset + 1});
+        setHpContext({...hpContext, weekSelection: {...hpContext.weekSelection, offset: hpContext.weekSelection.offset + 1}});
     }
 
     return(
@@ -37,9 +36,9 @@ export default function StundenplanHead(){
             <tr>
                 <th key="th_0">
                     <ButtonGroup>
-                        <Button disabled={hpContext.weekOffset === 0 ? true : false} onClick={onEarlier}>Früher</Button>
-                        <Button disabled={hpContext.weekOffset === 0 ? true : false} onClick={onToday}>Heute</Button>
-                        <Button disabled={hpContext.weekOffset === 5 ? true : false} onClick={onLater}>Später</Button>
+                        <Button disabled={hpContext.weekSelection.offset === 0 ? true : false} onClick={onEarlier}>Früher</Button>
+                        <Button disabled={hpContext.weekSelection.offset === 0 ? true : false} onClick={onToday}>Heute</Button>
+                        <Button disabled={hpContext.weekSelection.offset === 5 ? true : false} onClick={onLater}>Später</Button>
                     </ButtonGroup>
                 </th>
                 {elements}

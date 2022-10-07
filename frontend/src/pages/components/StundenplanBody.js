@@ -16,22 +16,22 @@ export default function StundenplanBody(){
     useEffect(() => {
         var newElements = [];
         timesMap.forEach(lesson => {
-            newElements.push(<StundenplanRow key={`row_${lesson.key}`} lesson={lesson} weekOffset={hpContext.weekOffset} />);
+            newElements.push(<StundenplanRow key={`row_${lesson.key}`} lesson={lesson} />);
         });
         setElements(newElements);
     }, []);
 
     useEffect(() => {
         async function doAsync(){
-            console.log("RoomID changed [Body]: " + hpContext.roomId);
-            if(hpContext.roomId === null) return; //TODO: Double reloading
-            await setHpContext({...hpContext, bookingsLoaded: false});
+            console.log("RoomID changed [Body]: " + hpContext.roomSelection.id);
+            if(hpContext.roomSelection.id === null) return; //TODO: Double reloading
+            await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: true}});
             console.log("Getting Bookings");
-            var temp = await BookingsAPI.getBookings(hpContext.roomId, moment().weekday(1).toJSON(), moment().weekday(5).add(amountWeeks - 1, 'weeks').toJSON());
-            await setHpContext({...hpContext, bookingsLoaded: true, bookings: temp, reloadBookings: false});
+            var temp = await BookingsAPI.getBookings(hpContext.roomSelection.id, moment().weekday(1).toJSON(), moment().weekday(5).add(amountWeeks - 1, 'weeks').toJSON());
+            await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: false}, bookings: {...hpContext.bookings, reload: false, bookings: temp}});
         }
         doAsync();
-    }, [hpContext.roomId, hpContext.reloadBookings]);
+    }, [hpContext.roomSelection.id, hpContext.bookings.reload]);
 
     return(
         <tbody>
@@ -40,7 +40,7 @@ export default function StundenplanBody(){
     );
 }
 
-function StundenplanRow({lesson, weekOffset}){
+function StundenplanRow({lesson}){
     const [elements, setElements] = useState([]);
 
     useEffect(() => {

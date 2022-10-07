@@ -14,12 +14,12 @@ export default function BookingModal(){
     const [state, setState] = useState(null);
 
     useEffect(() => {
-        if(hpContext.selectedBooking !== null){
-            setState(hpContext.selectedBooking);
+        if(hpContext.bookings.selected !== null){
+            setState(hpContext.bookings.selected);
         }else{
             setState(null);
         }
-    }, [hpContext.selectedBooking]);
+    }, [hpContext.bookings.selected]);
 
     useEffect(() => {
         if(state === null) return;
@@ -31,7 +31,7 @@ export default function BookingModal(){
     }, [state]);
 
     const onCancel = () => {
-        setHpContext({...hpContext, selectedBooking: null});
+        setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null}});
     };
 
     const onDelete = () => {
@@ -41,7 +41,7 @@ export default function BookingModal(){
     const onSubmit = () => {
         async function doAsync(){
             if(!state.editMode){
-                var targetDateStart = moment().weekday(1).add(hpContext.weekOffset, 'weeks').add(state.day - 1, 'days');
+                var targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(state.day - 1, 'days');
                 var lesson = timesMap.find(target => target.key === state.lesson);
                 var lessonHourStart = lesson.start.substring(0, 2);
                 var lessonMinuteStart = lesson.start.substring(3, 5);
@@ -51,11 +51,11 @@ export default function BookingModal(){
                 
                 var targetDateEnd = moment(targetDateStart).add(50, 'minutes');
     
-                await BookingsAPI.book(hpContext.roomId, targetDateStart.toJSON(), targetDateEnd.toJSON(), state.booking.note);
+                await BookingsAPI.book(hpContext.roomSelection.id, targetDateStart.toJSON(), targetDateEnd.toJSON(), state.booking.note);
     
-                await setHpContext({...hpContext, selectedBooking: null, reloadBookings: true});
+                await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }else{
-                await setHpContext({...hpContext, selectedBooking: null, reloadBookings: true});
+                await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }
         }
         doAsync();

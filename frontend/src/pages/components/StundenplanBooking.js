@@ -11,7 +11,7 @@ export default function StundenplanBooking({day, lesson}){
     useEffect(() => {
         var targetHourStart = lesson.start.substring(0, 2);
         var targetMinuteStart = lesson.start.substring(3, 5);
-        var targetDateStart = moment().weekday(1).add(hpContext.weekOffset, 'weeks').add(day - 1, 'days');
+        var targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(day - 1, 'days');
         targetDateStart.set('hours', targetHourStart).set('minutes', targetMinuteStart).set('seconds', 1).set('milliseconds', 0);
         var targetHourEnd = lesson.end.substring(0, 2);
         var targetMinuteEnd = lesson.end.substring(3, 5);
@@ -21,7 +21,7 @@ export default function StundenplanBooking({day, lesson}){
         var timeOver = false;
         if(targetDateStart.isBefore(moment())) timeOver = true;
         
-        var foundBooking = hpContext.bookings.find(booking => {
+        var foundBooking = hpContext.bookings.bookings.find(booking => {
             if(targetDateStart.add(1, 'second').isBetween(moment.utc(booking.startTime), moment.utc(booking.endTime).add(1, 'second'))
             && targetDateEnd.subtract(1, 'second').isBetween(moment.utc(booking.startTime), moment.utc(booking.endTime).add(1, 'second'))){
                 return true;
@@ -37,10 +37,10 @@ export default function StundenplanBooking({day, lesson}){
         }else{
             setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true, false)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
         }
-    }, [hpContext.bookings, hpContext.weekOffset]);
+    }, [hpContext.bookings.bookings, hpContext.weekSelection.offset]);
 
     const onClick = (editMode, viewMode) => {
-        setHpContext({...hpContext, selectedBooking: {day: day, lesson: lesson.key, booking: state.booking, editMode: editMode, viewMode: viewMode}});
+        setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {day: day, lesson: lesson.key, booking: state.booking, editMode: editMode, viewMode: viewMode}}});
     }
 
     return(
