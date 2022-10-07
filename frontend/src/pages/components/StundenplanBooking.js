@@ -9,6 +9,7 @@ export default function StundenplanBooking({day, lesson}){
     const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null, tooltip: "", booking: null});
 
     useEffect(() => {
+        console.log("Rendering Booking " + day + "-" + lesson.key);
         var targetHourStart = lesson.start.substring(0, 2);
         var targetMinuteStart = lesson.start.substring(3, 5);
         var targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(day - 1, 'days');
@@ -31,15 +32,22 @@ export default function StundenplanBooking({day, lesson}){
         
         var loginUsername = localStorage.getItem('loginUsername');
         if(!foundBooking){
-            setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false, false)}, text: "Buchen", user: null, tooltip: ""});
+            setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false, false)}, text: "Buchen", user: null, tooltip: "", booking: null});
         }else if(loginUsername !== foundBooking.user.username){
-            setState({...state, variant: 'danger', disabled: timeOver, onClick: ()=> {onClick(false, true)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note});
+            console.log(foundBooking.id);
+            setState({...state, variant: 'danger', disabled: timeOver, onClick: ()=> {onClick(false, true)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
         }else{
+            console.log(foundBooking.id);
             setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true, false)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
         }
     }, [hpContext.bookings.bookings, hpContext.weekSelection.offset]);
 
+    useEffect(()=> {
+        if(state.booking !== null) console.log("Selected: " + state.booking?.id);
+    }, [state.booking]);
+
     const onClick = (editMode, viewMode) => {
+        console.log(state.booking);
         setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {day: day, lesson: lesson.key, booking: state.booking, editMode: editMode, viewMode: viewMode}}});
     }
 

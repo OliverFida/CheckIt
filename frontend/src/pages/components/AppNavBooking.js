@@ -39,12 +39,8 @@ function RoomDropDown(){
     };
 
     return(
-        <>
-        {hpContext.roomSelection.id}<br />
-        {hpContext.bookings.bookings.toString()}
         <NavDropdown title={hpContext.roomSelection.name ? hpContext.roomSelection.name : "Raum"} align="end">
             {elements}
         </NavDropdown>
-        </>
     );
 }
