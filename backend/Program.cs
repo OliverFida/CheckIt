@@ -8,7 +8,6 @@ using System.Text;
 using awl_raumreservierung.Controllers;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore.Sqlite.Storage.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 loginController.builder = builder;
@@ -16,9 +15,8 @@ loginController.builder = builder;
 // leere DB inkl Admin User anlegen falls keine existiert
 if (!File.Exists(builder.Configuration.GetConnectionString("SqlConnection")))
 {
-
-	System.Data.SQLite.SQLiteConnection.CreateFile("checkIT.db");
-	string commString =@"
+   checkITContext ctx = new();
+   ctx.Database.ExecuteSqlRaw(@"
 		BEGIN TRANSACTION;
 		CREATE TABLE IF NOT EXISTS '__EFMigrationsHistory' (
 			'MigrationId'	TEXT NOT NULL,
@@ -142,15 +140,7 @@ if (!File.Exists(builder.Configuration.GetConnectionString("SqlConnection")))
 		);
 		INSERT INTO User (Username, Passwd, Active, Role)
 		VALUES ('Admin', 'admin', 1, 1); 
-		COMMIT;";
-
-	System.Data.SQLite.SQLiteConnection dbConn = new System.Data.SQLite.SQLiteConnection(builder.Configuration.GetConnectionString("SqlConnection"));
-	dbConn.Open();
-
-	System.Data.SQLite.SQLiteCommand command = new System.Data.SQLite.SQLiteCommand(commString, dbConn);
-	command.ExecuteNonQuery();
-
-	dbConn.Close();
+		COMMIT;");
 }
 
 // Add services to the container.
