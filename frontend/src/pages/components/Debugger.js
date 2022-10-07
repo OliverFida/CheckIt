@@ -15,6 +15,7 @@ export function HomePageDebugger(){
             {hpContext.bookings.selected !== null ?
             <>
             <br />
+            <b>Booking:</b> {hpContext.bookings.selected.booking ? "true" : "false"}<br />
             <b>ID:</b> {hpContext.bookings.selected.booking?.id}<br />
             <b>View Mode:</b> {hpContext.bookings.selected.viewMode ? "true" : "false"}<br />
             <b>Edit Mode:</b> {hpContext.bookings.selected.editMode ? "true" : "false"}<br />

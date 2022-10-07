@@ -6,14 +6,16 @@ import { HomePageContext } from '../../contexts/HomePageContext';
 
 export default function StundenplanBooking({day, lesson}){
     const {hpContext, setHpContext} = useContext(HomePageContext);
-    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null, tooltip: "", booking: null});
+    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null, tooltip: ""});
 
     useEffect(() => {
         console.log("Rendering Booking " + day + "-" + lesson.key);
+
         var targetHourStart = lesson.start.substring(0, 2);
         var targetMinuteStart = lesson.start.substring(3, 5);
         var targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(day - 1, 'days');
         targetDateStart.set('hours', targetHourStart).set('minutes', targetMinuteStart).set('seconds', 1).set('milliseconds', 0);
+
         var targetHourEnd = lesson.end.substring(0, 2);
         var targetMinuteEnd = lesson.end.substring(3, 5);
         var targetDateEnd = moment(targetDateStart);
@@ -32,11 +34,11 @@ export default function StundenplanBooking({day, lesson}){
         
         var loginUsername = localStorage.getItem('loginUsername');
         if(!foundBooking){
-            setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false, false)}, text: "Buchen", user: null, tooltip: "", booking: null});
+            setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false, false, foundBooking)}, text: "Buchen", user: null, tooltip: ""});
         }else if(loginUsername !== foundBooking.user.username){
-            setState({...state, variant: 'danger', disabled: timeOver, onClick: ()=> {onClick(false, true)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
+            setState({...state, variant: 'danger', disabled: timeOver, onClick: ()=> {onClick(false, true, foundBooking)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note});
         }else{
-            setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true, false)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note, booking: foundBooking});
+            setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true, false, foundBooking)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note});
         }
     }, [hpContext.bookings.bookings, hpContext.weekSelection.offset]);
 
@@ -44,9 +46,9 @@ export default function StundenplanBooking({day, lesson}){
         if(state.booking !== null) console.log("Assigned: " + state.booking?.id);
     }, [state.booking]);
 
-    const onClick = (editMode, viewMode) => {
+    const onClick = (editMode, viewMode, booking) => {
         console.log("Button Booking: " + state.booking?.id);
-        setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {day: day, lesson: lesson.key, booking: state.booking, editMode: editMode, viewMode: viewMode}}});
+        setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {day: day, lesson: lesson.key, booking: booking, editMode: editMode, viewMode: viewMode}}});
     }
 
     return(

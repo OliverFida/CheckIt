@@ -6,7 +6,7 @@ import moment from 'moment';
 // API imports
 import BookingsAPI from '../../api/bookings';
 import timesMap from '../../api/timesMap.json';
-
+// Style imports
 import '../../css/components/UserPage.css';
 
 export default function BookingModal(){
@@ -71,12 +71,6 @@ export default function BookingModal(){
                     <HoursPicker state={state} setState={setState} />
                     <NoteField state={state} setState={setState} />
                 </Form>
-                <p>
-                    Day: {state?.day} <br />
-                    Lesson: {state?.lesson} <br />
-                    EditMode: {state?.editMode ? "true" : "false"}<br />
-                    ViewMode: {state?.viewMode ? "true" : "false"}
-                </p>
             </Modal.Body>
             {!state?.viewMode ?
             <Modal.Footer>
