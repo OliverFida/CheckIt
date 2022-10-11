@@ -1,39 +1,34 @@
 // Component imports
-import React, { useState} from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import {Stack, Button, Form, Modal, Table} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
+import UserEditContextProvider, {UserEditContext} from '../contexts/UserEditContext';
 
+// Style imports
 import '../css/components/UserPage.css';
 
+// Api imports
+import AdminAPI from '../api/admin';
 
 export default function UserEdit(){
-    const [show, setShow] = useState(false);
-
-    const handleShowModalOne = () => {
-        setShow("modal-one")
-       }
-       
-    const handleShowModalTwo = () => {
-    setShow("modal-two")
-    }
     
-    const handleClose = () => {
-    setShow("close")
-    }
- 
-
     return(
-        <>
+        <UserEditContextProvider>
             <Stack direction='vertical'>
                 <AppNavBar>
-                    <Button onClick={handleShowModalTwo} className="my-1">
-                        Neuen Benutzer erstellen
-                    </Button>
+                    <NewUserButton />
                 </AppNavBar>
-                
-            </Stack>
-       
-       <Table className='useredit'>
+                <UserEditBody />
+                <EditNameModal />
+                <NewUserModal />
+            </Stack>  
+        </UserEditContextProvider>
+    );
+};
+
+function UserEditBody(){
+    return(
+        <Table className='useredit'>
             <thead>
                 <tr>                        
                     <th>Vorname</th>
@@ -42,25 +37,65 @@ export default function UserEdit(){
                 </tr>
             </thead>
             <tbody>
-                <tr>                        
-                    <td valign='middle'>Name</td>
-                    <td valign='middle'>Nachname</td>
-                    <td>
-                        <Button onClick={handleShowModalOne} className="me-2 my-1">
-                            Name Ändern
-                        </Button>
-                        <Button className="my-1 me-2">
-                            Passwort zurücksetzen
-                        </Button>
-                        <Button className="my-1 me-2" variant="danger">
-                            Benutzer deaktivieren
-                        </Button>                       
-                    </td>
-                </tr>
+                <UserEditRow />
             </tbody>
-        </Table>       
+        </Table>
+    );
+}
 
-        <Modal show={show === 'modal-one'} onHide={handleClose} centered>
+function UserEditRow(){
+    const [elements, setElements] = useState([]);
+    const [users, setUserData] = useState(null);
+
+    const {ueContext, setUpContext} = useContext(UserEditContext);
+
+    const showEditUser = () => {
+        setUpContext({...ueContext, showEditUserModal: true});
+    };
+
+    useEffect(() => {
+        async function doAsync(){
+            setUserData(await AdminAPI.getUsers());
+        }
+        doAsync();
+    }, []);
+    
+    useEffect(() => {
+        setElements(users?.map(user =>
+            <tr key={`user_${user.id}`}>                        
+                <td valign='middle' key={`user${user.firstName}`}>{user.firstName}</td>
+                <td valign='middle' key={`user${user.lastname}`}>{user.lastname}</td>
+                <td>
+                    <Button onClick={showEditUser} className="me-2 my-1">
+                        Name Ändern
+                    </Button>
+                    <Button className="my-1 me-2">
+                        Passwort zurücksetzen
+                    </Button>
+                    <Button className="my-1 me-2" variant="danger">
+                        Benutzer deaktivieren
+                    </Button>                       
+                </td>
+            </tr>
+           ));
+    }, [users]);
+
+    return(
+        <>
+            {elements}
+        </>
+    )
+}
+
+function EditNameModal(){
+    const {ueContext, setUpContext} = useContext(UserEditContext);
+
+    const onCancel = () => {
+        setUpContext({...ueContext, showUserEditModal: false});
+    }
+
+    return (
+        <Modal show={ueContext.showUserEditModal} onHide={onCancel} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Name ändern</Modal.Title>
             </Modal.Header>
@@ -77,18 +112,26 @@ export default function UserEdit(){
                 </Form> 
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={onCancel}>
                     Abbrechen
                 </Button>
-                <Button variant="primary" onClick={handleClose}>
+                <Button variant="primary" onClick={onCancel}>
                     Änderungen Speichern
                 </Button>
             </Modal.Footer>
         </Modal>
+    );
+}
 
+function NewUserModal(){
+    const {ueContext, setUpContext} = useContext(UserEditContext);
 
+    const onCancel = () => {
+        setUpContext({...ueContext, showNewUserModal: false});
+    }
 
-        <Modal show={show === 'modal-two'} onHide={handleClose}>
+    return(
+        <Modal show={ueContext.showNewUserModal} onHide={onCancel}>
             <Modal.Header closeButton>
                 <Modal.Title>Neuen Benutzer erstellen</Modal.Title>
             </Modal.Header>
@@ -109,17 +152,28 @@ export default function UserEdit(){
                 </Form> 
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" onClick={onCancel}>
                     Abbrechen
                 </Button>
-                <Button variant="primary" onClick={handleClose}>
+                <Button variant="primary" onClick={onCancel}>
                     Benutzer speichern
                 </Button>
             </Modal.Footer>
         </Modal>
-           
-        </>
     );
-};
+}
 
+function NewUserButton(){
+    const {ueContext, setUpContext} = useContext(UserEditContext);
+
+    const showNewUser = () => {
+        setUpContext({...ueContext, showNewUserModal: true});
+    }
+
+    return(
+        <Button onClick={showNewUser} className="my-1">
+            Neuen Benutzer erstellen
+        </Button>
+    );
+}
       
