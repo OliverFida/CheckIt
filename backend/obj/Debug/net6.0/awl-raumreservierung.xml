@@ -1,0 +1,1103 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>awl-raumreservierung</name>
+    </assembly>
+    <members>
+        <member name="T:awl_raumreservierung.Booking">
+            <summary>
+            DB-Booking
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.Id">
+            <summary>
+            Booking-ID
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.StartTime">
+            <summary>
+            Startzeit
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.EndTime">
+            <summary>
+            Endzeit, eine Sekunde wird abgezogen.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.Room">
+            <summary>
+            Raum-ID
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.UserId">
+            <summary>
+            ID des Bucher
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.CreateTime">
+            <summary>
+            Erstellungsdatum
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.CreatedBy">
+            <summary>
+            Ersteller
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Booking.Note">
+            <summary>
+            Notiz
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.Booking.#ctor">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Booking.#ctor(System.DateTime,System.DateTime,System.Int64,System.Int64,System.DateTime,System.Nullable{System.Int64},System.String)">
+             <summary>
+            
+             </summary>
+             <param name="startTime"></param>
+             <param name="endTime"></param>
+             <param name="room"></param>
+             <param name="userId"></param>
+             <param name="createTime"></param>
+             <param name="createdBy"></param>
+             <param name="note"></param>
+        </member>
+        <member name="T:awl_raumreservierung.checkITContext">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.checkITContext.#ctor">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.checkITContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{awl_raumreservierung.checkITContext})">
+             <summary>
+            
+             </summary>
+             <param name="options"></param>
+        </member>
+        <member name="P:awl_raumreservierung.checkITContext.Bookings">
+             <summary>
+            
+             </summary>
+             <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.checkITContext.Rooms">
+             <summary>
+            
+             </summary>
+             <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.checkITContext.Users">
+             <summary>
+            
+             </summary>
+             <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.checkITContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+             <summary>
+            
+             </summary>
+             <param name="optionsBuilder"></param>
+        </member>
+        <member name="M:awl_raumreservierung.checkITContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+             <summary>
+            
+             </summary>
+             <param name="modelBuilder"></param>
+        </member>
+        <member name="T:awl_raumreservierung.Room">
+            <summary>
+            DB-Raum
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.Room.Id">
+            <summary>
+            Raum-ID
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Room.Number">
+            <summary>
+            Raumnummer
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Room.Name">
+            <summary>
+            Name
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.Room.Active">
+            <summary>
+            Aktivstatus
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.Room.#ctor">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Room.#ctor(System.String,System.String,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="number"></param>
+             <param name="name"></param>
+             <param name="active"></param>
+        </member>
+        <member name="T:awl_raumreservierung.User">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:awl_raumreservierung.User.Id">
+            <summary>
+            User-ID
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Username">
+            <summary>
+            Username
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Firstname">
+            <summary>
+            Vorname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Lastname">
+            <summary>
+            Nachname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Passwd">
+            <summary>
+            Passwort
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Lastlogon">
+            <summary>
+            Letzer Logon
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Lastchange">
+            <summary>
+            Letzte Datenänderung
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Active">
+            <summary>
+            Ist User aktiv
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.User.Role">
+            <summary>
+            Userrolle
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.User.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:awl_raumreservierung.UserRole">
+            <summary>
+            Mögliche Userrollen
+            </summary>
+        </member>
+        <member name="F:awl_raumreservierung.UserRole.User">
+            Standardbenutzer
+        </member>
+        <member name="F:awl_raumreservierung.UserRole.Admin">
+            Admin
+        </member>
+        <member name="T:awl_raumreservierung.PublicBooking">
+            <summary>
+            Öffentliche Daten einer Buchung
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.PublicBooking.Id">
+            <summary>
+            ID
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicBooking.StartTime">
+            <summary>
+            Startzeit in Serverzeit
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicBooking.EndTime">
+            <summary>
+            Endzeit in Serverzeit
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicBooking.Room">
+            <summary>
+            Raum
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicBooking.User">
+            <summary>
+            Bucher
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicBooking.CreateTime">
+            <summary>
+            Erstellungsdatum in Serverzeit
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicBooking.Note">
+            <summary>
+            Notiz
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.PublicBooking.#ctor(awl_raumreservierung.Booking)">
+             <summary>
+            
+             </summary>
+             <param name="booking"></param>
+        </member>
+        <member name="T:awl_raumreservierung.PublicRoom">
+            <summary>
+            Öffentliche Daten eines Raums
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.PublicRoom.Id">
+            <summary>
+            ID
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicRoom.Number">
+            <summary>
+            Raumnummer
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicRoom.Name">
+            <summary>
+            Raumname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicRoom.Active">
+            <summary>
+            Raumstatus
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.PublicRoom.#ctor(awl_raumreservierung.Room)">
+             <summary>
+            
+             </summary>
+             <param name="room"></param>
+        </member>
+        <member name="T:awl_raumreservierung.PublicUser">
+            <summary>
+            Bildet die öffentlichen Daten eines Nutzers ab
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.PublicUser.Username">
+            <summary>
+            Username
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicUser.FirstName">
+            <summary>
+            Vorname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicUser.Lastname">
+            <summary>
+            Nachname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicUser.LastLogon">
+            <summary>
+            Letzte Loginzeit in Localtime
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicUser.Lastchange">
+            <summary>
+            Letzte Änderung der Nutzerdaten in Localtime
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicUser.Role">
+            <summary>
+            Rolle des Users
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.PublicUser.Active">
+            <summary>
+            Wahr, falsch der User aktivgesetzt ist
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.PublicUser.#ctor(awl_raumreservierung.User)">
+             <summary>
+            
+             /// </summary>
+             <param name="user"></param>
+        </member>
+        <member name="T:awl_raumreservierung.ReturnModel">
+            <summary>
+            Stellt ReturnModels bereit
+            </summary>
+        </member>
+        <member name="M:awl_raumreservierung.ReturnModel.#ctor">
+            <summary>
+            Erstellt eine neues Returnmodel mit Statuscode 200
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ReturnModel.#ctor(Microsoft.AspNetCore.Mvc.StatusCodeResult)">
+            <summary>
+            Erstellt eine neues Returnmodel mit bestimmten Statuscude
+            </summary>
+            <param name="statusCode">Statuscode</param>
+        </member>
+        <member name="P:awl_raumreservierung.ReturnModel.Status">
+            <summary>
+            Statuscode
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.ReturnModel.StatusMessage">
+            <summary>
+            HTTP-Statusmessage
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.ReturnModel.Message">
+            <summary>
+            Lesbare Nachricht
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.ReturnModel.Data">
+            <summary>
+            Zusätzliche Daten
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:awl_raumreservierung.CreateUserModel">
+            <summary>
+            Useranlagemodel
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.CreateUserModel.Username">
+            <summary>
+            Username
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateUserModel.FirstName">
+            <summary>
+            Vorname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateUserModel.LastName">
+            <summary>
+            Nachname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateUserModel.Role">
+            <summary>
+            Rolle
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateUserModel.Password">
+            <summary>
+            Password
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:awl_raumreservierung.LoginUserModel">
+            <summary>
+            Loginmodel
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.LoginUserModel.Username">
+            <summary>
+            Username
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.LoginUserModel.Password">
+            <summary>
+            Passwort
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.LoginUserModel.#ctor(System.String,System.String)">
+             <summary>
+            
+             </summary>
+             <param name="username"></param>
+             <param name="password"></param>
+        </member>
+        <member name="T:awl_raumreservierung.UpdateUserModel">
+            <summary>
+            Userupdatemodel
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.UpdateUserModel.FirstName">
+            <summary>
+            Vorname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.UpdateUserModel.LastName">
+            <summary>
+            Nachname
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.UpdateUserModel.Role">
+            <summary>
+            Rolle
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:awl_raumreservierung.CreateBookingModel">
+            <summary>
+            Buchungsmodel
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.CreateBookingModel.RoomID">
+            <summary>
+            Raum-ID
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateBookingModel.StartTime">
+            <summary>
+            Startzeit
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateBookingModel.EndTime">
+            <summary>
+            Endzeit
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateBookingModel.Note">
+            <summary>
+            Notiz
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateBookingModel.Username">
+            <summary>
+            Notiz
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.CreateBookingModel.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="username"></param>
+        </member>
+        <member name="T:awl_raumreservierung.UpdateBookingModel">
+            <summary>
+            Update Buchungsmodel
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.UpdateBookingModel.EndTime">
+            <summary>
+            Endzeit
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.UpdateBookingModel.Note">
+            <summary>
+            Notiz
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:awl_raumreservierung.CreateRoomModel">
+            <summary>
+            Raummodel
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.CreateRoomModel.Number">
+            <summary>
+            Raumnummer
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.CreateRoomModel.Name">
+            <summary>
+            /// Raumname
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.CreateRoomModel.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <param name="number"></param>
+        </member>
+        <member name="P:awl_raumreservierung.CreateRoomModel.Active">
+            <summary>
+            Aktivstatus
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:awl_raumreservierung.GetBookingModel">
+            <summary>
+            Model zum Holen von Bookings
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.GetBookingModel.StartDate">
+            <summary>
+            Startdatum der Abfrage, default Montag der aktuellen Woche
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:awl_raumreservierung.GetBookingModel.EndDate">
+            <summary>
+            Enddatum der Abfrage, default das Ende der Woche von Startdate
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:awl_raumreservierung.PasswordModel">
+            <summary>
+            Model für Passwortübergabe
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.PasswordModel.Password">
+            <summary>
+            Passworthash
+            </summary>
+            <value></value>
+        </member>
+        <member name="M:awl_raumreservierung.PasswordModel.#ctor(System.String)">
+             <summary>
+            
+             </summary>
+             <param name="password"></param>
+        </member>
+        <member name="T:awl_raumreservierung.Controllers.adminController">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.#ctor(Microsoft.Extensions.Logging.ILogger{awl_raumreservierung.Controllers.adminController})">
+             <summary>
+            
+             </summary>
+             <param name="logger"></param>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.Put(awl_raumreservierung.CreateUserModel)">
+            <summary>
+            Legt einen neuen User an
+            </summary>
+            <param name="model">Model mit Userdaten</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.UpdateUser(System.String,awl_raumreservierung.UpdateUserModel)">
+            <summary>
+            Aktualisiert die Daten eines Users
+            </summary>
+            <param name="username">Zu updatender Username</param>
+            <param name="model">Model mit Daten</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.Delete(System.String)">
+            <summary>
+            Löscht einen User
+            </summary>
+            <param name="username">Name des neuen Users</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.Post(System.String)">
+            <summary>
+            Aktiviert einen zuvor deaktivierten Benutzer
+            </summary>
+            <param name="username">Username des Users</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.PostDeactivate(System.String)">
+            <summary>
+            Deaktiviert einen Benutzer
+            </summary>
+            <param name="username">Username des Users</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.Get">
+            <summary>
+            Gibt die gesamte Userliste zurück
+            </summary>
+            <returns>Liste aller User mit Daten</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.GetRoles">
+            <summary>
+            Gibt die Rollenauflistung zurück
+            </summary>
+            <returns>Dict aus Rollen-ID und Beschreibung</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.ChangePassword(System.String,System.String)">
+            <summary>
+            Ändert das Passwort eines Users
+            </summary>
+            <param name="username">Username</param>
+            <param name="password">Hash des Passworts</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.adminController.DeleteBookings">
+            <summary>
+            Yeet bookings
+            </summary>
+        </member>
+        <member name="T:awl_raumreservierung.Controllers.bookingsController">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.bookingsController.#ctor(Microsoft.Extensions.Logging.ILogger{awl_raumreservierung.Controllers.bookingsController})">
+             <summary>
+            
+             </summary>
+             <param name="logger"></param>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.bookingsController.Get(System.Int32,awl_raumreservierung.GetBookingModel)">
+             <summary>
+             Liefert ein Array von Buchungen für den angegebenen Raum in der Woche des angegebenen Tags.
+            
+             </summary>
+             <param name="roomId">Raum ID des Raums für den Buchungen ausgegeben werden.</param>
+             <param name="model">Model der Daten</param>
+             <returns> 'PublicBooking' Array für den Raum und Woche.</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.bookingsController.Book(awl_raumreservierung.CreateBookingModel)">
+            <summary>
+            Erstellt eine neue Buchung laut dem übergebeben Models für den angegebenen Benutzer.
+            </summary>
+            <param name="model">Model der Buchung die erstellt werden soll.</param>
+            <returns>ReturnModel mit Statusnachricht und PublicBooking, wenn erfolgreich, in "Data".</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.bookingsController.Remove(System.Int32)">
+            <summary>
+            Entfernt eine Buchung aus der Datebank.
+            </summary>
+            <param name="bookingId">ID der Buchung die entfernt werden soll.</param>
+            <returns>ReturnModel mit Statusnachricht.</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.bookingsController.Edit(System.Int64,awl_raumreservierung.UpdateBookingModel)">
+            <summary>
+            Bearbeitet eine existierenden Buchung.
+            </summary>
+            <param name="bookingId">ID der Buchung die bearbeitet werden soll.</param>
+            <param name="model">Model mit den neuen Werten.</param>
+            <returns>ReturnModel mit Statusnachricht und PublicBooking der bearbeiteten Buchung in "Data".</returns>
+        </member>
+        <member name="T:awl_raumreservierung.Controllers.loginController">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:awl_raumreservierung.Controllers.loginController.builder">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.loginController.#ctor(Microsoft.Extensions.Logging.ILogger{awl_raumreservierung.Controllers.loginController})">
+             <summary>
+            
+             /// </summary>
+             <param name="logger"></param>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.loginController.Post(awl_raumreservierung.LoginUserModel)">
+            <summary>
+            Prüft den Login und stellt einen JWT bereit
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.loginController.PostLogout">
+            <summary>
+            Macht nichts
+            </summary>
+        </member>
+        <member name="T:awl_raumreservierung.Controllers.roomsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.roomsController.#ctor(Microsoft.Extensions.Logging.ILogger{awl_raumreservierung.Controllers.roomsController})">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.roomsController.GetRooms">
+            <summary>
+            Liefert ein Array der Räume in der Datenbank.
+            </summary>
+            <returns>Array der Räume in der Datenbank</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.roomsController.Add(awl_raumreservierung.CreateRoomModel)">
+            <summary>
+            Erstellt einen neuen Raum.
+            </summary>
+            <param name="model">RoomModel des Raums der erstellt werden soll.</param>
+            <returns>ReturnModel mit Statusnachricht und PublicRoom, wenn erfolgreich, in "Data".</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.roomsController.Remove(System.Int32)">
+            <summary>
+            Entfernt einen Raum aus der Datebank.
+            </summary>
+            <param name="roomId">ID des Raums der entfernt werden soll.</param>
+            <returns>Return Model mit Statusnachricht.</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.roomsController.Edit(System.Int64,awl_raumreservierung.CreateRoomModel)">
+            <summary>
+            Ersetzt die Raumdaten eines Raums mit neuen Daten.
+            </summary>
+            <param name="roomId">Die ID des Raums der bearbeitet werden soll.</param>
+            <param name="model">Die neuen Daten für den Raum.</param>
+            <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.roomsController.Activate(System.Int64)">
+            <summary>
+            Aktiviert einen Raum für Buchungen.
+            </summary>
+            <param name="roomId">Die ID des Raums der aktiviert werden soll.</param>
+            <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.roomsController.Deactivate(System.Int64)">
+            <summary>
+            Deaktiviert einen Raum für Buchungen.
+            </summary>
+            <param name="roomId">Die ID des Raums der deaktiviert werden soll.</param>
+            <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
+        </member>
+        <member name="T:awl_raumreservierung.Controllers.userController">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.userController.#ctor(Microsoft.Extensions.Logging.ILogger{awl_raumreservierung.Controllers.userController})">
+             <summary>
+            
+             </summary>
+             <param name="logger"></param>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.userController.GetByID(System.String)">
+            <summary>
+            Holt die öffentlichen Daten eines Nutzers
+            </summary>
+            <param name="idOrUsername"> ID oder Username</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.userController.GetUser">
+            <summary>
+            Liefert den aktuellen Benutzer
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Controllers.userController.PostChangePassword(awl_raumreservierung.PasswordModel)">
+            <summary>
+            Ändert das Password des angemeldeten Users
+            </summary>
+            <param name="model">Model mit Hash des Passworts</param>
+            <returns></returns>
+        </member>
+        <member name="T:awl_raumreservierung.ExtensionMethods">
+            <summary>
+            Stellt Extensions bereit
+            </summary>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.IsNullOrWhiteSpace(System.String)">
+            <summary>
+            Checkt, ob ein String Null oder Whitespace ist
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.ToUtc(System.Nullable{System.DateTime})">
+            <summary>
+            Konvertiert eine Zeit in UTC
+            </summary>
+            <param name="dateTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.ToInt(System.Int64)">
+            <summary>
+            Castet Long zu Int
+            </summary>
+            <param name="num"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.ToPublicUser(awl_raumreservierung.User)">
+            <summary>
+            Erzeugt einen PublicUser aus einem USer
+            </summary>
+            <param name="usr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.ToPublicRoom(awl_raumreservierung.Room)">
+            <summary>
+            Erzeugt einen PublicRoom aus einem Room
+            </summary>
+            <param name="room"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.ToPublicBooking(awl_raumreservierung.Booking)">
+            <summary>
+            Erzeugt ein PublicBooking aus einem Booking
+            </summary>
+            <param name="booking"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.StartOfWeek(System.DateTime)">
+            <summary>
+            Liefert den Starttag der Woche
+            </summary>
+            <param name="dt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.EndOfNextWeek(System.DateTime)">
+            <summary>
+            Liefert das Enddatum der nächsten Woche
+            </summary>
+            <param name="dt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.GetUser(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Gibt den User des Auth-Users zurück
+            </summary>
+            <param name="princ"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.GetUsername(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Gibt den Username des Auth-Users zurück
+            </summary>
+            <param name="princ"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.IsInRole(System.Security.Claims.ClaimsPrincipal,System.String)">
+            <summary>
+            Checkt, ob der User in einer Rolle ist
+            </summary>
+            <param name="princ"></param>
+            <param name="roleName">Name der Rolle</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.GetBookings(awl_raumreservierung.Room)">
+            <summary>
+            /// Holt alle Bookings eines Raumes
+            </summary>
+            <param name="room"></param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.ExtensionMethods.GetErrorModel(Microsoft.AspNetCore.Mvc.ControllerBase,System.Exception)">
+            <summary>
+            Erstellt ein Fehlerreturnmodel
+            </summary>
+            <param name="controller"></param>
+            <param name="ex">Exception</param>
+            <returns></returns>
+        </member>
+        <member name="T:awl_raumreservierung.core.Globals">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.core.Globals.AppBuilder">
+            <summary>
+            WebAppBuilder
+            </summary>
+        </member>
+        <member name="P:awl_raumreservierung.core.Globals.DbContext">
+            <summary>
+            DBContext
+            </summary>
+        </member>
+        <member name="T:awl_raumreservierung.Helpers">
+            <summary>
+            Stellt Helfermothoden bereit
+            </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.GetUser(System.String)">
+            <summary>
+            Holt einen User aus der Datenbank
+            </summary>
+            <param name="username">Username</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.DoesUserExist(System.String)">
+            <summary>
+            Checkt, ob ein Nutzer existiert
+            </summary>
+            <param name="username">Benutzername</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.DoesUserExist(System.Int32)">
+            <summary>
+            Checkt, ob ein Nutzer existiert
+            </summary>
+            <param name="userID">User-ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.GetUser(System.Int32)">
+            <summary>
+            Holt einen User aus der Datenbank
+            </summary>
+            <param name="id">User-ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.GetRoom(System.Int64)">
+            <summary>
+            Holt einen Raum aus der DB
+            </summary>
+            <param name="id">ID des Raums</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.DoesRoomExist(System.Int64)">
+            <summary>
+            Checkt, ob ein Raum existiert
+            </summary>
+            <param name="id">ID des Raums</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.GetBooking(System.Int64)">
+            <summary>
+            Holt ein Booking aus der DB
+            </summary>
+            <param name="id">Booking-ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.DoesBookingExist(System.Int64)">
+            <summary>
+            Checkt, ob ein spezifisches Booking existiert
+            </summary>
+            <param name="id">ID des Bookings</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.BookingOverlaps(awl_raumreservierung.CreateBookingModel)">
+            <summary>
+            Checkt, ob ein Booking sich mit einem anderen überschneidet
+            </summary>
+            <param name="model">Bookingmodel</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.BookingOverlaps(awl_raumreservierung.Booking)">
+            <summary>
+            Checkt, ob ein Booking sich mit einem anderen überschneidet
+            </summary>
+            <param name="booking">Booking</param>
+            <returns></returns>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.checkBookingTime(awl_raumreservierung.Booking)">
+            <summary>
+            Checkt ob die Zeiten einer Buchung valide sind.
+            </summary>
+            <param name="booking">Booking</param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:awl_raumreservierung.Helpers.SetUserStatus(awl_raumreservierung.User,System.Boolean)">
+            <summary>
+            Setzt den Aktivstatus eines Users
+            </summary>
+            <param name="user">User</param>
+            <param name="status">Status</param>
+        </member>
+        <member name="T:awl_raumreservierung.Login">
+            <summary>
+            Loginklasse
+            </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Login.CheckLogin(System.String,System.String)">
+            <summary>
+            Prüft den Login eines Nutzers
+            </summary>
+            <param name="username">Username</param>
+            <param name="password">Gehashtes Passwort</param>
+            <returns></returns>
+        </member>
+        <member name="T:awl_raumreservierung.Login.LoginMessage">
+            <summary>
+            Mögliche Loginrückgabemeldungen
+            </summary>
+        </member>
+        <member name="F:awl_raumreservierung.Login.LoginMessage.InvalidCredentials">
+            Ungültige Anmeldedaten
+        </member>
+        <member name="F:awl_raumreservierung.Login.LoginMessage.Success">
+            Erfolgreich angemeldet als normaler User
+        </member>
+        <member name="F:awl_raumreservierung.Login.LoginMessage.InactiveUser">
+            User ist inaktiv
+        </member>
+        <member name="F:awl_raumreservierung.Login.LoginMessage.SuccessAsAdmin">
+            Erfolgreich angemeldet als Admin
+        </member>
+        <member name="T:awl_raumreservierung.Migrations.First">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:awl_raumreservierung.Migrations.First.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="migrationBuilder"></param>
+        </member>
+        <member name="M:awl_raumreservierung.Migrations.First.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <summary>
+            
+            </summary>
+            <param name="migrationBuilder"></param>
+        </member>
+    </members>
+</doc>
