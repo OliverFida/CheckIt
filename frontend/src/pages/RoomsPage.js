@@ -7,7 +7,7 @@ import RoomsContextProvider, {RoomsContext} from '../contexts/RoomsContext';
 // Style imports
 import '../css/components/RoomsPage.css';
 // API imports
-import RoomsAPI from '../api/rooms';
+const RoomsAPI = require('../api/rooms');
 
 export default function RoomsPage(){    
 

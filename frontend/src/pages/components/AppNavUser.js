@@ -3,7 +3,7 @@ import React from 'react';
 import {NavDropdown} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-import LoginAPI from '../../api/login';
+const LoginAPI = require('../../api/login');
 
 export default function AppNavUser(){
     const navigate = useNavigate();

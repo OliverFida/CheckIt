@@ -4,8 +4,8 @@ import { HomePageContext } from '../../contexts/HomePageContext';
 import StundenplanBooking from './StundenplanBooking';
 import moment from 'moment';
 // API imports
-import BookingsAPI from '../../api/bookings';
 import timesMap from '../../api/timesMap.json';
+const BookingsAPI = require('../../api/bookings');
 
 const amountWeeks = 6;
 

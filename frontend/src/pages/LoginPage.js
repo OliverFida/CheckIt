@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import {Stack, Button, Form, Container, Row, Col} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 // API imports
-import LoginAPI from '../api/login';
+const LoginAPI = require('../api/login');
 
 export default function LoginPage(){
     const navigate = useNavigate();

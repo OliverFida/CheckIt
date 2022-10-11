@@ -3,11 +3,11 @@ import React, {useState, useEffect, useContext} from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import {HomePageContext} from '../../contexts/HomePageContext';
 import moment from 'moment';
-// API imports
-import BookingsAPI from '../../api/bookings';
-import timesMap from '../../api/timesMap.json';
 // Style imports
 import '../../css/components/UserPage.css';
+// API imports
+import timesMap from '../../api/timesMap.json';
+const BookingsAPI = require('../../api/bookings');
 
 export default function BookingModal(){
     const {hpContext, setHpContext} = useContext(HomePageContext);

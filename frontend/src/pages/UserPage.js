@@ -8,7 +8,7 @@ import moment from 'moment';
 // Style imports
 import '../css/components/UserPage.css';
 // API imports
-import UserAPI from '../api/user';
+const UserAPI = require('../api/user');
 
 export default function UserPage(){
     return(
