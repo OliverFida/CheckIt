@@ -36,6 +36,12 @@
 				"${workspaceFolder}/awl-raumreservierung.csproj"
 			],
 			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "publish container",
+			"command": "tools/build.sh",
+			"type": "process",
+			"problemMatcher": "$msCompile"
 		}
 	]
 }
