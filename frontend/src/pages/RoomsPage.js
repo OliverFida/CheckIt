@@ -1,6 +1,6 @@
 // Component imports
 import React, {useEffect, useState, useContext} from 'react';
-import {Stack, Button, Table, Modal, Form} from 'react-bootstrap';
+import {Stack, Button, Table, Row, Col, Card} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 import AppNavRooms from './components/AppNavRooms';
 import RoomsContextProvider, {RoomsContext} from '../contexts/RoomsContext';
@@ -26,18 +26,24 @@ export default function RoomsPage(){
 
 function RoomBody(){
     return(
-        <Table className='rooms'>
-            <thead>
-                <tr>                    
-                    <th>Raumnummer</th>
-                    <th>Raumname</th>                        
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>                    
-                <RoomRows />
-            </tbody>
-        </Table>
+       <Row className="justify-content-md-center">
+            <Col md={6}>
+                <Card>
+                    <Table className='rooms'>
+                        <thead>
+                            <tr>                    
+                                <th>Raumnummer</th>
+                                <th>Raumname</th>                        
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>                    
+                            <RoomRows />
+                        </tbody>
+                    </Table>
+                </Card>
+            </Col>
+       </Row>
     );
 }
 
