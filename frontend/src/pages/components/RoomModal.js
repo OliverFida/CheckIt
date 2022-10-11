@@ -44,7 +44,7 @@ export default function RoomModal(){
             </Modal.Header>
             <Modal.Body>
                 {roomsContext.uiControl.modalMode !== "delete" ? 
-                <Form>
+                <Form onSubmit={e => {e.preventDefault()}}>
                     <Form.Group className="mb-3" controlId="roomNumber">
                         <Form.Label>Nummer</Form.Label>
                         <Form.Control type="text" name="number" value={state?.number ? state.number : ""} onChange={onChange} />

@@ -72,7 +72,7 @@ export default function BookingModal(){
                 <Modal.Title>Buchung</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form onSubmit={e => {e.preventDefault()}}>
                     <HoursPicker state={state} setState={setState} />
                     <NoteField state={state} setState={setState} />
                 </Form>

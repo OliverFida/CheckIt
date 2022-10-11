@@ -1,6 +1,6 @@
 // Component imports
 import React, {useEffect, useState, useContext} from 'react';
-import {Stack, Button, Table, Row, Col, Card} from 'react-bootstrap';
+import {Stack, Button, Table, Row, Col, Card, ButtonGroup} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 import AppNavRooms from './components/AppNavRooms';
 import RoomsContextProvider, {RoomsContext} from '../contexts/RoomsContext';
@@ -63,37 +63,37 @@ function RoomRows(){
         doAsync();
     }, [roomsContext?.rooms.reload]);
 
-    const onSelect = (room, mode) => {
-        setRoomsContext({...roomsContext, uiControl:{...roomsContext.uiControl, roomModal: true, modalMode: mode}, rooms:{...roomsContext.rooms, selected: room}});
-    };
-
-    const onActivate = (room, state) => {
-        async function doAsync(){
-            await RoomsAPI.setActive(room.id, state);
-            setRoomsContext({...roomsContext, rooms:{...roomsContext.rooms, reload: true}});
-        }
-        doAsync();
-    };
-    
     useEffect(() => {
         setElements(rooms?.map(room => 
             <tr key={`room_${room.id}`}>
                 <td key={`room_${room.number}`}>{room.number}</td>
                 <td key={`room_${room.name}`}>{room.name}</td>
                 <td>
-                    <Button onClick={() => {onSelect(room, "edit")}} className="my-1 me-2">
-                        Bearbeiten
-                    </Button>
-                    <Button onClick={() => {onSelect(room, "delete")}} variant="danger" className="my-1 me-2">
-                        Löschen
-                    </Button>
-                    <Button onClick={() => {onActivate(room, room.active ? false : true)}} variant={room.active ? "secondary" : "success"} className="my-1 me-2">
-                        {room.active ? "Deaktivieren" : "Aktivieren"}
-                    </Button>
+                    <ButtonGroup>
+                        <Button onClick={() => {onSelect(room, "edit")}} className="my-1">
+                            Bearbeiten
+                        </Button>
+                        <Button onClick={() => {onActivate(room, room.active ? false : true)}} variant={room.active ? "secondary" : "success"} className="my-1">
+                            {room.active ? "Deaktivieren" : "Aktivieren"}
+                        </Button>
+                        <Button onClick={() => {onSelect(room, "delete")}} variant="danger" className="my-1">
+                            Löschen
+                        </Button>
+                    </ButtonGroup>
                 </td> 
             </tr>
         ));
     }, [rooms]);
+    
+    const onSelect = (room, mode) => {
+        setRoomsContext({...roomsContext, uiControl:{...roomsContext.uiControl, roomModal: true, modalMode: mode}, rooms:{...roomsContext.rooms, selected: room}});
+    };
+
+    const onActivate = async (room, state) => {
+        await RoomsAPI.setActive(room.id, state);
+        setRoomsContext({...roomsContext, rooms:{...roomsContext.rooms, reload: true}});
+    };
+    
    
 
     return(
