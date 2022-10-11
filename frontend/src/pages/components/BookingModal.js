@@ -55,7 +55,7 @@ export default function BookingModal(){
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }else{
                 await BookingsAPI.editBooking(state.booking.id, state.booking.endTime, state.booking.note);
-                
+
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }
         }
@@ -107,7 +107,7 @@ function NoteField({state, setState}){
     return(
         <Form.Group controlId="bookingNotes">
             <Form.Label>Notizen</Form.Label>
-            <Form.Control as="textarea" rows={3} className="bookingNotes" value={state?.booking?.note} onChange={onChange} disabled={state?.viewMode} />
+            <Form.Control autoComplete='off' as="textarea" rows={3} className="bookingNotes" value={state?.booking?.note} onChange={onChange} disabled={state?.viewMode} />
         </Form.Group>
     );
 }

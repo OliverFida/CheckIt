@@ -47,11 +47,11 @@ export default function RoomModal(){
                 <Form onSubmit={e => {e.preventDefault()}}>
                     <Form.Group className="mb-3" controlId="roomNumber">
                         <Form.Label>Nummer</Form.Label>
-                        <Form.Control type="text" name="number" value={state?.number ? state.number : ""} onChange={onChange} />
+                        <Form.Control autoComplete='off' type="text" name="number" value={state?.number ? state.number : ""} onChange={onChange} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="roomName">
                         <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" name="name" value={state?.name ? state.name : ""} onChange={onChange} />
+                        <Form.Control autoComplete='off' type="text" name="name" value={state?.name ? state.name : ""} onChange={onChange} />
                     </Form.Group> 
                 </Form>
                 :

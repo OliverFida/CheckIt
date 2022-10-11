@@ -53,15 +53,15 @@ export default function UserEditModal(){
                         <>
                         <Form.Group className="mb-3" controlId="userName">
                             <Form.Label>Benutzername</Form.Label>
-                            <Form.Control type="text" name="username" value={state?.username ? state.username : ""} onChange={onChange} />
+                            <Form.Control autoComplete='off' type="text" name="username" value={state?.username ? state.username : ""} onChange={onChange} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="firstName">
                             <Form.Label>Vorname</Form.Label>
-                            <Form.Control type="text" name="firstName" value={state?.firstName ? state.firstName : ""} onChange={onChange} />
+                            <Form.Control autoComplete='off' type="text" name="firstName" value={state?.firstName ? state.firstName : ""} onChange={onChange} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="lastName">
                             <Form.Label>Nachname</Form.Label>
-                            <Form.Control type="text" name="lastname" value={state?.lastname ? state.lastname : ""} onChange={onChange} />
+                            <Form.Control autoComplete='off' type="text" name="lastname" value={state?.lastname ? state.lastname : ""} onChange={onChange} />
                         </Form.Group> 
                         </>
                         :
@@ -72,11 +72,11 @@ export default function UserEditModal(){
                         <>
                         <Form.Group className="mb-3" controlId="firstName">
                             <Form.Label>Vorname</Form.Label>
-                            <Form.Control type="text" name="firstName" value={state?.firstName ? state.firstName : ""} onChange={onChange} />
+                            <Form.Control autoComplete='off' type="text" name="firstName" value={state?.firstName ? state.firstName : ""} onChange={onChange} />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="lastName">
                             <Form.Label>Nachname</Form.Label>
-                            <Form.Control type="text" name="lastname" value={state?.lastname ? state.lastname : ""} onChange={onChange} />
+                            <Form.Control autoComplete='off' type="text" name="lastname" value={state?.lastname ? state.lastname : ""} onChange={onChange} />
                         </Form.Group> 
                         </>
                         :

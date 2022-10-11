@@ -111,11 +111,11 @@ function ChangePasswordModal(){
                 <Form onSubmit={e => {e.preventDefault()}}>
                     <Form.Group className="mb-3" controlId="changePassword">
                         <Form.Label>Neues Passwort</Form.Label>
-                        <Form.Control type="password" name="password" onChange={onChange} value={values.password} />
+                        <Form.Control autoComplete='off' type="password" name="password" onChange={onChange} value={values.password} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="changePasswordConfirm">
                         <Form.Label>Neues Passwort wiederholen</Form.Label>
-                        <Form.Control type="password" name="repeat" onChange={onChange} value={values.repeat} />
+                        <Form.Control autoComplete='off' type="password" name="repeat" onChange={onChange} value={values.repeat} />
                     </Form.Group>                                      
                 </Form> 
             </Modal.Body>
