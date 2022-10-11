@@ -403,3 +403,4 @@ checkit.db
 /frontend/node_modules
 /frontend/build
 /backend/bin
+/backend/obj
