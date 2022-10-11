@@ -60,9 +60,17 @@ function RoomRows(){
     const onSelect = (room, mode) => {
         setRoomsContext({...roomsContext, uiControl:{...roomsContext.uiControl, roomModal: true, modalMode: mode}, rooms:{...roomsContext.rooms, selected: room}});
     };
+
+    const onActivate = (room, state) => {
+        async function doAsync(){
+            await RoomsAPI.setActive(room.id, state);
+            setRoomsContext({...roomsContext, rooms:{...roomsContext.rooms, reload: true}});
+        }
+        doAsync();
+    };
     
     useEffect(() => {
-        setElements(rooms?.map(room => room.active ? 
+        setElements(rooms?.map(room => 
             <tr key={`room_${room.id}`}>
                 <td key={`room_${room.number}`}>{room.number}</td>
                 <td key={`room_${room.name}`}>{room.name}</td>
@@ -73,9 +81,12 @@ function RoomRows(){
                     <Button onClick={() => {onSelect(room, "delete")}} variant="danger" className="my-1 me-2">
                         Löschen
                     </Button>
+                    <Button onClick={() => {onActivate(room, room.active ? false : true)}} variant={room.active ? "secondary" : "success"} className="my-1 me-2">
+                        {room.active ? "Deaktivieren" : "Aktivieren"}
+                    </Button>
                 </td> 
             </tr>
-            : null));
+        ));
     }, [rooms]);
    
 
