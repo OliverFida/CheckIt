@@ -145,7 +145,7 @@ namespace awl_raumreservierung
 		{
 			var room = GetRoom(booking.Room);
 
-			bool overlapsWithOtherBookings = room.GetBookings(ctx).Any(b => b.StartTime <= booking.EndTime.Subtract(new TimeSpan(0, 0, 1)) && booking.StartTime <= b.EndTime);
+			bool overlapsWithOtherBookings = room.GetBookings(ctx).Any(b => b != booking && b.StartTime <= booking.EndTime.Subtract(new TimeSpan(0, 0, 1)) && booking.StartTime <= b.EndTime);
 			return overlapsWithOtherBookings;
 		}
 
