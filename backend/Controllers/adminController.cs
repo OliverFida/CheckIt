@@ -25,7 +25,7 @@ public class adminController : ControllerBase
 	public adminController(ILogger<adminController> logger)
 	{
 		_logger = logger;
-		ctx = Globals.DbContext;
+		ctx = new checkITContext();
 	}
 
 	/// <summary>

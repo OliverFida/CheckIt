@@ -30,7 +30,7 @@ public class bookingsController : ControllerBase
 	/// <param name="logger"></param>
 	public bookingsController(ILogger<bookingsController> logger)
 	{
-		ctx = Globals.DbContext;
+		ctx = new checkITContext();
 		_logger = logger;
 	}
 

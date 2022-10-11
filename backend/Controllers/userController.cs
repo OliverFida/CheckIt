@@ -26,7 +26,7 @@ public class userController : ControllerBase
     /// <param name="logger"></param>
     public userController(ILogger<userController> logger)
     {
-        ctx = Globals.DbContext;
+        ctx = new checkITContext();
         _logger = logger;
     }
 

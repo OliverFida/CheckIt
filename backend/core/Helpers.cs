@@ -18,7 +18,7 @@ namespace awl_raumreservierung
 		/// <returns></returns>
 		public static User GetUser(string username)
 		{
-			checkITContext ctx = Globals.DbContext;
+			checkITContext ctx = new checkITContext();
 			var user = ctx.Users.Where(u => u.Username.ToLower().Trim() == username.ToLower().Trim()).FirstOrDefault();
 
 			if (user is null)
@@ -56,7 +56,7 @@ namespace awl_raumreservierung
 		/// <returns></returns>
 		public static User GetUser(int id)
 		{
-			checkITContext ctx = Globals.DbContext;
+			checkITContext ctx = new checkITContext();
 			var user = ctx.Users.Where(u => u.Id == id).FirstOrDefault();
 
 			if (user is null)
@@ -74,7 +74,7 @@ namespace awl_raumreservierung
 		/// <returns></returns>
 		public static Room GetRoom(long id)
 		{
-			checkITContext ctx = Globals.DbContext;
+			checkITContext ctx = new checkITContext();
 			var room = ctx.Rooms.Where(r => r.Id == id).FirstOrDefault();
 
 			if (room is null)
@@ -91,7 +91,7 @@ namespace awl_raumreservierung
 		/// <param name="id">ID des Raums</param>
 		/// <returns></returns>
 		public static bool DoesRoomExist(long id){
-			checkITContext ctx = Globals.DbContext;
+			checkITContext ctx = new checkITContext();
 			return ctx.Rooms.Find(id) is not null;
 		}
 
@@ -102,7 +102,7 @@ namespace awl_raumreservierung
 		/// <returns></returns>
 		public static Booking GetBooking(long id)
 		{
-			checkITContext ctx = Globals.DbContext;
+			checkITContext ctx = new checkITContext();
 			var booking = ctx.Bookings.Where(b => b.Id == id).FirstOrDefault();
 
 			if (booking is null)
@@ -119,7 +119,7 @@ namespace awl_raumreservierung
 		/// <param name="id">ID des Bookings</param>
 		/// <returns></returns>
 		public static bool DoesBookingExist(long id){
-			checkITContext ctx = Globals.DbContext;
+			checkITContext ctx = new checkITContext();
 
 			return ctx.Bookings.Find(id) is not null;
 		}
@@ -176,7 +176,7 @@ namespace awl_raumreservierung
 		/// <param name="status">Status</param>
 		public static void SetUserStatus(User user, bool status)
 		{
-			var ctx = Globals.DbContext;
+			var ctx = new checkITContext();
 
 			user.Active = status;
 			user.Lastchange = DateTime.Now;

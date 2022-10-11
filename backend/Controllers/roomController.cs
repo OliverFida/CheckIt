@@ -22,7 +22,7 @@ public class roomsController : ControllerBase
 	public roomsController(ILogger<roomsController> logger)
 	{
 		_logger = logger;
-		ctx = Globals.DbContext;
+		ctx = new checkITContext();
 	}
 	/// <summary>
 	/// Liefert ein Array der Räume in der Datenbank.

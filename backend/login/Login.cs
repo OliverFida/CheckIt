@@ -17,7 +17,7 @@ namespace awl_raumreservierung
 		/// <returns></returns>
 		public static LoginMessage CheckLogin(string username, string password)
 		{
-			var ctx = Globals.DbContext;
+			var ctx = new checkITContext();
 
 			var user = ctx.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
 
