@@ -39,8 +39,10 @@ export default function BookingModal(){
     
     const onSubmit = () => {
         async function doAsync(){
+            var targetDateStart, targetDateEnd;
+
             if(!state.editMode){
-                var targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(state.day - 1, 'days');
+                targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(state.day - 1, 'days');
                 var lesson = timesMap.find(target => target.key === state.lesson);
                 var lessonHourStart = lesson.start.substring(0, 2);
                 var lessonMinuteStart = lesson.start.substring(3, 5);
@@ -48,13 +50,16 @@ export default function BookingModal(){
                 targetDateStart.set('minute', lessonMinuteStart);
                 targetDateStart.set('second', 0).set('millisecond', 0);
                 
-                var targetDateEnd = moment(targetDateStart).add(50, 'minutes');
-    
+                targetDateEnd = moment(targetDateStart).add(50, 'minutes');
+                console.log(targetDateEnd.toJSON());
+                
                 await BookingsAPI.book(hpContext.roomSelection.id, targetDateStart.toJSON(), targetDateEnd.toJSON(), state.booking.note);
     
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }else{
-                await BookingsAPI.editBooking(state.booking.id, state.booking.endTime, state.booking.note);
+                targetDateEnd = moment.utc(state.booking.endTime).add(1, 'second');
+
+                await BookingsAPI.editBooking(state.booking.id, targetDateEnd.toJSON(), state.booking.note);
 
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }

@@ -23,7 +23,9 @@ async function editUser(username, firstName, lastName, role){
 }
 
 async function resetPassword(username){
-    return await apiRequest(`admin/user/${username}/password`, "PATCH", "awl");
+    return await apiRequest(`admin/user/${username}/password`, "PATCH", {
+        "password": "awl"
+    });
 }
 
 async function setUserActive(username, state){

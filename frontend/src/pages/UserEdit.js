@@ -28,7 +28,8 @@ function UserEditBody(){
     return(
         <Table className='useredit'>
             <thead>
-                <tr>                        
+                <tr>
+                    <th>Benutzername</th>                        
                     <th>Vorname</th>
                     <th>Nachname</th>
                     <th></th>
@@ -60,6 +61,7 @@ function UserEditRow(){
     useEffect(() => {
         setElements(users.map(user =>
             <tr key={`user_${user.username}`}>                        
+                <td valign='middle' key={`user${user.username}`}>{user.username}</td>
                 <td valign='middle' key={`user${user.firstName}`}>{user.firstName}</td>
                 <td valign='middle' key={`user${user.lastname}`}>{user.lastname}</td>
                 <td>

@@ -98,7 +98,11 @@ export default function UserEditModal(){
             </Modal.Body>
             <Modal.Footer>
                 <Button variant='ghost' onClick={onCancel}>Abbrechen</Button>
-                <Button variant={ueContext.uiControl.modalMode === "resetPW" || "delete" ? "danger" : "primary"} onClick={onSubmit}>
+                <Button variant={
+                    ueContext.uiControl.modalMode === "resetPW" ? "danger" : 
+                    ueContext.uiControl.modalMode === "delete" ? "danger" : 
+                    "primary"
+                    } onClick={onSubmit}>
                     {
                         ueContext.uiControl.modalMode === "editName" ? "Speichern" :
                         ueContext.uiControl.modalMode === "resetPW" ? "Zurücksetzen" :

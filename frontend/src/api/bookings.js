@@ -9,6 +9,7 @@ async function getBookings(roomId, startDate, endDate){
 }
 
 async function book(roomId, startTime, endTime, note){
+  console.log(roomId, startTime, endTime, note);
   var returnValue;
 
   await apiRequest("bookings", "PUT", {
@@ -19,6 +20,7 @@ async function book(roomId, startTime, endTime, note){
     username: localStorage.getItem("loginUsername")
   })
   .then(response => {
+    console.log(response);
     returnValue = response.data;
   });
 
