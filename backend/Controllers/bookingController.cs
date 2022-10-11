@@ -164,7 +164,7 @@ public class bookingsController : ControllerBase
 		try
 		{
 
-			if (Helpers.DoesBookingExist(bookingId))
+			if (!Helpers.DoesBookingExist(bookingId))
 			{
 				Response.StatusCode = StatusCodes.Status404NotFound;
 				return new ReturnModel(new StatusCodeResult(404)) { Message = "Buchung konnte nicht gefunden werden!" };
