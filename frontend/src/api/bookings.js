@@ -25,6 +25,13 @@ async function book(roomId, startTime, endTime, note){
   return returnValue;
 }
 
+async function editBooking(id, endTime, note){
+  await apiRequest(`bookings/${id}`, "PATCH", {
+    "endTime": endTime,
+    "note": note
+  });
+}
+
 async function del(bookingId){
   await apiRequest(`bookings/${bookingId}`, "DELETE", null)
   .then(response => {
@@ -35,5 +42,6 @@ async function del(bookingId){
 module.exports = {
     getBookings,
     book,
+    editBooking,
     del
 };

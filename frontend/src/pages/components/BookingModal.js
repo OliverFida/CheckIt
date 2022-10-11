@@ -14,19 +14,13 @@ export default function BookingModal(){
     const [state, setState] = useState(null);
 
     useEffect(() => {
-        if(hpContext.bookings.selected !== null){
-            setState(hpContext.bookings.selected);
-        }else{
-            setState(null);
-        }
+        setState(hpContext.bookings.selected);
     }, [hpContext.bookings.selected]);
 
     useEffect(() => {
         if(state === null) return;
         if(state.booking === null){
-            setState({...state, booking: {}});
-        }else{
-            // TODO: Edit/View Mode
+            setState({...state, booking: {note: ""}});
         }
     }, [state]);
 
@@ -60,6 +54,8 @@ export default function BookingModal(){
     
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }else{
+                await BookingsAPI.editBooking(state.booking.id, state.booking.endTime, state.booking.note);
+                
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }
         }
