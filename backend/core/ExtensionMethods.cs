@@ -146,7 +146,7 @@ namespace awl_raumreservierung
 		{
 			try
 			{
-				using checkITContext ctx = Globals.DbContext;
+				using checkITContext ctx = new checkITContext();
 				return ctx.Bookings.Where(b => b.Room == room.Id).ToArray();
 			}
 			catch
