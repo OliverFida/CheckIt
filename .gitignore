@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+checkit.docker
+checkit.db
+./backend/out
+/frontend/node_modules
+/frontend/build
