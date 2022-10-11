@@ -6,7 +6,7 @@ import { HomePageContext } from '../../contexts/HomePageContext';
 
 export default function StundenplanBooking({day, lesson}){
     const {hpContext, setHpContext} = useContext(HomePageContext);
-    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null, tooltip: ""});
+    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null});
 
     useEffect(() => {
         console.log("Rendering Booking " + day + "-" + lesson.key);
@@ -34,11 +34,11 @@ export default function StundenplanBooking({day, lesson}){
         
         var loginUsername = localStorage.getItem('loginUsername');
         if(!foundBooking){
-            setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false, false, foundBooking)}, text: "Buchen", user: null, tooltip: ""});
+            setState({...state, variant: 'light', disabled: timeOver, onClick: () => {onClick(false, false, foundBooking)}, text: "Buchen", user: null});
         }else if(loginUsername !== foundBooking.user.username){
-            setState({...state, variant: 'danger', disabled: timeOver, onClick: ()=> {onClick(false, true, foundBooking)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note});
+            setState({...state, variant: 'danger', disabled: timeOver, onClick: ()=> {onClick(false, true, foundBooking)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`});
         }else{
-            setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true, false, foundBooking)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`, tooltip: foundBooking.note});
+            setState({...state, variant: 'success', disabled: timeOver, onClick: () => {onClick(true, false, foundBooking)}, text: "Gebucht von", user: `${foundBooking.user.firstName} ${foundBooking.user.lastname}`});
         }
     }, [hpContext.bookings.bookings, hpContext.weekSelection.offset]);
 

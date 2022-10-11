@@ -19,8 +19,33 @@ export default function BookingModal(){
 
     useEffect(() => {
         if(state === null) return;
-        if(state.booking === null){
-            setState({...state, booking: {note: ""}});
+        var targetDateStart, targetDateEnd;
+
+        if(state.booking === null || state.booking === undefined){
+            targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(state.day - 1, 'days');
+            var lesson = timesMap.find(target => target.key === state.lesson);
+            var lessonHourStart = lesson.start.substring(0, 2);
+            var lessonMinuteStart = lesson.start.substring(3, 5);
+            targetDateStart.set('hour', lessonHourStart);
+            targetDateStart.set('minute', lessonMinuteStart);
+            targetDateStart.set('second', 0).set('millisecond', 0);
+
+            targetDateEnd = moment(targetDateStart).add(50, 'minutes');
+
+            setState({...state, booking: {startTime: targetDateStart.toJSON(), endTime: targetDateEnd.toJSON(), note: ""}});
+        }
+
+        if(state.booking !== null && state.booking !== undefined){
+            targetDateStart = moment.utc(state.booking.startTime).local();
+            targetDateEnd = moment.utc(state.booking.endTime).local();
+            if(targetDateEnd.get('seconds') !== 0) targetDateEnd.add(1, 'second');
+
+            var startLesson = timesMap.find(target => target.start === targetDateStart.format('HH:mm'));
+            var endLesson = timesMap.find(target => target.end === targetDateEnd.format('HH:mm'));
+            var duration = endLesson.key - startLesson.key + 1;
+
+            if(duration === state.duration) return;
+            setState({...state, duration: duration});
         }
     }, [state]);
 
@@ -39,27 +64,17 @@ export default function BookingModal(){
     
     const onSubmit = () => {
         async function doAsync(){
-            var targetDateStart, targetDateEnd;
+            console.log(state.booking);
 
-            if(!state.editMode){
-                targetDateStart = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks').add(state.day - 1, 'days');
-                var lesson = timesMap.find(target => target.key === state.lesson);
-                var lessonHourStart = lesson.start.substring(0, 2);
-                var lessonMinuteStart = lesson.start.substring(3, 5);
-                targetDateStart.set('hour', lessonHourStart);
-                targetDateStart.set('minute', lessonMinuteStart);
-                targetDateStart.set('second', 0).set('millisecond', 0);
-                
-                targetDateEnd = moment(targetDateStart).add(50, 'minutes');
-                console.log(targetDateEnd.toJSON());
-                
-                await BookingsAPI.book(hpContext.roomSelection.id, targetDateStart.toJSON(), targetDateEnd.toJSON(), state.booking.note);
+            if(!state.editMode){                
+                await BookingsAPI.book(hpContext.roomSelection.id, state.booking.startTime, state.booking.endTime, state.booking.note);
     
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }else{
-                targetDateEnd = moment.utc(state.booking.endTime).add(1, 'second');
+                var endTime = moment.utc(state.booking.endTime)
+                if(endTime.get('seconds') !== 0) endTime.add(1, 'second');
 
-                await BookingsAPI.editBooking(state.booking.id, targetDateEnd.toJSON(), state.booking.note);
+                await BookingsAPI.editBooking(state.booking.id, endTime.toJSON(), state.booking.note);
 
                 await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
             }
@@ -74,7 +89,7 @@ export default function BookingModal(){
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={e => {e.preventDefault()}}>
-                    <HoursPicker state={state} setState={setState} />
+                    {/* {<HoursPicker parentState={state} setParentState={setState} /> */}
                     <NoteField state={state} setState={setState} />
                 </Form>
             </Modal.Body>
@@ -89,12 +104,23 @@ export default function BookingModal(){
     );
 };
 
-function HoursPicker({state, setState}){
-    return null; //TODO
+function HoursPicker({parentState, setParentState}){
+    const onChange = (e) => {
+        // TODO: Edit Mode correct default Value & selection not working
+        var hours = e.target.value;
+        var targetLesson = timesMap.find(target => target.key === parentState.lesson + parseInt(hours) - 1);
+        var lessonHourEnd = targetLesson.end.substring(0, 2);
+        var lessonMinuteEnd = targetLesson.end.substring(3, 5);
+        
+        var endTime = moment.utc(parentState.booking.startTime).local().set('hours', lessonHourEnd).set('minutes', lessonMinuteEnd);
+
+        setParentState({...parentState, duration: hours, booking:{...parentState.booking, endTime: endTime.toJSON()}});
+    };
+
     return(
         <Form.Group className="mb-3" controlId="bookingDuration">
             <Form.Label>Stunden</Form.Label>
-            <Form.Select>
+            <Form.Select defaultValue={parentState?.duration ? parentState.duration : 1} onSelect={onChange} disabled={parentState?.viewMode}>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
