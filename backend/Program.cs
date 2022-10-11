@@ -8,12 +8,15 @@ using System.Text;
 using awl_raumreservierung.Controllers;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using awl_raumreservierung.core;
 
 var builder = WebApplication.CreateBuilder(args);
 loginController.builder = builder;
+Globals.AppBuilder = builder;
+Globals.DbContext = new checkITContext();
 
 // leere DB inkl Admin User anlegen falls keine existiert
-if (!File.Exists("checkIT.db"))
+if (!File.Exists(builder.Configuration["Database:Path"]))
 {
 	string sqlComm = @"
 		BEGIN TRANSACTION;
@@ -141,7 +144,7 @@ if (!File.Exists("checkIT.db"))
 		VALUES ('Admin', 'admin', 1, 1); 
 		COMMIT;";
 
-	System.Data.SQLite.SQLiteConnection.CreateFile("checkIT.db");
+	System.Data.SQLite.SQLiteConnection.CreateFile(builder.Configuration["Database:Path"]);
 	System.Data.SQLite.SQLiteConnection dbConn = new System.Data.SQLite.SQLiteConnection(builder.Configuration.GetConnectionString("SqlConnection"));
 	dbConn.Open();
 
