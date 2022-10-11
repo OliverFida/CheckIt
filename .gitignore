@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 checkit.docker
 checkit.db
+./backend/out
+/frontend/node_modules
+/frontend/build
