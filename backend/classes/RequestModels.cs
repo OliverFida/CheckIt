@@ -1,9 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualBasic;
 
 namespace awl_raumreservierung
 {

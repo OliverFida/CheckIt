@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Security.Claims;
-using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace awl_raumreservierung
@@ -76,10 +75,11 @@ namespace awl_raumreservierung
 		/// Erzeugt ein PublicBooking aus einem Booking
 		/// </summary>
 		/// <param name="booking"></param>
+		/// <param name="helper"></param>
 		/// <returns></returns>
-		public static PublicBooking ToPublicBooking(this Booking booking)
+		public static PublicBooking ToPublicBooking(this Booking booking, Helpers helper)
 		{
-			return new PublicBooking(booking);
+			return new PublicBooking(booking, helper);
 		}
 
 		/// <summary>
@@ -108,11 +108,12 @@ namespace awl_raumreservierung
 		/// Gibt den User des Auth-Users zurück
 		/// </summary>
 		/// <param name="princ"></param>
+		/// <param name="helper"></param>
 		/// <returns></returns>
-		public static User GetUser(this ClaimsPrincipal princ)
+		public static User GetUser(this ClaimsPrincipal princ, Helpers helper)
 		{
 			string username = princ.FindFirstValue(ClaimTypes.NameIdentifier); // Note: Nicht Single line weil er sonst bs macht
-			return Helpers.GetUser(username);
+			return helper.GetUser(username);
 		}
 
 		/// <summary>
@@ -141,12 +142,12 @@ namespace awl_raumreservierung
 		/// /// Holt alle Bookings eines Raumes
 		/// </summary>
 		/// <param name="room"></param>
+		/// <param name="ctx"></param>
 		/// <returns></returns>
-		public static IEnumerable<Booking> GetBookings(this Room room)
+		public static IEnumerable<Booking> GetBookings(this Room room, checkITContext ctx)
 		{
 			try
 			{
-				using checkITContext ctx = new checkITContext();
 				return ctx.Bookings.Where(b => b.Room == room.Id).ToArray();
 			}
 			catch

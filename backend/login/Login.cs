@@ -1,7 +1,3 @@
-using awl_raumreservierung.core;
-using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Identity;
-
 namespace awl_raumreservierung
 {
 	/// <summary>
@@ -14,11 +10,10 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="username">Username</param>
 		/// <param name="password">Gehashtes Passwort</param>
+		/// <param name="ctx">DB-Context</param>
 		/// <returns></returns>
-		public static LoginMessage CheckLogin(string username, string password)
+		public static LoginMessage CheckLogin(string username, string password, checkITContext ctx)
 		{
-			var ctx = new checkITContext();
-
 			var user = ctx.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
 
 			if (user != null)

@@ -1,10 +1,5 @@
-using System.Configuration;
-using System.Security.Claims;
-using System.Threading;
-using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -17,6 +12,7 @@ namespace awl_raumreservierung.Controllers;
 public class userController : ControllerBase
 #pragma warning restore IDE1006 // Naming Styles
 {
+	private readonly Helpers helper;
     private readonly ILogger<userController> _logger;
     private readonly checkITContext ctx;
 
@@ -24,9 +20,11 @@ public class userController : ControllerBase
     ///
     /// </summary>
     /// <param name="logger"></param>
-    public userController(ILogger<userController> logger)
+    /// <param name="_context"></param>
+    public userController(ILogger<userController> logger, checkITContext _context)
     {
-        ctx = new checkITContext();
+       	ctx = _context;
+		helper = new Helpers(ctx);
         _logger = logger;
     }
 
@@ -44,11 +42,11 @@ public class userController : ControllerBase
         User user;
         if (int.TryParse(idOrUsername, out int x))
         {
-            user = Helpers.GetUser(x);
+            user = helper.GetUser(x);
         }
         else
         {
-            user = Helpers.GetUser(idOrUsername);
+            user = helper.GetUser(idOrUsername);
         }
 
         return user.ToPublicUser();
@@ -63,7 +61,7 @@ public class userController : ControllerBase
 	[ProducesResponseType(200)]
 	public PublicUser? GetUser()
   { 
-      return User.GetUser().ToPublicUser();
+      return User.GetUser(helper).ToPublicUser();
 	}
 	/// <summary>
 	/// Ändert das Password des angemeldeten Users
@@ -79,7 +77,7 @@ public class userController : ControllerBase
     {
         try
         {
-            var user = User.GetUser();
+            var user = User.GetUser(helper);
 
             user.Passwd = model.Password;
 
