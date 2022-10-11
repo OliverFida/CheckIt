@@ -51,7 +51,7 @@ namespace awl_raumreservierung
 		{
 			if (!optionsBuilder.IsConfigured)
 			{
-				optionsBuilder.UseSqlite(Globals.AppBuilder.Configuration["Database:Path"]);
+				optionsBuilder.UseSqlite($"Datasource={Globals.AppBuilder.Configuration["Database:Path"]}");
 			}
 		}
 

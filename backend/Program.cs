@@ -145,7 +145,7 @@ if (!File.Exists(builder.Configuration["Database:Path"]))
 		COMMIT;";
 
 	System.Data.SQLite.SQLiteConnection.CreateFile(builder.Configuration["Database:Path"]);
-	System.Data.SQLite.SQLiteConnection dbConn = new System.Data.SQLite.SQLiteConnection(builder.Configuration.GetConnectionString("SqlConnection"));
+	System.Data.SQLite.SQLiteConnection dbConn = new System.Data.SQLite.SQLiteConnection($"Datasource={Globals.AppBuilder.Configuration["Database:Path"]}");
 	dbConn.Open();
 
 	System.Data.SQLite.SQLiteCommand command = new System.Data.SQLite.SQLiteCommand(sqlComm, dbConn);
