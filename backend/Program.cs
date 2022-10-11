@@ -140,8 +140,8 @@ if (!File.Exists(builder.Configuration["Database:Path"]))
 		CREATE UNIQUE INDEX IF NOT EXISTS 'UserNameIndex' ON 'AspNetUsers' (
 			'NormalizedUserName'
 		);
-		INSERT INTO User (Username, Passwd, Active, Role)
-		VALUES ('Admin', 'admin', 1, 1); 
+		INSERT INTO User (Username, Passwd, Firstname, Lastname, Active, Role)
+		VALUES ('Admin', 'admin', 'Admin', 'Benutzer', 1, 1); 
 		COMMIT;";
 
 	System.Data.SQLite.SQLiteConnection.CreateFile(builder.Configuration["Database:Path"]);
