@@ -2,26 +2,23 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {Stack, Button, Table, Modal, Form} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
+import AppNavRooms from './components/AppNavRooms';
 import RoomsContextProvider, {RoomsContext} from '../contexts/RoomsContext';
-
+import RoomModal from './components/RoomModal';
 // Style imports
 import '../css/components/RoomsPage.css';
 // API imports
 const RoomsAPI = require('../api/rooms');
 
-export default function RoomsPage(){    
-
-   
-
+export default function RoomsPage(){
     return(
         <RoomsContextProvider>
             <Stack direction='vertical'>
                 <AppNavBar>
-                    <NewRoomButton />
+                    <AppNavRooms />
                 </AppNavBar>
                 <RoomBody />
-                <NewRoomModal />
-                <EditRoomModal />
+                <RoomModal />
             </Stack>
         </RoomsContextProvider>
     );
@@ -38,28 +35,31 @@ function RoomBody(){
                 </tr>
             </thead>
             <tbody>                    
-                <RoomRow />
+                <RoomRows />
             </tbody>
         </Table>
     );
 }
 
-function RoomRow(){
+function RoomRows(){
+    const {roomsContext, setRoomsContext} = useContext(RoomsContext);
     const [rooms, setRooms] = useState(null);
     const [elements, setElements] = useState([]);
-    const {roomsContext, setUpContext} = useContext(RoomsContext);
-
-    const showEdit = () => {
-        setUpContext({...roomsContext, showEditRoomModal: true});
-    };
-
+    
     useEffect(() => {
+        if(!roomsContext?.rooms.reload) return;
+
         async function doAsync(){
             var tempRooms = await RoomsAPI.getRooms();
             await setRooms(tempRooms.data);
+            setRoomsContext({...roomsContext, rooms:{...roomsContext.rooms, reload: false}});
         };
         doAsync();
-    }, []);
+    }, [roomsContext?.rooms.reload]);
+
+    const onSelect = (room, mode) => {
+        setRoomsContext({...roomsContext, uiControl:{...roomsContext.uiControl, roomModal: true, modalMode: mode}, rooms:{...roomsContext.rooms, selected: room}});
+    };
     
     useEffect(() => {
         setElements(rooms?.map(room => room.active ? 
@@ -67,11 +67,11 @@ function RoomRow(){
                 <td key={`room_${room.number}`}>{room.number}</td>
                 <td key={`room_${room.name}`}>{room.name}</td>
                 <td>
-                    <Button onClick={showEdit} className="my-1 me-2">
-                        Raum bearbeiten
+                    <Button onClick={() => {onSelect(room, "edit")}} className="my-1 me-2">
+                        Bearbeiten
                     </Button>
-                    <Button variant="danger" className="my-1 me-2">
-                        Raum löschen
+                    <Button onClick={() => {onSelect(room, "delete")}} variant="danger" className="my-1 me-2">
+                        Löschen
                     </Button>
                 </td> 
             </tr>
@@ -85,89 +85,4 @@ function RoomRow(){
         </>
     );
 }
-
-function EditRoomModal(){
-    const {roomsContext, setUpContext} = useContext(RoomsContext);
-
-    const onCancel = () => {
-        setUpContext({...roomsContext, showEditRoomModal: false});
-    }
-
-    return(
-        <Modal show={roomsContext.showEditRoomModal} onHide={onCancel} centered>
-        <Modal.Header closeButton>
-            <Modal.Title>Raum bearbeiten</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <Form>
-                <Form.Group className="mb-3" controlId="editNumber">
-                    <Form.Label>Neue Nummer</Form.Label>
-                    <Form.Control type="text"/>
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="editName">
-                    <Form.Label>Neuer Name</Form.Label>
-                    <Form.Control type="text"/>
-                </Form.Group>                                      
-            </Form> 
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant="secondary" onClick={onCancel}>
-                Abbrechen
-            </Button>
-            <Button variant="primary" onClick={onCancel}>
-                Änderungen Speichern
-            </Button>
-        </Modal.Footer>
-        </Modal>
-    );
-}
-
-function NewRoomModal(){
-    const {roomsContext, setUpContext} = useContext(RoomsContext);
-
-    const onCancel = () => {
-        setUpContext({...roomsContext, showNewRoomModal: false});
-    }
-
-    return(
-        <Modal show={roomsContext.showNewRoomModal} onHide={onCancel} centered>
-            <Modal.Header closeButton>
-                <Modal.Title>Neuen Raum erstellen</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <Form.Group className="mb-3" controlId="setNumber">
-                        <Form.Label>Nummer</Form.Label>
-                        <Form.Control type="text"/>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="setName">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text"/>
-                    </Form.Group>                                      
-                </Form> 
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={onCancel}>
-                    Abbrechen
-                </Button>
-                <Button variant="primary" onClick={onCancel}>
-                    Änderungen Speichern
-                </Button>
-            </Modal.Footer>
-        </Modal>
-    );
-}
-
-function NewRoomButton(){
-    const {roomsContext, setUpContext} = useContext(RoomsContext);
-
-    const showNewRoom = () => {
-        setUpContext({...roomsContext, showNewRoomModal: true});
-    };
-
-    return(
-        <Button onClick={showNewRoom}>Neuen Raum erstellen</Button>
-    );
-}
- 
 

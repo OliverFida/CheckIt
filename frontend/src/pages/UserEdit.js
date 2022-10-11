@@ -3,12 +3,10 @@ import React, { useState, useContext, useEffect} from 'react';
 import {Stack, Button, Form, Modal, Table} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 import UserEditContextProvider, {UserEditContext} from '../contexts/UserEditContext';
-
 // Style imports
 import '../css/components/UserPage.css';
-
 // Api imports
-import AdminAPI from '../api/admin';
+const AdminAPI = require('../api/admin');
 
 export default function UserEdit(){
     
@@ -16,7 +14,6 @@ export default function UserEdit(){
         <UserEditContextProvider>
             <Stack direction='vertical'>
                 <AppNavBar>
-                    <NewUserButton />
                 </AppNavBar>
                 <UserEditBody />
                 <EditNameModal />

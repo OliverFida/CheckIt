@@ -25,7 +25,15 @@ async function book(roomId, startTime, endTime, note){
   return returnValue;
 }
 
+async function del(bookingId){
+  await apiRequest(`bookings/${bookingId}`, "DELETE", null)
+  .then(response => {
+    console.log(response);
+  });
+}
+
 module.exports = {
     getBookings,
-    book
+    book,
+    del
 };

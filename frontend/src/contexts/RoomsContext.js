@@ -1,12 +1,23 @@
 import React, {useState, createContext} from 'react';
 
-export const RoomsContext = createContext({showEditRoomModal: false, showNewRoomModal: false});
+export const RoomsContext = createContext(null);
 
 export default function RoomsContextProvider({children}){
-    const [roomsContext, setUpContext] = useState({});
+    const [roomsContext, setRoomsContext] = useState({
+        uiControl:{
+            roomsLoading: false,
+            roomModal: false,
+            modalMode: ""
+        },
+        rooms: {
+            rooms: [],
+            reload: true,
+            selected: null
+        }
+    });
 
     return(
-        <RoomsContext.Provider value={{roomsContext, setUpContext}}>
+        <RoomsContext.Provider value={{roomsContext, setRoomsContext}}>
             {children}
         </RoomsContext.Provider>
     );

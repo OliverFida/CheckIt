@@ -35,7 +35,12 @@ export default function BookingModal(){
     };
 
     const onDelete = () => {
-        onCancel();
+        async function doAsync(){
+            await BookingsAPI.del(state.booking.id);
+
+            await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
+        }
+        doAsync();
     };
     
     const onSubmit = () => {
