@@ -1,12 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using System.Security.Claims;
-using System.Security.Cryptography.Xml;
-using awl_raumreservierung.core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Swashbuckle.AspNetCore.Annotations;
-using static awl_raumreservierung.Controllers.adminController;
 using StatusCodeResult = Microsoft.AspNetCore.Mvc.StatusCodeResult;
 
 namespace awl_raumreservierung.Controllers;

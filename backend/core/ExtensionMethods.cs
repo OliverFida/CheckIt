@@ -1,7 +1,5 @@
-using System.CodeDom;
 using System.Diagnostics;
 using System.Security.Claims;
-using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace awl_raumreservierung

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace awl_raumreservierung.core
+﻿namespace awl_raumreservierung.core
 {
 	/// <summary>
 	/// 

@@ -1,8 +1,5 @@
-using System.Security.Claims;
-using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace awl_raumreservierung.Controllers;
 

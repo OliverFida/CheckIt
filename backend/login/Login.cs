@@ -1,7 +1,3 @@
-using awl_raumreservierung.core;
-using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Identity;
-
 namespace awl_raumreservierung
 {
 	/// <summary>

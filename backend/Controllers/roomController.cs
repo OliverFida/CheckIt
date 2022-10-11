@@ -1,7 +1,5 @@
-﻿using awl_raumreservierung.core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static awl_raumreservierung.Controllers.adminController;
 
 namespace awl_raumreservierung.Controllers;
 /// <summary>

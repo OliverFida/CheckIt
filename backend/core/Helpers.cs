@@ -1,10 +1,3 @@
-using System.CodeDom;
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using awl_raumreservierung.core;
-using Microsoft.AspNetCore.Mvc;
-
 namespace awl_raumreservierung
 {
 	/// <summary>
