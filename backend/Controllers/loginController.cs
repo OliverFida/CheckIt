@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,16 +21,20 @@ public class loginController : ControllerBase
 	/// <summary>
 	///
 	/// </summary>
-	public static WebApplicationBuilder? builder;
 	private readonly ILogger<loginController> _logger;
+	private readonly Helpers helper;
+	private readonly checkITContext ctx;
 
 	/// <summary>
 	///
 	/// /// </summary>
 	/// <param name="logger"></param>
-	public loginController(ILogger<loginController> logger)
+	/// <param name="_context"></param>
+	public loginController(ILogger<loginController> logger, checkITContext _context)
 	{
 		_logger = logger;
+		ctx = _context;
+		helper = new Helpers(ctx);
 	}
 
 	/// <summary>
@@ -44,7 +49,7 @@ public class loginController : ControllerBase
 
 	public IResult Post(LoginUserModel model)
 	{
-		var res = Login.CheckLogin(model.Username, model.Password);
+		var res = Login.CheckLogin(model.Username, model.Password, ctx);
 
 		var statuscode = res switch
 		{
@@ -76,14 +81,9 @@ public class loginController : ControllerBase
 
 			claims.Add(new Claim(ClaimTypes.Role, "User"));
 
-			if (builder is null)
-			{
-				throw new Exception("Builder is null uff 🙀");
-			}
-
-			var issuer = builder.Configuration["Jwt:Issuer"];
-			var audience = builder.Configuration["Jwt:Audience"];
-			var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+			var issuer = Globals.AppBuilder.Configuration["Jwt:Issuer"];
+			var audience = Globals.AppBuilder.Configuration["Jwt:Audience"];
+			var key = Encoding.ASCII.GetBytes(Globals.AppBuilder .Configuration["Jwt:Key"]);
 			var tokenDescriptor = new SecurityTokenDescriptor
 			{
 				Subject = new ClaimsIdentity(

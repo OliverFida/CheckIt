@@ -11,9 +11,5 @@ namespace awl_raumreservierung.core
 		/// WebAppBuilder
 		/// </summary>
 		public static WebApplicationBuilder AppBuilder { get; set; } = null!;
-		/// <summary>
-		/// DBContext
-		/// </summary>
-		public static checkITContext DbContext { get; set; }=null!;
 	}
 }

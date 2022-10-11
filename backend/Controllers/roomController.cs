@@ -14,15 +14,19 @@ public class roomsController : ControllerBase
 #pragma warning restore IDE1006 // Naming Styles
 {
 	private readonly ILogger<roomsController> _logger;
+	private readonly Helpers helper;
+
 	private readonly checkITContext ctx;
 	/// <summary>
 	/// 
 	/// </summary>
 	/// <param name="logger"></param>
-	public roomsController(ILogger<roomsController> logger)
+	/// <param name="_context"></param>
+	public roomsController(ILogger<roomsController> logger, checkITContext _context)
 	{
 		_logger = logger;
-		ctx = new checkITContext();
+		ctx = _context;
+		helper = new Helpers(ctx);
 	}
 	/// <summary>
 	/// Liefert ein Array der Räume in der Datenbank.
@@ -70,9 +74,9 @@ public class roomsController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Remove(int roomId)
 	{
-		if (Helpers.DoesRoomExist(roomId))
+		if (helper.DoesRoomExist(roomId))
 		{
-			var room = Helpers.GetRoom(roomId);
+			var room = helper.GetRoom(roomId);
 			ctx.Rooms.Remove(room);
 			ctx.SaveChanges();
 		}
@@ -93,14 +97,14 @@ public class roomsController : ControllerBase
 	public ReturnModel Edit(long roomId, CreateRoomModel model)
 	{
 
-		if (!Helpers.DoesRoomExist(roomId))
+		if (!helper.DoesRoomExist(roomId))
 		{
 			return new ReturnModel(new StatusCodeResult(404))
 			{
 				Message = "Raum nicht gefunden"
 			};
 		}
-		Room room = Helpers.GetRoom(roomId);
+		Room room = helper.GetRoom(roomId);
 		room.Number = model.Number;
 		room.Name = model.Name;
 		ctx.Rooms.Update(room);
@@ -120,14 +124,14 @@ public class roomsController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	public ReturnModel Activate(long roomId)
 	{
-		if (!Helpers.DoesRoomExist(roomId))
+		if (!helper.DoesRoomExist(roomId))
 		{
 			return new ReturnModel(new StatusCodeResult(404))
 			{
 				Message = "Raum wurde nicht gefunden."
 			};
 		}
-		Room room = Helpers.GetRoom(roomId);
+		Room room = helper.GetRoom(roomId);
 		room.Active = true;
 		ctx.Rooms.Update(room);
 		ctx.SaveChanges();
@@ -148,14 +152,14 @@ public class roomsController : ControllerBase
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	public ReturnModel Deactivate(long roomId)
 	{
-		if (!Helpers.DoesRoomExist(roomId))
+		if (!helper.DoesRoomExist(roomId))
 		{
 			return new ReturnModel(new StatusCodeResult(404))
 			{
 				Message = "Raum wurde nicht gefunden."
 			};
 		}
-		Room room = Helpers.GetRoom(roomId);
+		Room room = helper.GetRoom(roomId);
 		room.Active = false;
 		ctx.Rooms.Update(room);
 		ctx.SaveChanges();
