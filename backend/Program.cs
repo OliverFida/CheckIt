@@ -140,7 +140,7 @@ if (!File.Exists(builder.Configuration["Database:Path"]))
 			'NormalizedUserName'
 		);
 		INSERT INTO User (Username, Passwd, Firstname, Lastname, Active, Role)
-		VALUES ('Admin', 'admin', 'Admin', 'Benutzer', 1, 1); 
+		VALUES ('admin', 'admin', 'Admin', 'Benutzer', 1, 1); 
 		COMMIT;";
 
 	System.Data.SQLite.SQLiteConnection.CreateFile(builder.Configuration["Database:Path"]);
