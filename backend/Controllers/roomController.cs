@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using awl_raumreservierung.core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static awl_raumreservierung.Controllers.adminController;
 
@@ -21,7 +22,7 @@ public class roomsController : ControllerBase
 	public roomsController(ILogger<roomsController> logger)
 	{
 		_logger = logger;
-		ctx = new checkITContext();
+		ctx = Globals.DbContext;
 	}
 	/// <summary>
 	/// Liefert ein Array der Räume in der Datenbank.
