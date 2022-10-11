@@ -402,3 +402,4 @@ checkit.db
 ./backend/out
 /frontend/node_modules
 /frontend/build
+/backend/bin
