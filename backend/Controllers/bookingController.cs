@@ -1,7 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography.Xml;
-using System.Web.Http.Results;
 using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
