@@ -53,13 +53,24 @@ public class userController : ControllerBase
 
         return user.ToPublicUser();
     }
-
-    /// <summary>
-    /// Ändert das Password des angemeldeten Users
-    /// </summary>
-    /// <param name="model">Model mit Hash des Passworts</param>
-    /// <returns></returns>
-    [HttpPatch("password")]
+   /// <summary>
+   /// Liefert den aktuellen Benutzer
+   /// </summary>
+   /// <returns></returns>
+	[HttpGet("")]
+	[Authorize()]
+	[ProducesResponseType(404)]
+	[ProducesResponseType(200)]
+	public PublicUser? GetUser()
+  { 
+      return User.GetUser().ToPublicUser();
+	}
+	/// <summary>
+	/// Ändert das Password des angemeldeten Users
+	/// </summary>
+	/// <param name="model">Model mit Hash des Passworts</param>
+	/// <returns></returns>
+	[HttpPatch("password")]
     [Authorize]
     [ProducesResponseType(404)]
     [ProducesResponseType(200)]
