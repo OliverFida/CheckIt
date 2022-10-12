@@ -58,6 +58,13 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public string? Note { get; set; }
 
+
+		/// <summary>
+		/// Anzahl der Schüler
+		/// </summary>
+		/// <value></value>
+		public int? StudentCount { get; set; }
+
 		/// <summary>
 		///
 		/// </summary>
