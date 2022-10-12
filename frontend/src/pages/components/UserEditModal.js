@@ -14,7 +14,7 @@ export default function UserEditModal(){
     useEffect(() => {
         async function doAsync(){
             if(!ueContext.uiControl.userModal) return;
-    
+            
             if(ueContext.users.selected === null) setState({}); //TODO
             if(ueContext.users.selected !== null) setState(ueContext.users.selected);
         }
@@ -33,7 +33,6 @@ export default function UserEditModal(){
         if(ueContext.uiControl.modalMode === "new"){
             await AdminAPI.addUser(state.username, state.firstName, state.lastname, state.role);
         }else if(ueContext.uiControl.modalMode === "edit"){
-            console.log(state.role);
             await AdminAPI.editUser(state.username, state.firstName, state.lastname, state.role);
         }else if(ueContext.uiControl.modalMode === "resetPW"){
             await AdminAPI.resetPassword(state.username);
@@ -97,7 +96,7 @@ export default function UserEditModal(){
                         </Form.Group> 
                         <Form.Group className="mb-3" controlId="role">
                             <Form.Label>Rolle</Form.Label>
-                            <Form.Select defaultValue={state?.role} name="role" onChange={onChange}>
+                            <Form.Select defaultValue={`${state?.role}`} name="role" onChange={onChange}>
                                 {roleElements}
                             </Form.Select>
                         </Form.Group> 
