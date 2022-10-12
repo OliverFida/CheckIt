@@ -1,8 +1,5 @@
-using System.Security.Claims;
-using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -17,15 +14,18 @@ public class adminController : ControllerBase
 	private readonly ILogger<adminController> _logger;
 
 	private readonly checkITContext ctx;
+	private readonly Helpers helper;
 
 	/// <summary>
 	///
 	/// </summary>
 	/// <param name="logger"></param>
-	public adminController(ILogger<adminController> logger)
+	/// <param name="_context"></param>
+	public adminController(ILogger<adminController> logger, checkITContext _context)
 	{
 		_logger = logger;
-		ctx = Globals.DbContext;
+		ctx = _context;
+		helper = new Helpers(ctx);
 	}
 
 	/// <summary>
@@ -52,7 +52,7 @@ public class adminController : ControllerBase
 				};
 			}
 
-			if (Helpers.DoesUserExist(model.Username))
+			if (helper.DoesUserExist(model.Username))
 			{
 				Response.StatusCode = StatusCodes.Status400BadRequest;
 				return new ReturnModel()
@@ -78,7 +78,7 @@ public class adminController : ControllerBase
 			ctx.SaveChanges();
 			Response.StatusCode = StatusCodes.Status201Created;
 
-			return new ReturnModel() { Message = $"Benutzer {model.Username} erfolgreich angelegt!", Data = Helpers.GetUser(model.Username ?? "").ToPublicUser() };
+			return new ReturnModel() { Message = $"Benutzer {model.Username} erfolgreich angelegt!", Data = helper.GetUser(model.Username ?? "").ToPublicUser() };
 		}
 		catch (Exception ex)
 		{
@@ -101,7 +101,7 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-			if (!Helpers.DoesUserExist(username))
+			if (!helper.DoesUserExist(username))
 			{
 				Response.StatusCode = 404;
 				return new ReturnModel
@@ -111,7 +111,7 @@ public class adminController : ControllerBase
 					Message = "Benutzer konnte nicht gefunden werden!"
 				};
 			}
-			var user = Helpers.GetUser(username);
+			var user = helper.GetUser(username);
 
 			user.Firstname = model.FirstName;
 			user.Lastname = model.LastName;
@@ -148,7 +148,7 @@ public class adminController : ControllerBase
 				throw new ArgumentException("User kann sich nicht selbst deaktivieren.");
 			}
 
-			var user = Helpers.GetUser(username);
+			var user = helper.GetUser(username);
 
 			ctx.Users.Remove(user);
 			ctx.SaveChanges();
@@ -175,9 +175,9 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-			var user = Helpers.GetUser(username);
+			var user = helper.GetUser(username);
 
-			Helpers.SetUserStatus(user, true);
+			helper.SetUserStatus(user, true);
 
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel()
@@ -211,9 +211,9 @@ public class adminController : ControllerBase
 				throw new ArgumentException("User kann sich nicht selbst deaktivieren.");
 			}
 
-			var user = Helpers.GetUser(username);
+			var user = helper.GetUser(username);
 
-			Helpers.SetUserStatus(user, false);
+			helper.SetUserStatus(user, false);
 
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel()
@@ -241,7 +241,7 @@ public class adminController : ControllerBase
 	{
 		try
 		{
-			var users = Globals.DbContext.Users.Select(u => u.ToPublicUser()).ToArray();
+			var users = ctx.Users.Select(u => u.ToPublicUser()).ToArray();
 			return users;
 		}
 		catch (Exception ex)
@@ -278,21 +278,21 @@ public class adminController : ControllerBase
 	/// Ändert das Passwort eines Users
 	/// </summary>
 	/// <param name="username">Username</param>
-	/// <param name="password">Hash des Passworts</param>
+	/// <param name="model">Model mit Hash des Passworts</param>
 	/// <returns></returns>
 	[HttpPatch("user/{username}/password")]
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(200)]
 	[ProducesResponseType(404)]
 	[ProducesResponseType(400)]
-	public ReturnModel ChangePassword(string username, [FromBody] string password)
+	public ReturnModel ChangePassword(string username, PasswordModel model)
 	{
 		try
 		{
 			var isAdmin = User.IsInRole("Admin");
-			var user = Helpers.GetUser(username);
+			var user = helper.GetUser(username);
 
-			user.Passwd = password;
+			user.Passwd = model.Password;
 			user.Lastchange = DateTime.Now;
 			ctx.Users.Update(user);
 			ctx.SaveChanges();

@@ -11,9 +11,8 @@ using Microsoft.OpenApi.Models;
 using awl_raumreservierung.core;
 
 var builder = WebApplication.CreateBuilder(args);
-loginController.builder = builder;
 Globals.AppBuilder = builder;
-Globals.DbContext = new checkITContext();
+// Globals.DbContext = new checkITContext();
 
 // leere DB inkl Admin User anlegen falls keine existiert
 if (!File.Exists(builder.Configuration["Database:Path"]))
@@ -140,15 +139,15 @@ if (!File.Exists(builder.Configuration["Database:Path"]))
 		CREATE UNIQUE INDEX IF NOT EXISTS 'UserNameIndex' ON 'AspNetUsers' (
 			'NormalizedUserName'
 		);
-		INSERT INTO User (Username, Passwd, Active, Role)
-		VALUES ('Admin', 'admin', 1, 1); 
+		INSERT INTO User (Username, Passwd, Firstname, Lastname, Active, Role)
+		VALUES ('admin', 'admin', 'Administrator', '', 1, 1); 
 		COMMIT;";
 
 	System.Data.SQLite.SQLiteConnection.CreateFile(builder.Configuration["Database:Path"]);
-	System.Data.SQLite.SQLiteConnection dbConn = new System.Data.SQLite.SQLiteConnection(builder.Configuration.GetConnectionString("SqlConnection"));
+	System.Data.SQLite.SQLiteConnection dbConn = new($"Datasource={Globals.AppBuilder.Configuration["Database:Path"]}");
 	dbConn.Open();
 
-	System.Data.SQLite.SQLiteCommand command = new System.Data.SQLite.SQLiteCommand(sqlComm, dbConn);
+	System.Data.SQLite.SQLiteCommand command = new(sqlComm, dbConn);
 	command.ExecuteNonQuery();
 
 	dbConn.Close();
@@ -156,6 +155,7 @@ if (!File.Exists(builder.Configuration["Database:Path"]))
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddDbContext<checkITContext>(option => option.UseSqlite($"Datasource={Globals.AppBuilder.Configuration["Database:Path"]}"));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {

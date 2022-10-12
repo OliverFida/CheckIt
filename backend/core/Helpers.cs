@@ -1,9 +1,3 @@
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using awl_raumreservierung.core;
-using Microsoft.AspNetCore.Mvc;
-
 namespace awl_raumreservierung
 {
 	/// <summary>
@@ -11,14 +5,23 @@ namespace awl_raumreservierung
 	/// </summary>
 	public class Helpers
 	{
+		private readonly checkITContext ctx;
+
+/// <summary>
+/// Erstellt eine neue Helper-Classe mit DB-Context
+/// </summary>
+/// <param name="context">DB-Context</param>
+		public Helpers(checkITContext context){
+			ctx = context;
+		}
+
 		/// <summary>
 		/// Holt einen User aus der Datenbank
 		/// </summary>
 		/// <param name="username">Username</param>
 		/// <returns></returns>
-		public static User GetUser(string username)
+		public User GetUser(string username)
 		{
-			using checkITContext ctx = Globals.DbContext;
 			var user = ctx.Users.Where(u => u.Username.ToLower().Trim() == username.ToLower().Trim()).FirstOrDefault();
 
 			if (user is null)
@@ -34,9 +37,9 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="username">Benutzername</param>
 		/// <returns></returns>
-		public static bool DoesUserExist(string username)
+		public bool DoesUserExist(string username)
 		{
-			return Globals.DbContext.Users.Any(u => u.Username == username);
+			return ctx.Users.Any(u => u.Username == username);
 		}
 
 		/// <summary>
@@ -44,9 +47,9 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="userID">User-ID</param>
 		/// <returns></returns>
-		public static bool DoesUserExist(int userID)
+		public bool DoesUserExist(int userID)
 		{
-			return Globals.DbContext.Users.Find(userID) is not null;
+			return ctx.Users.Find(userID) is not null;
 		}
 
 		/// <summary>
@@ -54,9 +57,8 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="id">User-ID</param>
 		/// <returns></returns>
-		public static User GetUser(int id)
+		public User GetUser(int id)
 		{
-			using checkITContext ctx = Globals.DbContext;
 			var user = ctx.Users.Where(u => u.Id == id).FirstOrDefault();
 
 			if (user is null)
@@ -72,9 +74,8 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="id">ID des Raums</param>
 		/// <returns></returns>
-		public static Room GetRoom(long id)
+		public Room GetRoom(long id)
 		{
-			using checkITContext ctx = Globals.DbContext;
 			var room = ctx.Rooms.Where(r => r.Id == id).FirstOrDefault();
 
 			if (room is null)
@@ -90,8 +91,7 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="id">ID des Raums</param>
 		/// <returns></returns>
-		public static bool DoesRoomExist(long id){
-			using checkITContext ctx = Globals.DbContext;
+		public bool DoesRoomExist(long id){
 			return ctx.Rooms.Find(id) is not null;
 		}
 
@@ -100,9 +100,8 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="id">Booking-ID</param>
 		/// <returns></returns>
-		public static Booking GetBooking(long id)
+		public Booking GetBooking(long id)
 		{
-			using checkITContext ctx = Globals.DbContext;
 			var booking = ctx.Bookings.Where(b => b.Id == id).FirstOrDefault();
 
 			if (booking is null)
@@ -118,9 +117,7 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="id">ID des Bookings</param>
 		/// <returns></returns>
-		public static bool DoesBookingExist(long id){
-			using checkITContext ctx = Globals.DbContext;
-
+		public bool DoesBookingExist(long id){
 			return ctx.Bookings.Find(id) is not null;
 		}
 
@@ -128,12 +125,13 @@ namespace awl_raumreservierung
 		/// Checkt, ob ein Booking sich mit einem anderen überschneidet
 		/// </summary>
 		/// <param name="model">Bookingmodel</param>
+		/// <param name="ctx">Bookingmodel</param>
 		/// <returns></returns>
-		public static bool BookingOverlaps(CreateBookingModel model)
+		public bool BookingOverlaps(CreateBookingModel model, checkITContext ctx)
 		{
 			var room = GetRoom(model.RoomID);
 
-			bool overlapsWithOtherBookings = room.GetBookings().Any(b => b.StartTime <= model.EndTime.Subtract(new TimeSpan(0, 0, 1)) && model.StartTime <= b.EndTime);
+			bool overlapsWithOtherBookings = room.GetBookings(ctx).Any(b => b.StartTime <= model.EndTime.Subtract(new TimeSpan(0, 0, 1)) && model.StartTime <= b.EndTime);
 			return overlapsWithOtherBookings;
 		}
 
@@ -141,12 +139,13 @@ namespace awl_raumreservierung
 		/// Checkt, ob ein Booking sich mit einem anderen überschneidet
 		/// </summary>
 		/// <param name="booking">Booking</param>
+		/// <param name="ctx">Booking</param>
 		/// <returns></returns>
-		public static bool BookingOverlaps(Booking booking)
+		public bool BookingOverlaps(Booking booking, checkITContext ctx)
 		{
 			var room = GetRoom(booking.Room);
 
-			bool overlapsWithOtherBookings = room.GetBookings().Any(b => b.StartTime <= booking.EndTime.Subtract(new TimeSpan(0, 0, 1)) && booking.StartTime <= b.EndTime);
+			bool overlapsWithOtherBookings = room.GetBookings(ctx).Any(b => b != booking && b.StartTime <= booking.EndTime.Subtract(new TimeSpan(0, 0, 1)) && booking.StartTime <= b.EndTime);
 			return overlapsWithOtherBookings;
 		}
 
@@ -156,13 +155,13 @@ namespace awl_raumreservierung
 		/// <param name="booking">Booking</param>
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
-		public static bool checkBookingTime(Booking booking)
+		public bool CheckBookingTime(Booking booking)
 		{
 			if (booking.StartTime > booking.EndTime)
 			{
 				throw new ArgumentException("Endzeit vor Startzeit");
 			}
-			if (BookingOverlaps(booking))
+			if (BookingOverlaps(booking, ctx))
 			{
 				throw new ArgumentException("Buchung überlappt mit anderer Buchung");
 			}
@@ -174,10 +173,8 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="user">User</param>
 		/// <param name="status">Status</param>
-		public static void SetUserStatus(User user, bool status)
+		public void SetUserStatus(User user, bool status)
 		{
-			var ctx = Globals.DbContext;
-
 			user.Active = status;
 			user.Lastchange = DateTime.Now;
 			ctx.Users.Update(user);

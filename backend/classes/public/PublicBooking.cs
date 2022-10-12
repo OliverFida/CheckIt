@@ -53,18 +53,19 @@ namespace awl_raumreservierung
 		///
 		/// </summary>
 		/// <param name="booking"></param>
-		public PublicBooking(Booking booking)
+		/// <param name="helper"></param>
+		public PublicBooking(Booking booking, Helpers helper)
 		{
 			this.Id = booking.Id;
 			this.StartTime = booking.StartTime;
 			this.EndTime = booking.EndTime;
-			this.Room = Helpers.GetRoom(booking.Room).ToPublicRoom();
+			this.Room = helper.GetRoom(booking.Room).ToPublicRoom();
 
 			PublicUser user;
 
 			try
 			{
-				user = Helpers.GetUser(booking.UserId.ToInt()).ToPublicUser();
+				user = helper.GetUser(booking.UserId.ToInt()).ToPublicUser();
 			}
 			catch (Exception ex) { 
 				user = new PublicUser(new User { })
