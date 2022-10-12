@@ -1,6 +1,6 @@
 // Component imports
 import React, { useState, useContext, useEffect} from 'react';
-import {Stack, Button, Form, Modal, Table, ButtonGroup} from 'react-bootstrap';
+import {Stack, Button, Table, ButtonGroup, Row, Col, Card} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 import AppNavUserEdit from './components/AppNavUserEdit';
 import UserEditModal from './components/UserEditModal';
@@ -26,19 +26,25 @@ export default function UserEdit(){
 
 function UserEditBody(){
     return(
-        <Table className='useredit'>
-            <thead>
-                <tr>
-                    <th>Benutzername</th>                        
-                    <th>Vorname</th>
-                    <th>Nachname</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <UserEditRow />
-            </tbody>
-        </Table>
+        <Row className="justify-content-md-center">
+            <Col md={6}>
+               <Card>
+                    <Table className='useredit'>
+                        <thead>
+                            <tr>
+                                <th>Benutzername</th>                        
+                                <th>Vorname</th>
+                                <th>Nachname</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <UserEditRow />
+                        </tbody>
+                    </Table>
+               </Card>
+            </Col>
+        </Row>
     );
 }
 
