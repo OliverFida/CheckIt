@@ -26,12 +26,13 @@ export default function RoomsPage(){
 
 function RoomBody(){
     return(
-       <Row className="justify-content-md-center">
-            <Col md={6}>
-                <Card>
+       <Row className="justify-content-md-center mt-5">
+            <Col xl={8}>
+                <Card className="px-2">
                     <Table className='rooms'>
                         <thead>
-                            <tr>                    
+                            <tr>    
+                                <th>Buchbar</th>                
                                 <th>Raumnummer</th>
                                 <th>Raumname</th>                        
                                 <th></th>
@@ -66,17 +67,18 @@ function RoomRows(){
     useEffect(() => {
         setElements(rooms?.map(room => 
             <tr key={`room_${room.id}`}>
+                <td>{room.active ? "buchbar" : "nicht buchbar"}</td>
                 <td key={`room_${room.number}`}>{room.number}</td>
                 <td key={`room_${room.name}`}>{room.name}</td>
                 <td>
                     <ButtonGroup>
-                        <Button onClick={() => {onSelect(room, "edit")}} className="my-1">
+                        <Button onClick={() => {onSelect(room, "edit")}} className="my-1 me-1" size="sm">
                             Bearbeiten
                         </Button>
-                        <Button onClick={() => {onActivate(room, room.active ? false : true)}} variant={room.active ? "secondary" : "success"} className="my-1">
+                        <Button onClick={() => {onActivate(room, room.active ? false : true)}} variant={room.active ? "secondary" : "success"} className="my-1 me-1" size="sm">
                             {room.active ? "Deaktivieren" : "Aktivieren"}
                         </Button>
-                        <Button onClick={() => {onSelect(room, "delete")}} variant="danger" className="my-1">
+                        <Button onClick={() => {onSelect(room, "delete")}} variant="danger" className="my-1 me-1" size="sm">
                             Löschen
                         </Button>
                     </ButtonGroup>

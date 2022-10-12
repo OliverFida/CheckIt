@@ -26,9 +26,9 @@ export default function UserEdit(){
 
 function UserEditBody(){
     return(
-        <Row className="justify-content-md-center">
-            <Col md={6}>
-               <Card>
+        <Row className="justify-content-md-center mt-5">
+            <Col xl={8}>
+               <Card className="px-2">
                     <Table className='useredit'>
                         <thead>
                             <tr>
@@ -65,30 +65,32 @@ function UserEditRow(){
     }, [ueContext.users.reload]);
     
     useEffect(() => {
-        setElements(users.map(user =>
+        setElements(users.map(user => user.username != 'admin' ?
             <tr key={`user_${user.username}`}>                        
                 <td valign='middle' key={`user${user.username}`}>{user.username}</td>
                 <td valign='middle' key={`user${user.firstName}`}>{user.firstName}</td>
                 <td valign='middle' key={`user${user.lastname}`}>{user.lastname}</td>
                 <td>
                     <ButtonGroup>
-                        <Button onClick={() => {onEditName(user)}} className="my-1">
+                        <Button onClick={() => {onEditName(user)}} className="my-1 me-1" size="sm">
                             Name ändern
                         </Button>
-                        <Button onClick={() => {onResetPW(user)}} className="my-1">
+                        <Button onClick={() => {onResetPW(user)}} className="my-1 me-1" size="sm">
                             Passwort zurücksetzen
                         </Button>
-                        <Button onClick={() => {onDeactivateUser(user, user.active ? false : true)}} className="my-1" variant={user.active ? "secondary" : "success"}
+                        <Button onClick={() => {onDeactivateUser(user, user.active ? false : true)}} className="my-1 me-1" size="sm" variant={user.active ? "secondary" : "success"}
                         disabled={localStorage.getItem("loginUsername") === user.username.toLowerCase() ? true : false}>
                             {user.active ? "Deaktivieren" : "Aktivieren"}
                         </Button>    
-                        <Button onClick={() => {onDeleteUser(user)}} className="my-1" variant="danger"
+                        <Button onClick={() => {onDeleteUser(user)}} className="my-1 me-1" size="sm" variant="danger"
                         disabled={localStorage.getItem("loginUsername") === user.username.toLowerCase() ? true : false}>
                             Löschen
                         </Button>    
                     </ButtonGroup>                 
                 </td>
             </tr>
+            :
+            null
            ));
     }, [users]);
 

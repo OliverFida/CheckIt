@@ -5,3 +5,7 @@ table.rooms th {
 table.rooms td {
     vertical-align: middle;
 }
+
+td.deactivated {
+    background-color: grey;
+}
