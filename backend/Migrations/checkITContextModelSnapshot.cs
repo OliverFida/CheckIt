@@ -116,7 +116,7 @@ namespace awl_raumreservierung.Migrations
                             Id = 1L,
                             Active = true,
                             Firstname = "Admin",
-                            Lastchange = new DateTime(2022, 10, 12, 16, 40, 29, 222, DateTimeKind.Utc).AddTicks(5735),
+                            Lastchange = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Lastname = "Benutzer",
                             Passwd = "admin",
                             Role = 1,

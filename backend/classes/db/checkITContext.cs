@@ -50,7 +50,7 @@ namespace awl_raumreservierung
 		/// <param name="modelBuilder"></param>
 		 protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			// Admin seeden
-			modelBuilder.Entity<User>().HasData(new User { Username = "admin", Firstname = "Admin", Lastname = "Benutzer", Lastchange = DateTime.UtcNow, Passwd = "admin", Role = UserRole.Admin, Id = 1, Active = true });
+			modelBuilder.Entity<User>().HasData(new User { Username = "admin", Firstname = "Admin", Lastname = "Benutzer", Lastchange = DateTime.MinValue, Passwd = "admin", Role = UserRole.Admin, Id = 1, Active = true });
 		}
 
 }
