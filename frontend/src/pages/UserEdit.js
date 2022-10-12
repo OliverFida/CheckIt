@@ -8,7 +8,7 @@ import UserEditContextProvider, {UserEditContext} from '../contexts/UserEditCont
 // Style imports
 import '../css/components/UserPage.css';
 // Api imports
-const AdminAPI = require('../api/admin');
+import AdminAPI from '../api/admin';
 
 export default function UserEdit(){
     return(

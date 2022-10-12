@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal, Form} from 'react-bootstrap';
 import { RoomsContext } from '../../contexts/RoomsContext';
 // API imports
-const RoomsAPI = require('../../api/rooms');
+import RoomsAPI from '../../api/rooms';
 
 export default function RoomModal(){
     const {roomsContext, setRoomsContext} = useContext(RoomsContext);

@@ -1,11 +1,11 @@
-const apiRequest = require('./base').apiRequest;
+import base from './base';
 
 async function getRooms(){
-    return await apiRequest('rooms', "GET", null);
+    return await base.apiRequest('rooms', "GET", null);
 }
 
 async function addRoom(number, name){
-    return await apiRequest('rooms', "PUT", {
+    return await base.apiRequest('rooms', "PUT", {
         number: number,
         name: name,
         active: true
@@ -13,7 +13,7 @@ async function addRoom(number, name){
 }
 
 async function editRoom(id, number, name){
-    return await apiRequest(`rooms/${id}`, "PATCH", {
+    return await base.apiRequest(`rooms/${id}`, "PATCH", {
         number: number,
         name: name,
         active: true
@@ -21,18 +21,19 @@ async function editRoom(id, number, name){
 }
 
 async function setActive(id, state){
-    if(state === true) return await apiRequest(`rooms/${id}/activate`, "PATCH", null);
-    return await apiRequest(`rooms/${id}/deactivate`, "PATCH", null);
+    if(state === true) return await base.apiRequest(`rooms/${id}/activate`, "PATCH", null);
+    return await base.apiRequest(`rooms/${id}/deactivate`, "PATCH", null);
 }
 
 async function deleteRoom(id){
-    return await apiRequest(`rooms/${id}`, "DELETE", null);
+    return await base.apiRequest(`rooms/${id}`, "DELETE", null);
 }
 
-module.exports = {
+var exports = {
     getRooms,
     addRoom,
     deleteRoom,
     setActive,
     editRoom
 };
+export default exports;

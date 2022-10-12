@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal, Form} from 'react-bootstrap';
 import { UserEditContext } from '../../contexts/UserEditContext';
 // API imports
-const AdminAPI = require('../../api/admin');
+import AdminAPI from '../../api/admin';
 
 export default function UserEditModal(){
     const {ueContext, setUeContext} = useContext(UserEditContext);

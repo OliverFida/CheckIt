@@ -8,7 +8,7 @@ import RoomModal from './components/RoomModal';
 // Style imports
 import '../css/components/RoomsPage.css';
 // API imports
-const RoomsAPI = require('../api/rooms');
+import RoomsAPI from '../api/rooms';
 
 export default function RoomsPage(){
     return(

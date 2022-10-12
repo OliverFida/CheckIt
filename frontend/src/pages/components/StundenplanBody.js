@@ -5,7 +5,7 @@ import StundenplanBooking from './StundenplanBooking';
 import moment from 'moment';
 // API imports
 import timesMap from '../../api/timesMap.json';
-const BookingsAPI = require('../../api/bookings');
+import BookingsAPI from '../../api/bookings';
 
 const amountWeeks = 6;
 

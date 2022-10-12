@@ -1,4 +1,4 @@
-const axios = require('axios').default;
+import axios from 'axios';
 
 const SERVER_CONF = {
     PROTOCOL: "https",
@@ -32,7 +32,7 @@ async function apiRequest(path, method, data){
 
     return returnVal;
 }
-
-module.exports = {
+var exports = {
     apiRequest
 };
+export default exports;

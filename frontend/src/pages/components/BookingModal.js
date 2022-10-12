@@ -7,7 +7,7 @@ import moment from 'moment';
 import '../../css/components/UserPage.css';
 // API imports
 import timesMap from '../../api/timesMap.json';
-const BookingsAPI = require('../../api/bookings');
+import BookingsAPI from '../../api/bookings';
 
 export default function BookingModal(){
     const {hpContext, setHpContext} = useContext(HomePageContext);

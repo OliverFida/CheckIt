@@ -3,7 +3,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import {Nav, NavDropdown} from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
 // API imports
-const RoomsAPI = require('../../api/rooms');
+import RoomsAPI from '../../api/rooms';
 
 export default function AppNavBooking(){return(
         <Nav>

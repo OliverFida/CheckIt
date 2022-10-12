@@ -1,17 +1,18 @@
-const apiRequest = require('./base').apiRequest;
+import base from './base';
 
 async function changePassword(password){
-  return await apiRequest("user/password", "PATCH", {
+  return await base.apiRequest("user/password", "PATCH", {
     password: password
   });
 }
 
 async function getUserData(){
-  var response = await apiRequest(`user/${localStorage.getItem('loginUsername')}`, "GET", null);
+  var response = await base.apiRequest(`user/${localStorage.getItem('loginUsername')}`, "GET", null);
   return response.data;
 }
 
-module.exports = {
+var exports = {
     changePassword,
     getUserData
 };
+export default exports;
