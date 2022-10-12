@@ -72,8 +72,8 @@ function UserEditRow(){
                 <td valign='middle' key={`user${user.lastname}`}>{user.lastname}</td>
                 <td>
                     <ButtonGroup>
-                        <Button onClick={() => {onEditName(user)}} className="my-1 me-1" size="sm">
-                            Name ändern
+                        <Button onClick={() => {onEdit(user)}} className="my-1 me-1" size="sm">
+                            Bearbeiten
                         </Button>
                         <Button onClick={() => {onResetPW(user)}} className="my-1 me-1" size="sm">
                             Passwort zurücksetzen
@@ -94,8 +94,8 @@ function UserEditRow(){
            ));
     }, [users]);
 
-    const onEditName = (user) => {
-        setUeContext({...ueContext, uiControl:{...ueContext.uiControl, userModal: true, modalMode: "editName"}, users:{...ueContext.users, selected: user}});
+    const onEdit = (user) => {
+        setUeContext({...ueContext, uiControl:{...ueContext.uiControl, userModal: true, modalMode: "edit"}, users:{...ueContext.users, selected: user}});
     };
 
     const onResetPW = (user) => {

@@ -8,12 +8,22 @@ import AdminAPI from '../../api/admin';
 export default function UserEditModal(){
     const {ueContext, setUeContext} = useContext(UserEditContext);
     const [state, setState] = useState(null);
+    const [roles, setRoles] = useState(["User", "Admin"]);
+    const [roleElements, setRoleElements] = useState([]);
 
     useEffect(() => {
-        if(!ueContext.uiControl.userModal) return;
-        if(ueContext.users.selected === null) setState({}); //TODO
-        if(ueContext.users.selected !== null) setState(ueContext.users.selected);
+        async function doAsync(){
+            if(!ueContext.uiControl.userModal) return;
+    
+            if(ueContext.users.selected === null) setState({}); //TODO
+            if(ueContext.users.selected !== null) setState(ueContext.users.selected);
+        }
+        doAsync();
     }, [ueContext.uiControl.userModal]);
+
+    useEffect(() => {
+        setRoleElements(roles.map(role => <option key={`option_${role}`} value={role}>{role}</option>));
+    }, [roles]);
 
     const onCancel = () => {
         setUeContext({...ueContext, uiControl:{...ueContext.uiControl, userModal: false}, users:{...ueContext.users, selected: null}});
@@ -21,8 +31,9 @@ export default function UserEditModal(){
 
     const onSubmit = async () => {
         if(ueContext.uiControl.modalMode === "new"){
-            await AdminAPI.addUser(state.username, state.firstName, state.lastname);
-        }else if(ueContext.uiControl.modalMode === "editName"){
+            await AdminAPI.addUser(state.username, state.firstName, state.lastname, state.role);
+        }else if(ueContext.uiControl.modalMode === "edit"){
+            console.log(state.role);
             await AdminAPI.editUser(state.username, state.firstName, state.lastname, state.role);
         }else if(ueContext.uiControl.modalMode === "resetPW"){
             await AdminAPI.resetPassword(state.username);
@@ -40,7 +51,7 @@ export default function UserEditModal(){
         <Modal show={ueContext.uiControl.userModal} onHide={onCancel} centered>
             <Modal.Header closeButton>
                 <Modal.Title>{
-                    ueContext.uiControl.modalMode === "editName" ? "Name bearbeiten" :
+                    ueContext.uiControl.modalMode === "edit" ? "Benutzer bearbeiten" :
                     ueContext.uiControl.modalMode === "resetPW" ? "Passwort zurücksetzen" :
                     ueContext.uiControl.modalMode === "delete" ? "Benutzer löschen" :
                     "Benutzer erstellen"    
@@ -63,12 +74,18 @@ export default function UserEditModal(){
                             <Form.Label>Nachname</Form.Label>
                             <Form.Control autoComplete='off' type="text" name="lastname" value={state?.lastname ? state.lastname : ""} onChange={onChange} />
                         </Form.Group> 
+                        <Form.Group className="mb-3" controlId="role">
+                            <Form.Label>Rolle</Form.Label>
+                            <Form.Select defaultValue={state?.role} name="role" onChange={onChange}>
+                                {roleElements}
+                            </Form.Select>
+                        </Form.Group> 
                         </>
                         :
                         null
                     }
                     {
-                        ueContext.uiControl.modalMode === "editName" ?
+                        ueContext.uiControl.modalMode === "edit" ?
                         <>
                         <Form.Group className="mb-3" controlId="firstName">
                             <Form.Label>Vorname</Form.Label>
@@ -77,6 +94,12 @@ export default function UserEditModal(){
                         <Form.Group className="mb-3" controlId="lastName">
                             <Form.Label>Nachname</Form.Label>
                             <Form.Control autoComplete='off' type="text" name="lastname" value={state?.lastname ? state.lastname : ""} onChange={onChange} />
+                        </Form.Group> 
+                        <Form.Group className="mb-3" controlId="role">
+                            <Form.Label>Rolle</Form.Label>
+                            <Form.Select defaultValue={state?.role} name="role" onChange={onChange}>
+                                {roleElements}
+                            </Form.Select>
                         </Form.Group> 
                         </>
                         :
@@ -104,7 +127,7 @@ export default function UserEditModal(){
                     "primary"
                     } onClick={onSubmit}>
                     {
-                        ueContext.uiControl.modalMode === "editName" ? "Speichern" :
+                        ueContext.uiControl.modalMode === "edit" ? "Speichern" :
                         ueContext.uiControl.modalMode === "resetPW" ? "Zurücksetzen" :
                         ueContext.uiControl.modalMode === "delete" ? "Löschen" :
                         "Erstellen"

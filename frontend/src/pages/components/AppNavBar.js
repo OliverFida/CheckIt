@@ -1,6 +1,6 @@
 // Component imports
 import React from 'react';
-import {Navbar, Stack, Button} from 'react-bootstrap';
+import {Navbar, Nav, Stack, Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AppNavUser from './AppNavUser';
 import Logo from '../../assets/checkit-logo.png';
@@ -21,7 +21,7 @@ export default function AppNavBar({children}){
                     <Stack direction='horizontal' style={{gap: '10px'}}>
                         <img src={Logo} alt="Check-It Logo" id="appNavLogo" />
                         CHECK-IT
-                        {localStorage.getItem('loginToken') !== null ? <Button onClick={onHome}>Buchungen</Button> : null}
+                        {localStorage.getItem('loginToken') !== null ? <Button variant='ghost' onClick={onHome}>Buchungen</Button> : null}
                     </Stack>
                 </Navbar.Brand>
                 <Stack direction='horizontal' style={{gap: '10px'}}>

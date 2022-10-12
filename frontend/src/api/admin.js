@@ -4,12 +4,12 @@ async function getUsers(){
     return await base.apiRequest('admin/users', "GET", null);
 }
 
-async function addUser(username, firstName, lastName){
+async function addUser(username, firstName, lastName, role){
     return await base.apiRequest('admin/user', "PUT", {
         "username": username,
         "firstName": firstName,
         "lastname": lastName,
-        "role": "User",
+        "role": role,
         "password": "awl"
     });
 }
@@ -37,12 +37,17 @@ async function deleteUser(username){
     return await base.apiRequest(`admin/user/${username}`, "DELETE", null);
 }
 
+async function getRoles(){
+    return await base.apiRequest('admin/roles', "GET", null);
+}
+
 var exports = {
     getUsers,
     addUser,
     editUser,
     resetPassword,
     setUserActive,
-    deleteUser
+    deleteUser,
+    getRoles
 };
 export default exports;
