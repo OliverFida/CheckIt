@@ -54,12 +54,7 @@ export default function BookingModal(){
     };
 
     const onDelete = () => {
-        async function doAsync(){
-            await BookingsAPI.del(state.booking.id);
-
-            await setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: null, reload: true}});
-        }
-        doAsync();
+        setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingDeleteModal: true}});
     };
     
     const onSubmit = () => {
@@ -140,5 +135,34 @@ function NoteField({state, setState}){
             <Form.Label>Notizen</Form.Label>
             <Form.Control autoComplete='off' as="textarea" rows={3} className="bookingNotes" value={state?.booking?.note} onChange={onChange} disabled={state?.viewMode} />
         </Form.Group>
+    );
+}
+
+export function BookingDeleteModal(){
+    const {hpContext, setHpContext} = useContext(HomePageContext);
+
+    const onAbort = () => {
+        setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingDeleteModal: false}});
+    };
+
+    const onSubmit = async () => {
+        await BookingsAPI.del(hpContext.bookings.selected.booking.id);
+
+        await setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingDeleteModal: false}, bookings: {...hpContext.bookings, selected: null, reload: true}});
+    };
+
+    return(
+        <Modal show={hpContext.uiControl.bookingDeleteModal} onHide={onAbort} centered>
+            <Modal.Header>
+                <Modal.Title>Buchung löschen</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>Buchung wirklich löschen?</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant='ghost' onClick={onAbort}>Abbrechen</Button>
+                <Button variant='danger' onClick={onSubmit}>Löschen</Button>
+            </Modal.Footer>
+        </Modal>
     );
 }

@@ -8,7 +8,8 @@ export default function HomePageContextProvider({children}){
     const [hpContext, setHpContext] = useState({
         uiControl: {
             bookingsLoading: false,
-            bookingModal: false
+            bookingModal: false,
+            bookingDeleteModal: false,
         },
         roomSelection: {
             id: null,
