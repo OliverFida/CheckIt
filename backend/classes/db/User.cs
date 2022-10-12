@@ -8,6 +8,8 @@ namespace awl_raumreservierung
 	/// </summary>
 	public partial class User
 	{
+		private string username = null!;
+
 		/// <summary>
 		/// User-ID
 		/// </summary>
@@ -18,8 +20,7 @@ namespace awl_raumreservierung
 		/// Username
 		/// </summary>
 		/// <value></value>
-		public string Username { get; set; } = null!;
-
+		public string Username { get => username.ToLower(); set => username = value.ToLower(); }
 		/// <summary>
 		/// Vorname
 		/// </summary>
@@ -65,10 +66,11 @@ namespace awl_raumreservierung
 		/// <summary>
 		/// 
 		/// </summary>
-	public User(){
-		DateTime.SpecifyKind(Lastlogon ?? DateTime.Now, DateTimeKind.Utc);
-		DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
-	}
+		public User()
+		{
+			DateTime.SpecifyKind(Lastlogon ?? DateTime.Now, DateTimeKind.Utc);
+			DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
+		}
 	}
 
 	/// <summary>
