@@ -6,7 +6,7 @@ import AppNavBooking from './components/AppNavBooking';
 import Stundenplan from './components/Stundenplan';
 import HomePageContextProvider from '../contexts/HomePageContext';
 import BookingModal from './components/BookingModal';
-import {HomePageDebugger} from './components/Debugger';
+// import {HomePageDebugger} from './components/Debugger';
 
 export default function HomePage(){
     return(
@@ -17,7 +17,7 @@ export default function HomePage(){
                 </AppNavBar>
                 <Stundenplan />
                 <BookingModal />
-                <HomePageDebugger />
+                {/* <HomePageDebugger /> */}
             </Stack>
         </HomePageContextProvider>
     );
