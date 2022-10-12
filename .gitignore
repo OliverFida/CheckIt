@@ -404,3 +404,5 @@ checkit.db
 /frontend/build
 /backend/bin
 /backend/obj
+backend/out/checkit_release.tgz
+backend_
