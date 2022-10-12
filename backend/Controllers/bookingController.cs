@@ -133,7 +133,7 @@ public class bookingsController : ControllerBase
 					CreateTime = DateTime.Now,
 					CreatedBy = User.GetUser(helper)?.Id,
 					Note = model.Note,
-					StudentCount = model.StudenCount
+					StudentCount = model.StudentCount
 				};
 			ctx.Bookings.Add(book);
 
