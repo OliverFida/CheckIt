@@ -304,7 +304,6 @@ public class adminController : ControllerBase
 			return this.GetErrorModel(ex);
 		}
 	}
-
 #if DEBUG
 	/// <summary>
 	/// Yeet bookings
