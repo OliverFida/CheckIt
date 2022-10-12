@@ -67,7 +67,7 @@ function UserEditRow(){
                 <td>
                     <ButtonGroup>
                         <Button onClick={() => {onEditName(user)}} className="my-1">
-                            Name Ändern
+                            Name ändern
                         </Button>
                         <Button onClick={() => {onResetPW(user)}} className="my-1">
                             Passwort zurücksetzen

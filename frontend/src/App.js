@@ -15,7 +15,7 @@ import UserEdit from './pages/UserEdit';
 export default function App() {
   return (
     <div id="App">     
-        <BrowserRouter>
+        <BrowserRouter basename='/'>
           <Routes>
             <Route exact path='/' element={<Navigate to='/login' />} />
             <Route path='/login' element={<LoginProtectedRoute reverse><LoginPage /></LoginProtectedRoute>} />
