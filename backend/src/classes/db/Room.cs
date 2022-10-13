@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace awl_raumreservierung.db
-{
+namespace awl_raumreservierung.db {
 	/// <summary>
 	/// DB-Raum
 	/// </summary>
-	public partial class Room
-	{
+	public partial class Room {
 		/// <summary>
 		/// Raum-ID
 		/// </summary>
@@ -43,8 +41,7 @@ namespace awl_raumreservierung.db
 		/// <param name="number"></param>
 		/// <param name="name"></param>
 		/// <param name="active"></param>
-		public Room(string? number, string? name, bool active)
-		{
+		public Room(string? number, string? name, bool active) {
 			Number = number;
 			Name = name;
 			Active = active;

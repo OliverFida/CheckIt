@@ -1,10 +1,8 @@
-namespace awl_raumreservierung
-{
+namespace awl_raumreservierung {
 	/// <summary>
 	/// Bildet die öffentlichen Daten eines Nutzers ab
 	/// </summary>
-	public class PublicUser
-	{
+	public class PublicUser {
 		private DateTime? lastLogon;
 		private DateTime? lastchange;
 
@@ -54,8 +52,7 @@ namespace awl_raumreservierung
 		///
 		/// /// </summary>
 		/// <param name="user"></param>
-		public PublicUser(User user)
-		{
+		public PublicUser(User user) {
 			Username = user.Username;
 			FirstName = user.Firstname;
 			Lastname = user.Lastname;

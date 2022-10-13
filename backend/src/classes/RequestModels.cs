@@ -1,14 +1,12 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using System.ComponentModel.DataAnnotations;
 
-namespace awl_raumreservierung
-{
+namespace awl_raumreservierung {
 	/// <summary>
 	/// Stellt ReturnModels bereit
 	/// </summary>
-	public class ReturnModel
-	{
+	public class ReturnModel {
 		/// <summary>
 		/// Erstellt eine neues Returnmodel mit Statuscode 200
 		/// </summary>
@@ -19,17 +17,9 @@ namespace awl_raumreservierung
 		/// Erstellt eine neues Returnmodel mit bestimmten Statuscude
 		/// </summary>
 		/// <param name="statusCode">Statuscode</param>
-		public ReturnModel(StatusCodeResult statusCode)
-		{
+		public ReturnModel(StatusCodeResult statusCode) {
 			Status = statusCode.StatusCode;
-			if (Status is < 300 and > 199)
-			{
-				StatusMessage = "success";
-			}
-			else
-			{
-				StatusMessage = ReasonPhrases.GetReasonPhrase(Status);
-			}
+			StatusMessage = Status is < 300 and > 199 ? "success" : ReasonPhrases.GetReasonPhrase(Status);
 
 			Message = string.Empty;
 		}
@@ -62,8 +52,7 @@ namespace awl_raumreservierung
 	/// <summary>
 	/// Useranlagemodel
 	/// </summary>
-	public class CreateUserModel
-	{
+	public class CreateUserModel {
 		/// <summary>
 		/// Username
 		/// </summary>
@@ -98,8 +87,7 @@ namespace awl_raumreservierung
 	/// <summary>
 	/// Loginmodel
 	/// </summary>
-	public class LoginUserModel
-	{
+	public class LoginUserModel {
 		/// <summary>
 		/// Username
 		/// </summary>
@@ -117,8 +105,7 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="username"></param>
 		/// <param name="password"></param>
-		public LoginUserModel(string username, string password)
-		{
+		public LoginUserModel(string username, string password) {
 			Username = username;
 			Password = password;
 		}
@@ -127,8 +114,7 @@ namespace awl_raumreservierung
 	/// <summary>
 	/// Userupdatemodel
 	/// </summary>
-	public class UpdateUserModel
-	{
+	public class UpdateUserModel {
 		/// <summary>
 		/// Vorname
 		/// </summary>
@@ -151,8 +137,7 @@ namespace awl_raumreservierung
 	/// <summary>
 	/// Buchungsmodel
 	/// </summary>
-	public class CreateBookingModel
-	{
+	public class CreateBookingModel {
 		private DateTime startTime;
 		private DateTime endTime;
 
@@ -166,8 +151,7 @@ namespace awl_raumreservierung
 		/// Startzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime StartTime
-		{
+		public DateTime StartTime {
 			get => startTime;
 			set => startTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
 		}
@@ -176,8 +160,7 @@ namespace awl_raumreservierung
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime
-		{
+		public DateTime EndTime {
 			get => endTime;
 			set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
 		}
@@ -194,35 +177,30 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public string Username { get; set; }
 
-/// <summary>
-/// Schüleranzahl
-/// </summary>
-/// <value></value>
-		public int? StudentCount {get; set;}
+		/// <summary>
+		/// Schüleranzahl
+		/// </summary>
+		/// <value></value>
+		public int? StudentCount { get; set; }
 
-/// <summary>
-/// 
-/// </summary>
-/// <param name="username"></param>
-		public CreateBookingModel(string username)
-		{
-			Username = username;
-		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="username"></param>
+		public CreateBookingModel(string username) => Username = username;
 	}
 
 	/// <summary>
 	/// Update Buchungsmodel
 	/// </summary>
-	public class UpdateBookingModel
-	{
+	public class UpdateBookingModel {
 		private DateTime endTime;
 
 		/// <summary>
 		/// Endzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime
-		{
+		public DateTime EndTime {
 			get => endTime;
 			set => endTime = DateTime.SpecifyKind(value, DateTimeKind.Utc);
 		}
@@ -233,19 +211,17 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public string? Note { get; set; }
 
-		
-/// <summary>
-/// Schüleranzahl
-/// </summary>
-/// <value></value>
-		public int StudenCount {get; set;}
+		/// <summary>
+		/// Schüleranzahl
+		/// </summary>
+		/// <value></value>
+		public int StudenCount { get; set; }
 	}
 
 	/// <summary>
 	/// Raummodel
 	/// </summary>
-	public class CreateRoomModel
-	{
+	public class CreateRoomModel {
 		/// <summary>
 		/// Raumnummer
 		/// </summary>
@@ -263,8 +239,7 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="number"></param>
-		public CreateRoomModel(string name, string number)
-		{
+		public CreateRoomModel(string name, string number) {
 			Name = name;
 			Number = number;
 		}
@@ -279,8 +254,7 @@ namespace awl_raumreservierung
 	/// <summary>
 	/// Model zum Holen von Bookings
 	/// </summary>
-	public class GetBookingModel
-	{
+	public class GetBookingModel {
 		/// <summary>
 		/// Startdatum der Abfrage, default Montag der aktuellen Woche
 		/// </summary>
@@ -297,8 +271,7 @@ namespace awl_raumreservierung
 	/// <summary>
 	/// Model für Passwortübergabe
 	/// </summary>
-	public class PasswordModel
-	{
+	public class PasswordModel {
 		/// <summary>
 		/// Passworthash
 		/// </summary>
@@ -310,9 +283,6 @@ namespace awl_raumreservierung
 		///
 		/// </summary>
 		/// <param name="password"></param>
-		public PasswordModel(string password)
-		{
-			Password = password;
-		}
+		public PasswordModel(string password) => Password = password;
 	}
 }

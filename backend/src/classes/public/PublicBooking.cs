@@ -1,12 +1,10 @@
-﻿using System.Diagnostics;
-using awl_raumreservierung.core;
-namespace awl_raumreservierung
-{
+﻿using awl_raumreservierung.core;
+using System.Diagnostics;
+namespace awl_raumreservierung {
 	/// <summary>
 	/// Öffentliche Daten einer Buchung
 	/// </summary>
-	public class PublicBooking
-	{
+	public class PublicBooking {
 		/// <summary>
 		/// ID
 		/// </summary>
@@ -60,22 +58,18 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="booking"></param>
 		/// <param name="helper"></param>
-		public PublicBooking(Booking booking, Helpers helper)
-		{
-			this.Id = booking.Id;
-			this.StartTime = booking.StartTime;
-			this.EndTime = booking.EndTime;
-			this.Room = helper.GetRoom(booking.Room).ToPublicRoom();
+		public PublicBooking(Booking booking, Helpers helper) {
+			Id = booking.Id;
+			StartTime = booking.StartTime;
+			EndTime = booking.EndTime;
+			Room = helper.GetRoom(booking.Room).ToPublicRoom();
 
 			PublicUser user;
 
-			try
-			{
+			try {
 				user = helper.GetUser(booking.UserId.ToInt()).ToPublicUser();
-			}
-			catch (Exception ex) { 
-				user = new PublicUser(new User { })
-				{
+			} catch(Exception ex) {
+				user = new PublicUser(new User { }) {
 					FirstName = "Gelöschter",
 					Lastname = "Benutzer",
 					Username = "deleted"
@@ -85,9 +79,9 @@ namespace awl_raumreservierung
 			}
 
 			StudentCount = booking.StudentCount;
-			this.User = user;
-			this.CreateTime = booking.CreateTime;
-			this.Note = booking.Note;
+			User = user;
+			CreateTime = booking.CreateTime;
+			Note = booking.Note;
 		}
 	}
 }

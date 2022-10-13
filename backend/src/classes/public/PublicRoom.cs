@@ -1,12 +1,10 @@
 ﻿using awl_raumreservierung.core;
 
-namespace awl_raumreservierung
-{
+namespace awl_raumreservierung {
 	/// <summary>
 	/// Öffentliche Daten eines Raums
 	/// </summary>
-	public class PublicRoom
-	{
+	public class PublicRoom {
 		/// <summary>
 		/// ID
 		/// </summary>
@@ -34,16 +32,13 @@ namespace awl_raumreservierung
 		///
 		/// </summary>
 		/// <param name="room"></param>
-		public PublicRoom(Room? room)
-		{
-			if (room != null)
-			{
-				this.Id = room.Id.ToInt();
-				this.Number = room.Number;
-				this.Name = room.Name;
-				this.Active = room.Active;
+		public PublicRoom(Room? room) {
+			if(room != null) {
+				Id = room.Id.ToInt();
+				Number = room.Number;
+				Name = room.Name;
+				Active = room.Active;
 			}
 		}
-
 	}
 }

@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using awl_raumreservierung.Controllers;
+﻿using awl_raumreservierung.Controllers;
 using awl_raumreservierung.core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System;
+using System.Collections.Generic;
 
-namespace awl_raumreservierung
-{
+namespace awl_raumreservierung {
 	/// <summary>
 	///
 	/// </summary>
 #pragma warning disable IDE1006 // Naming Styles
-	public partial class checkITContext : DbContext
-	{
+	public partial class checkITContext : DbContext {
 		/// <summary>
 		///
 		/// </summary>
-		public checkITContext() { 
+		public checkITContext() {
 		}
 
 		/// <summary>
@@ -48,10 +46,9 @@ namespace awl_raumreservierung
 		/// 
 		/// </summary>
 		/// <param name="modelBuilder"></param>
-		 protected override void OnModelCreating(ModelBuilder modelBuilder) {
+		protected override void OnModelCreating(ModelBuilder modelBuilder) =>
 			// Admin seeden
 			modelBuilder.Entity<User>().HasData(new User { Username = "admin", Firstname = "Admin", Lastname = "Benutzer", Lastchange = DateTime.MinValue, Passwd = "admin", Role = UserRole.Admin, Id = 1, Active = true });
-		}
 
-}
+	}
 }

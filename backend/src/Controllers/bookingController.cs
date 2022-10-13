@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using awl_raumreservierung.core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using StatusCodeResult = Microsoft.AspNetCore.Mvc.StatusCodeResult;
-using awl_raumreservierung.core;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -25,10 +25,9 @@ public class bookingsController : ControllerBase
 	/// </summary>
 	/// <param name="logger"></param>
 	/// <param name="_context"></param>
-	public bookingsController(ILogger<bookingsController> logger, checkITContext _context)
-	{
+	public bookingsController(ILogger<bookingsController> logger, checkITContext _context) {
 		_logger = logger;
-				ctx = _context;
+		ctx = _context;
 		helper = new Helpers(ctx);
 	}
 
@@ -42,26 +41,21 @@ public class bookingsController : ControllerBase
 	[HttpPost("/rooms/{roomId}/bookings")]
 	[Authorize]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public PublicBooking[] Get(int roomId, GetBookingModel model)
-	{
-		try
-		{
-			if (!helper.DoesRoomExist(roomId))
-			{
+	public PublicBooking[] Get(int roomId, GetBookingModel model) {
+		try {
+			if(!helper.DoesRoomExist(roomId)) {
 				Response.StatusCode = StatusCodes.Status404NotFound;
 				return Array.Empty<PublicBooking>();
 			}
 
-			if (model.EndDate is null)
-			{
+			if(model.EndDate is null) {
 				model.EndDate = model.StartDate + new TimeSpan(6, 0, 0, 0);
 			}
-			Room room = helper.GetRoom(roomId);
+
+			var room = helper.GetRoom(roomId);
 
 			return room.GetBookings(ctx).Where(b => b.StartTime >= model.StartDate && b.EndTime <= model.EndDate).Select(b => b.ToPublicBooking(helper)).ToArray();
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			_logger.LogError("Fehler aufgetreten: ", ex);
 
 			Response.StatusCode = StatusCodes.Status400BadRequest;
@@ -82,51 +76,47 @@ public class bookingsController : ControllerBase
 			+ "Buchung sich mit einer bereits existierenden Buchung wird eine Fehlermeldung ausgegeben."
 	)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public ReturnModel Book(CreateBookingModel model)
-	{
-		try
-		{
-			if (!helper.DoesRoomExist(model.RoomID))
-			{
+	public ReturnModel Book(CreateBookingModel model) {
+		try {
+			if(!helper.DoesRoomExist(model.RoomID)) {
 				Response.StatusCode = StatusCodes.Status404NotFound;
 				return new ReturnModel(new StatusCodeResult(404)) { Message = "Raum konnte nicht gefunden werden!" };
 			}
-			Room room = helper.GetRoom(model.RoomID);
 
-			bool roomActive = room.Active;
-			if (!roomActive)
-			{
+			var room = helper.GetRoom(model.RoomID);
+
+			var roomActive = room.Active;
+			if(!roomActive) {
 				Response.StatusCode = StatusCodes.Status400BadRequest;
 				return new ReturnModel(new StatusCodeResult(400)) { Message = "Der angegebene Raum ist aktuell nicht buchbar!" };
 			}
-			if (model.EndTime < model.StartTime)
-			{
+
+			if(model.EndTime < model.StartTime) {
 				return new ReturnModel(new StatusCodeResult(400)) { Message = "Endzeit darf nicht vor Startzeit sein!" };
 			}
-			bool overlapsWithOtherBookings = helper.BookingOverlaps(model, ctx);
 
-			if (overlapsWithOtherBookings)
-			{
+			var overlapsWithOtherBookings = helper.BookingOverlaps(model, ctx);
+
+			if(overlapsWithOtherBookings) {
 				Response.StatusCode = StatusCodes.Status400BadRequest;
 				return new ReturnModel(new StatusCodeResult(400)) { Message = "Die angegebene Buchung überschneidet sich mit einer bereits bestehenden!" };
 			}
+
 			long userId;
-			User currUser = User.GetUser(helper);
-			if (!currUser.Active)
-			{
+			var currUser = User.GetUser(helper);
+			if(!currUser.Active) {
 				return new ReturnModel(new StatusCodeResult(404)) { Message = $"Benutzer ist inaktiv!" };
 			}
 
-			User user = helper.GetUser(model.Username);
-			if (!helper.DoesUserExist(model.Username) || !helper.GetUser(model.Username).Active)
-			{
+			var user = helper.GetUser(model.Username);
+			if(!helper.DoesUserExist(model.Username) || !helper.GetUser(model.Username).Active) {
 				return new ReturnModel(new StatusCodeResult(404)) { Message = $"Benutzer {model.Username} konnte nicht gefunden werden oder ist inaktiv!" };
 			}
+
 			userId = user.Id;
 
 			Booking book =
-				new()
-				{
+				new() {
 					StartTime = model.StartTime,
 					EndTime = model.EndTime,
 					Room = model.RoomID,
@@ -142,9 +132,7 @@ public class bookingsController : ControllerBase
 
 			Response.StatusCode = StatusCodes.Status201Created;
 			return new ReturnModel(new StatusCodeResult(201)) { Message = $"Raum {room.Number} wurde erfolgreich für den {model.StartTime:d} gebucht.", Data = book.ToPublicBooking(helper) };
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -158,21 +146,17 @@ public class bookingsController : ControllerBase
 	[Authorize]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public ReturnModel Remove(int bookingId)
-	{
-		try
-		{
+	public ReturnModel Remove(int bookingId) {
+		try {
 
-			if (!helper.DoesBookingExist(bookingId))
-			{
+			if(!helper.DoesBookingExist(bookingId)) {
 				Response.StatusCode = StatusCodes.Status404NotFound;
 				return new ReturnModel(new StatusCodeResult(404)) { Message = "Buchung konnte nicht gefunden werden!" };
 			}
 
-			Booking booking = helper.GetBooking(bookingId);
+			var booking = helper.GetBooking(bookingId);
 
-			if (booking.UserId != User.GetUser(helper).Id && !User.IsInRole("Admin"))
-			{
+			if(booking.UserId != User.GetUser(helper).Id && !User.IsInRole("Admin")) {
 				Response.StatusCode = StatusCodes.Status401Unauthorized;
 				return new ReturnModel(new StatusCodeResult(401)) { Message = "Es können nur eigene Buchungen gelöscht werden!" };
 			}
@@ -182,9 +166,7 @@ public class bookingsController : ControllerBase
 
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel { Message = $"Buchung erfolgreich gelöscht!" };
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -197,38 +179,34 @@ public class bookingsController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht und PublicBooking der bearbeiteten Buchung in "Data".</returns>
 	[HttpPatch("{bookingId}")]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
-	public ReturnModel Edit(long bookingId, UpdateBookingModel model)
-	{
-		if (!helper.DoesBookingExist(bookingId))
-		{
+	public ReturnModel Edit(long bookingId, UpdateBookingModel model) {
+		if(!helper.DoesBookingExist(bookingId)) {
 			Response.StatusCode = StatusCodes.Status404NotFound;
 			return new ReturnModel(new StatusCodeResult(404)) { Message = "Buchung konnte nicht gefunden werden!" };
 		}
 
-		Booking booking = helper.GetBooking(bookingId);
+		var booking = helper.GetBooking(bookingId);
 
 		// user auth
-		if (booking.UserId != User.GetUser(helper)?.Id && !User.IsInRole("Admin"))
-		{
+		if(booking.UserId != User.GetUser(helper)?.Id && !User.IsInRole("Admin")) {
 			return new ReturnModel(new StatusCodeResult(401)) { Message = "Keine Berechtigung!" };
 		}
 		// booking in future check
-		if (model.EndTime < booking.StartTime)
-		{
+		if(model.EndTime < booking.StartTime) {
 			return new ReturnModel(new StatusCodeResult(400)) { Message = "Neue Endzeit darf nicht vor Buchungsbeginn sein" };
 		}
-		bool inPast = booking.EndTime < DateTime.Now.ToUniversalTime();
-		if (inPast)
-		{
+
+		var inPast = booking.EndTime < DateTime.Now.ToUniversalTime();
+		if(inPast) {
 			return new ReturnModel(new StatusCodeResult(400)) { Message = "Buchungszeitraum ist bereits abgelaufen." };
 		}
 		// no overlap check
-		bool overlapsWithOtherBookings = helper.BookingOverlaps(booking, ctx);
-		if (overlapsWithOtherBookings)
-		{
+		var overlapsWithOtherBookings = helper.BookingOverlaps(booking, ctx);
+		if(overlapsWithOtherBookings) {
 			Response.StatusCode = StatusCodes.Status400BadRequest;
 			return new ReturnModel(new StatusCodeResult(400)) { Message = "Die angegebene Buchung Überschneidet sich mit einer bereits bestehenden!" };
 		}
+
 		booking.Note = model.Note;
 		booking.EndTime = model.EndTime;
 		booking.StudentCount = model.StudenCount;
