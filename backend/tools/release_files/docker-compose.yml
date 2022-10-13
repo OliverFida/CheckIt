@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-  checkit:
+  checkit_backend:
     image: checkit
     ports:
       - "5000:5000"

@@ -1,6 +1,7 @@
 #! /bin/bash
 
+dotnet build -c release
 docker build -t checkit .
 docker save checkit > tools/release_files/checkit.docker
-tar -cv tools/release_files/* -f out/checkit_release.tgz
-
+cd tools/release_files
+tar -cv * -f ../../out/checkit_release.tgz

@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  checkit_frontend:
+    image: "httpd:latest"
+    container_name: "frontend_checkit"
+    ports:
+    - "80:8080"
+    volumes:
+    - ./website:/usr/local/apache2/htdocs
+    - ./conf:/usr/local/apache2/conf
+    restart: always
