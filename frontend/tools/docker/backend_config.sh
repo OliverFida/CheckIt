@@ -1,7 +1,1 @@
-echo "{" > /www/backend_config.json
-echo "$CHECKIT_BACKEND_PROTOCOL" >> /www/backend_config.json
-echo "," > /www/backend_config.json
-echo "$CHECKIT_BACKEND_ADDRESS" >> /www/backend_config.json
-echo "," > /www/backend_config.json
-echo "$CHECKIT_BACKEND_PORT" >> /www/backend_config.json
-echo "}" > /www/backend_config.json
+echo "{PROTOCOL : $CHECKIT_BACKEND_PROTOCOL, ADDRESS : $CHECKIT_BACKEND_ADDRESS, PORT : $CHECKIT_BACKEND_PORT}" > /www/backend_config.json
