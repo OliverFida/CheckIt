@@ -408,3 +408,6 @@ backend/out/checkit_release.tgz
 backend_
 /backend/checkit.db-wal
 /backend/checkit.db-shm
+frontend/out/checkit_frontend_release.tgz
+*.tgz
+*.docker

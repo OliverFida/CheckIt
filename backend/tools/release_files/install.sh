@@ -1,3 +1,3 @@
 #! /bin/bash
 
-cat checkit.docker | docker load
+cat checkit_backend.docker | docker load
