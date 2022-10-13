@@ -1,22 +1,23 @@
 version: "3"
 services:
-  checkit_frontend:
+  checkit_frontend:  # Konfigurationssektion für das Frontend
     image: "checkit_frontend:latest"
     container_name: "checkit_frontend"
     ports:
-    - "80:8080"
+    - "80:8080" # Erste Zahl ist der zu benutzende Backendport
     environment:
-      - CHECKIT_BACKEND_PROTOCOL="http"
-      - CHECKIT_BACKEND_PORT="5000"
-      - CHECKIT_BACKEND_ADDRESS="10.0.2.11"
+      - CHECKIT_BACKEND_PROTOCOL="http" # Protokoll, mit dem das Backend vom Frontend angesprochen wird
+      - CHECKIT_BACKEND_PORT="5000" # Port, an dem das Backend erreichbar ist. Muss mit dem Port in der Backensektion übereinstimmen.
+      - CHECKIT_BACKEND_ADDRESS="10.0.2.11" # Adresse des Backends, alle üblichen Formate (IP, Hostname, etc.) werden akzeptiert
     restart: always
-  checkit_backend:
+
+  checkit_backend: # Konfigurationssektion für das Backend
     image: checkit_backend
     ports:
-      - "5000:5000"
+      - "5000:5000" # Erste Zahl ist der zu benutzende Backendport
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:5000"
     volumes:
-      - ./checkit.db:/data/checkit.db
+      - ./checkit.db:/data/checkit.db # Der Teil vor ":" ist der Pfad zur Datenbankdatei
     container_name: "checkit_backend"
     restart: always

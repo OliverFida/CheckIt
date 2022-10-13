@@ -84,6 +84,7 @@ namespace awl_raumreservierung
 				Debug.WriteLine(ex);
 			}
 
+			StudentCount = booking.StudentCount;
 			this.User = user;
 			this.CreateTime = booking.CreateTime;
 			this.Note = booking.Note;
