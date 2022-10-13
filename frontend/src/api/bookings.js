@@ -8,23 +8,15 @@ async function getBookings(roomId, startDate, endDate){
   return response.data;
 }
 
-async function book(roomId, startTime, endTime, note){
-  console.log(roomId, startTime, endTime, note);
-  var returnValue;
-
+async function book(roomId, startTime, endTime, note, studentCount){
   await base.apiRequest("bookings", "PUT", {
     roomID: roomId,
     startTime: startTime,
     endTime: endTime,
     note: note,
-    username: localStorage.getItem("loginUsername")
-  })
-  .then(response => {
-    console.log(response);
-    returnValue = response.data;
+    username: localStorage.getItem("loginUsername"),
+    studentCount: studentCount
   });
-
-  return returnValue;
 }
 
 async function editBooking(id, endTime, note){
@@ -35,10 +27,7 @@ async function editBooking(id, endTime, note){
 }
 
 async function del(bookingId){
-  await base.apiRequest(`bookings/${bookingId}`, "DELETE", null)
-  .then(response => {
-    console.log(response);
-  });
+  await base.apiRequest(`bookings/${bookingId}`, "DELETE", null);
 }
 
 var exports = {
