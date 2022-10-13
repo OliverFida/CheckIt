@@ -7,7 +7,8 @@ import moment from 'moment';
 import timesMap from '../../api/timesMap.json';
 import BookingsAPI from '../../api/bookings';
 
-const amountWeeks = 6;
+const amountWeeks = 10;
+const amountDays = 6; // TODO Samstag nach Config
 
 export default function StundenplanBody(){
     const {hpContext, setHpContext} = useContext(HomePageContext);
@@ -25,7 +26,7 @@ export default function StundenplanBody(){
         async function doAsync(){
             if(hpContext.roomSelection.id === null) return; //TODO: Double reloading
             await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: true}});
-            var temp = await BookingsAPI.getBookings(hpContext.roomSelection.id, moment().weekday(1).toJSON(), moment().weekday(5).add(amountWeeks - 1, 'weeks').toJSON());
+            var temp = await BookingsAPI.getBookings(hpContext.roomSelection.id, moment().weekday(1).toJSON(), moment().weekday(amountDays).add(amountWeeks - 1, 'weeks').toJSON());
             await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: false}, bookings: {...hpContext.bookings, reload: false, bookings: temp}});
         }
         doAsync();
@@ -43,7 +44,7 @@ function StundenplanRow({lesson}){
 
     useEffect(() => {
         var newElements = [];
-        for(var day = 1; day < amountWeeks; day++){
+        for(var day = 1; day <= amountDays; day++){
             if(lesson.key !== "break"){
                 newElements.push(<StundenplanBooking key={`booking_${day}_${lesson.key}`} day={day} lesson={lesson} />);
             }else{
