@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace awl_raumreservierung
-{
+﻿namespace awl_raumreservierung.db {
 	/// <summary>
 	///
 	/// </summary>
-	public partial class User
-	{
+	public partial class User {
 		private string username = null!;
 
 		/// <summary>
@@ -66,23 +61,20 @@ namespace awl_raumreservierung
 		/// <summary>
 		/// 
 		/// </summary>
-		public User()
-		{
-			DateTime.SpecifyKind(Lastlogon ?? DateTime.Now, DateTimeKind.Utc);
-			DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
+		public User() {
+			_ = DateTime.SpecifyKind(Lastlogon ?? DateTime.Now, DateTimeKind.Utc);
+			_ = DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
 		}
 	}
 
 	/// <summary>
 	/// Mögliche Userrollen
 	/// </summary>
-	public enum UserRole
-	{
+	public enum UserRole {
 		/// Standardbenutzer
 		User,
 
 		/// Admin
 		Admin
 	}
-
 }

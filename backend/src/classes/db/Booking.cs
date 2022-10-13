@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace awl_raumreservierung
-{
+﻿namespace awl_raumreservierung.db {
 	/// <summary>
 	/// DB-Booking
 	/// </summary>
-	public partial class Booking
-	{
+	public partial class Booking {
 		private DateTime endTime;
 
 		/// <summary>
@@ -26,7 +21,7 @@ namespace awl_raumreservierung
 		/// Endzeit, eine Sekunde wird abgezogen.
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get => endTime; set => endTime = value.Subtract(new TimeSpan(0,0,1)); }
+		public DateTime EndTime { get => endTime; set => endTime = value.Subtract(new TimeSpan(0, 0, 1)); }
 
 		/// <summary>
 		/// Raum-ID
@@ -58,7 +53,6 @@ namespace awl_raumreservierung
 		/// <value></value>
 		public string? Note { get; set; }
 
-
 		/// <summary>
 		/// Anzahl der Schüler
 		/// </summary>
@@ -80,8 +74,7 @@ namespace awl_raumreservierung
 		/// <param name="createTime"></param>
 		/// <param name="createdBy"></param>
 		/// <param name="note"></param>
-		public Booking(DateTime startTime, DateTime endTime, long room, long userId, DateTime createTime, long? createdBy, string note)
-		{
+		public Booking(DateTime startTime, DateTime endTime, long room, long userId, DateTime createTime, long? createdBy, string note) {
 			StartTime = startTime;
 			EndTime = endTime;
 			Room = room;

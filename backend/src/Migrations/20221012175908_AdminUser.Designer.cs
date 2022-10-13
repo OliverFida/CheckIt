@@ -11,11 +11,13 @@ using awl_raumreservierung;
 namespace awl_raumreservierung.Migrations
 {
     [DbContext(typeof(checkITContext))]
-    [Migration("20221012160815_Init")]
-    partial class Init
+    [Migration("20221012175908_AdminUser")]
+    partial class AdminUser
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+		protected override void BuildTargetModel(ModelBuilder modelBuilder)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+		  {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
@@ -42,6 +44,9 @@ namespace awl_raumreservierung.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("StudentCount")
+                        .HasColumnType("INTEGER");
 
                     b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
@@ -108,6 +113,19 @@ namespace awl_raumreservierung.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Active = true,
+                            Firstname = "Admin",
+                            Lastchange = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Lastname = "Benutzer",
+                            Passwd = "admin",
+                            Role = 1,
+                            Username = "admin"
+                        });
                 });
 #pragma warning restore 612, 618
         }

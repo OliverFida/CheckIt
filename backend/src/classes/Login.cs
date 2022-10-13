@@ -1,4 +1,5 @@
-namespace awl_raumreservierung.src.classes
+
+namespace awl_raumreservierung.classes
 {
     /// <summary>
     /// Loginklasse

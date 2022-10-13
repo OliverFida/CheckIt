@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using StatusCodeResult = Microsoft.AspNetCore.Mvc.StatusCodeResult;
+using awl_raumreservierung.core;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -216,7 +217,7 @@ public class bookingsController : ControllerBase
 		{
 			return new ReturnModel(new StatusCodeResult(400)) { Message = "Neue Endzeit darf nicht vor Buchungsbeginn sein" };
 		}
-		bool inPast = booking.EndTime < DateTime.Now;
+		bool inPast = booking.EndTime < DateTime.Now.ToUniversalTime();
 		if (inPast)
 		{
 			return new ReturnModel(new StatusCodeResult(400)) { Message = "Buchungszeitraum ist bereits abgelaufen." };
