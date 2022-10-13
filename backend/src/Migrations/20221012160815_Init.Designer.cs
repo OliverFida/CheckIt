@@ -11,11 +11,13 @@ using awl_raumreservierung;
 namespace awl_raumreservierung.Migrations
 {
     [DbContext(typeof(checkITContext))]
-    [Migration("20221012161029_StudentCountBooking")]
-    partial class StudentCountBooking
+    [Migration("20221012160815_Init")]
+    partial class Init
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
-        {
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+		protected override void BuildTargetModel(ModelBuilder modelBuilder)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+		  {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
@@ -42,9 +44,6 @@ namespace awl_raumreservierung.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("StudentCount")
-                        .HasColumnType("INTEGER");
 
                     b.Property<long>("UserId")
                         .HasColumnType("INTEGER");

@@ -1,4 +1,6 @@
-﻿namespace awl_raumreservierung
+﻿using awl_raumreservierung.core;
+
+namespace awl_raumreservierung
 {
 	/// <summary>
 	/// Öffentliche Daten eines Raums

@@ -1,52 +1,35 @@
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 
-namespace awl_raumreservierung
-{
+namespace awl_raumreservierung.core {
 	/// <summary>
 	/// Stellt Extensions bereit
 	/// </summary>
-	public static class ExtensionMethods
-	{
+	public static class ExtensionMethods {
 		/// <summary>
 		/// Checkt, ob ein String Null oder Whitespace ist
 		/// </summary>
 		/// <param name="str"></param>
 		/// <returns></returns>
-		public static bool IsNullOrWhiteSpace(this string? str)
-		{
-			return String.IsNullOrWhiteSpace(str);
-		}
+		public static bool IsNullOrWhiteSpace(this string? str) => string.IsNullOrWhiteSpace(str);
 
 		/// <summary>
 		/// Konvertiert eine Zeit in UTC
 		/// </summary>
 		/// <param name="dateTime"></param>
 		/// <returns></returns>
-		public static DateTime? ToUtc(this DateTime? dateTime)
-		{
-			if (dateTime.HasValue)
-			{
-				return dateTime.Value.ToUniversalTime();
-			}
-
-			return dateTime;
-		}
+		public static DateTime? ToUtc(this DateTime? dateTime) => dateTime.HasValue ? dateTime.Value.ToUniversalTime() : dateTime;
 
 		/// <summary>
 		/// Castet Long zu Int
 		/// </summary>
 		/// <param name="num"></param>
 		/// <returns></returns>
-		public static int ToInt(this long num)
-		{
-			try
-			{
+		public static int ToInt(this long num) {
+			try {
 				return Convert.ToInt32(num);
-			}
-			catch
-			{
+			} catch {
 				return 0;
 			}
 		}
@@ -56,20 +39,14 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="usr"></param>
 		/// <returns></returns>
-		public static PublicUser ToPublicUser(this User usr)
-		{
-			return new PublicUser(usr);
-		}
+		public static PublicUser ToPublicUser(this User usr) => new(usr);
 
 		/// <summary>
 		/// Erzeugt einen PublicRoom aus einem Room
 		/// </summary>
 		/// <param name="room"></param>
 		/// <returns></returns>
-		public static PublicRoom ToPublicRoom(this Room room)
-		{
-			return new PublicRoom(room);
-		}
+		public static PublicRoom ToPublicRoom(this Room room) => new(room);
 
 		/// <summary>
 		/// Erzeugt ein PublicBooking aus einem Booking
@@ -77,19 +54,15 @@ namespace awl_raumreservierung
 		/// <param name="booking"></param>
 		/// <param name="helper"></param>
 		/// <returns></returns>
-		public static PublicBooking ToPublicBooking(this Booking booking, Helpers helper)
-		{
-			return new PublicBooking(booking, helper);
-		}
+		public static PublicBooking ToPublicBooking(this Booking booking, Helpers helper) => new(booking, helper);
 
 		/// <summary>
 		/// Liefert den Starttag der Woche
 		/// </summary>
 		/// <param name="dt"></param>
 		/// <returns></returns>
-		public static DateTime StartOfWeek(this DateTime dt)
-		{
-			int diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;
+		public static DateTime StartOfWeek(this DateTime dt) {
+			var diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;
 			return dt.AddDays(-1 * diff).Date;
 		}
 
@@ -98,9 +71,8 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="dt"></param>
 		/// <returns></returns>
-		public static DateTime EndOfNextWeek(this DateTime dt)
-		{
-			var diff = (DayOfWeek.Friday - dt.DayOfWeek + 7);
+		public static DateTime EndOfNextWeek(this DateTime dt) {
+			var diff = DayOfWeek.Friday - dt.DayOfWeek + 7;
 			return dt.AddDays(diff);
 		}
 
@@ -110,9 +82,8 @@ namespace awl_raumreservierung
 		/// <param name="princ"></param>
 		/// <param name="helper"></param>
 		/// <returns></returns>
-		public static User GetUser(this ClaimsPrincipal princ, Helpers helper)
-		{
-			string username = princ.FindFirstValue(ClaimTypes.NameIdentifier); // Note: Nicht Single line weil er sonst bs macht
+		public static User GetUser(this ClaimsPrincipal princ, Helpers helper) {
+			var username = princ.FindFirstValue(ClaimTypes.NameIdentifier); // Note: Nicht Single line weil er sonst bs macht
 			return helper.GetUser(username);
 		}
 
@@ -121,9 +92,8 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <param name="princ"></param>
 		/// <returns></returns>
-		public static string GetUsername(this ClaimsPrincipal princ)
-		{
-			string username = princ.FindFirstValue(ClaimTypes.NameIdentifier); // Note: Nicht Single line weil er sonst bs macht
+		public static string GetUsername(this ClaimsPrincipal princ) {
+			var username = princ.FindFirstValue(ClaimTypes.NameIdentifier); // Note: Nicht Single line weil er sonst bs macht
 			return username;
 		}
 
@@ -133,10 +103,7 @@ namespace awl_raumreservierung
 		/// <param name="princ"></param>
 		/// <param name="roleName">Name der Rolle</param>
 		/// <returns></returns>
-		public static bool IsInRole(this ClaimsPrincipal princ, string roleName)
-		{
-			return princ.FindAll(ClaimTypes.Role).Any(c => c.Type == ClaimTypes.Role && c.Value == roleName);
-		}
+		public static bool IsInRole(this ClaimsPrincipal princ, string roleName) => princ.FindAll(ClaimTypes.Role).Any(c => c.Type == ClaimTypes.Role && c.Value == roleName);
 
 		/// <summary>
 		/// /// Holt alle Bookings eines Raumes
@@ -144,35 +111,28 @@ namespace awl_raumreservierung
 		/// <param name="room"></param>
 		/// <param name="ctx"></param>
 		/// <returns></returns>
-		public static IEnumerable<Booking> GetBookings(this Room room, checkITContext ctx)
-		{
-			try
-			{
+		public static IEnumerable<Booking> GetBookings(this Room room, checkITContext ctx) {
+			try {
 				return ctx.Bookings.Where(b => b.Room == room.Id).ToArray();
-			}
-			catch
-			{
+			} catch {
 				return new List<Booking>().ToArray();
 			}
 		}
 
+		/// <summary>
+		/// Erstellt ein Fehlerreturnmodel
+		/// </summary>
+		/// <param name="controller"></param>
+		/// <param name="ex">Exception</param>
+		/// <returns></returns>
+		public static ReturnModel GetErrorModel(this ControllerBase controller, Exception ex) {
+			Debug.WriteLine("Fehler aufgetreten: ", ex);
 
-	/// <summary>
-	/// Erstellt ein Fehlerreturnmodel
-	/// </summary>
-	/// <param name="controller"></param>
-	/// <param name="ex">Exception</param>
-	/// <returns></returns>
-	public static ReturnModel GetErrorModel(this ControllerBase controller, Exception ex)
-	{
-		Debug.WriteLine("Fehler aufgetreten: ", ex);
-
-		controller.Response.StatusCode = StatusCodes.Status400BadRequest;
-		return new ReturnModel()
-		{
-			Status = 400,
-			Message = $"{ex}"
-		};
-	}
+			controller.Response.StatusCode = StatusCodes.Status400BadRequest;
+			return new ReturnModel() {
+				Status = 400,
+				Message = $"{ex}"
+			};
+		}
 	}
 }

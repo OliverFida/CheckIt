@@ -1,11 +1,11 @@
-version: "3.9"
+#version: "3.9"
 services:
-  checkit:
+  checkit_backend:
     image: checkit
     ports:
       - "5000:5000"
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:5000"
     volumes:
-      - .:/data
+      - ./checkit.db:/data/checkit.db
     restart: always

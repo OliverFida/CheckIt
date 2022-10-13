@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using awl_raumreservierung.core;
 
 namespace awl_raumreservierung.Controllers;
 

@@ -1,10 +1,11 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using awl_raumreservierung.classes;
 using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -29,8 +30,7 @@ public class loginController : ControllerBase
 	/// /// </summary>
 	/// <param name="logger"></param>
 	/// <param name="_context"></param>
-	public loginController(ILogger<loginController> logger, checkITContext _context)
-	{
+	public loginController(ILogger<loginController> logger, checkITContext _context) {
 		_logger = logger;
 		ctx = _context;
 		helper = new Helpers(ctx);
@@ -42,16 +42,14 @@ public class loginController : ControllerBase
 	/// <param name="model"></param>
 	/// <returns></returns>
 	[HttpPost(Name = "login")]
-    [ProducesResponseType(401)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(200)]
+	[ProducesResponseType(401)]
+	[ProducesResponseType(400)]
+	[ProducesResponseType(200)]
 
-	public IResult Post(LoginUserModel model)
-	{
+	public IResult Post(LoginUserModel model) {
 		var res = Login.CheckLogin(model.Username, model.Password, ctx);
 
-		var statuscode = res switch
-		{
+		var statuscode = res switch {
 			Login.LoginMessage.InactiveUser => StatusCodes.Status401Unauthorized,
 			Login.LoginMessage.InvalidCredentials => StatusCodes.Status401Unauthorized,
 			Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin => StatusCodes.Status200OK,
@@ -60,21 +58,17 @@ public class loginController : ControllerBase
 
 		Response.StatusCode = statuscode;
 
-		if (res == Login.LoginMessage.InactiveUser)
-		{
-			return Results.BadRequest(new { value = String.Empty, message = "Benutzerkonto deaktiviert! Kontaktieren Sie einen Administrator." });
+		if(res == Login.LoginMessage.InactiveUser) {
+			return Results.BadRequest(new { value = string.Empty, message = "Benutzerkonto deaktiviert! Kontaktieren Sie einen Administrator." });
 		}
 
-		if (res == Login.LoginMessage.InvalidCredentials)
-		{
-			return Results.BadRequest(new { value = String.Empty, message = "Ungültige Benutzerdaten angegeben!" });
+		if(res == Login.LoginMessage.InvalidCredentials) {
+			return Results.BadRequest(new { value = string.Empty, message = "Ungültige Benutzerdaten angegeben!" });
 		}
 
-		if (res is Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin)
-		{
+		if(res is Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin) {
 			var claims = new List<Claim>();
-			if (res == Login.LoginMessage.SuccessAsAdmin)
-			{
+			if(res == Login.LoginMessage.SuccessAsAdmin) {
 				claims.Add(new Claim(ClaimTypes.Role, "Admin"));
 			}
 
@@ -82,9 +76,8 @@ public class loginController : ControllerBase
 
 			var issuer = Globals.AppBuilder.Configuration["Jwt:Issuer"];
 			var audience = Globals.AppBuilder.Configuration["Jwt:Audience"];
-			var key = Encoding.ASCII.GetBytes(Globals.AppBuilder .Configuration["Jwt:Key"]);
-			var tokenDescriptor = new SecurityTokenDescriptor
-			{
+			var key = Encoding.ASCII.GetBytes(Globals.AppBuilder.Configuration["Jwt:Key"]);
+			var tokenDescriptor = new SecurityTokenDescriptor {
 				Subject = new ClaimsIdentity(
 					new[]
 					{
@@ -103,10 +96,8 @@ public class loginController : ControllerBase
 			var token = tokenHandler.CreateToken(tokenDescriptor);
 			var stringToken = tokenHandler.WriteToken(token);
 			return Results.Ok(
-				new
-				{
-					Role = res switch
-					{
+				new {
+					Role = res switch {
 						Login.LoginMessage.SuccessAsAdmin => UserRole.Admin,
 						Login.LoginMessage.Success => UserRole.User,
 						_ => throw new Exception()
@@ -124,8 +115,7 @@ public class loginController : ControllerBase
 	/// </summary>
 	[HttpPost("/logout")]
 	[Authorize]
-	public void PostLogout()
-	{
+	public void PostLogout() {
 		//   var authUsername = User.FindFirstValue(ClaimTypes.NameIdentifier);
 	}
 }

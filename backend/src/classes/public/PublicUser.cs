@@ -54,7 +54,7 @@ namespace awl_raumreservierung
 		///
 		/// /// </summary>
 		/// <param name="user"></param>
-		public PublicUser(awl_raumreservierung.User user)
+		public PublicUser(User user)
 		{
 			Username = user.Username;
 			FirstName = user.Firstname;

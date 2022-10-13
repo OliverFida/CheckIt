@@ -111,5 +111,5 @@ Die Konfiguration des Images findet über die bereitgestellen Docker-Compose-Dat
 ##### Datenbankpfad
 
 1. Datei `/home/checkit/checkit/backend/docker-compose.yaml` öffnen
-2. Unter `services` - `checkit_backend` - `volumes` den Pfad vor `:/data` auf den Wunschpfad ändern. Z.B. `~/ordner:/data` lässt den Dienst die Datenbank unter `~/ordner/`speichern.
+2. Unter `services` - `checkit_backend` - `volumes` den Pfad vor `:/data/checkit.db` auf den Wunschpfad ändern. Z.B. `~/ordner/checkit.db:/data` lässt den Dienst die Datenbank unter `~/ordner/checkit.db`speichern.
 3. Mittels `docker-compose down && docker-compose up -d` den Dienst neustarten.

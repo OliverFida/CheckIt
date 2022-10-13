@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace awl_raumreservierung
+namespace awl_raumreservierung.db
 {
 	/// <summary>
 	/// DB-Raum

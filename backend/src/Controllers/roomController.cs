@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using awl_raumreservierung.classes;
+using awl_raumreservierung.core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace awl_raumreservierung.Controllers;
@@ -20,8 +22,7 @@ public class roomsController : ControllerBase
 	/// </summary>
 	/// <param name="logger"></param>
 	/// <param name="_context"></param>
-	public roomsController(ILogger<roomsController> logger, checkITContext _context)
-	{
+	public roomsController(ILogger<roomsController> logger, checkITContext _context) {
 		_logger = logger;
 		ctx = _context;
 		helper = new Helpers(ctx);
@@ -32,10 +33,7 @@ public class roomsController : ControllerBase
 	/// <returns>Array der Räume in der Datenbank</returns>
 	[HttpGet()]
 	[Authorize]
-	public Room[] GetRooms()
-	{
-		return ctx.Rooms.ToArray();
-	}
+	public Room[] GetRooms() => ctx.Rooms.ToArray();
 	/// <summary>
 	/// Erstellt einen neuen Raum.
 	/// </summary>
@@ -43,24 +41,20 @@ public class roomsController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom, wenn erfolgreich, in "Data".</returns>
 	[HttpPut()]
 	[Authorize(Roles = "Admin")]
-	public ReturnModel Add(CreateRoomModel model)
-	{
-		Room room = new()
-		{
+	public ReturnModel Add(CreateRoomModel model) {
+		Room room = new() {
 			Number = model.Number,
 			Name = model.Name,
 			Active = model.Active
 		};
 
-		ctx.Rooms.Add(room);
-		ctx.SaveChanges();
-		return new ReturnModel(new StatusCodeResult(201))
-		{
+		_ = ctx.Rooms.Add(room);
+		_ = ctx.SaveChanges();
+		return new ReturnModel(new StatusCodeResult(201)) {
 			Message = "Raum erfolgreich erstellt.",
 			Data = room.ToPublicRoom()
 		};
 	}
-
 
 	/// <summary>
 	/// Entfernt einen Raum aus der Datebank.
@@ -70,16 +64,14 @@ public class roomsController : ControllerBase
 	[HttpDelete("{roomId}")]
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public ReturnModel Remove(int roomId)
-	{
-		if (helper.DoesRoomExist(roomId))
-		{
+	public ReturnModel Remove(int roomId) {
+		if(helper.DoesRoomExist(roomId)) {
 			var room = helper.GetRoom(roomId);
-			ctx.Rooms.Remove(room);
-			ctx.SaveChanges();
+			_ = ctx.Rooms.Remove(room);
+			_ = ctx.SaveChanges();
 		}
-		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
-		{
+
+		return new ReturnModel(StatusCode(StatusCodes.Status200OK)) {
 			Message = "Raum erfolgreich entfernt."
 		};
 	}
@@ -92,23 +84,20 @@ public class roomsController : ControllerBase
 	[HttpPatch("{roomId}")]
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public ReturnModel Edit(long roomId, CreateRoomModel model)
-	{
+	public ReturnModel Edit(long roomId, CreateRoomModel model) {
 
-		if (!helper.DoesRoomExist(roomId))
-		{
-			return new ReturnModel(new StatusCodeResult(404))
-			{
+		if(!helper.DoesRoomExist(roomId)) {
+			return new ReturnModel(new StatusCodeResult(404)) {
 				Message = "Raum nicht gefunden"
 			};
 		}
-		Room room = helper.GetRoom(roomId);
+
+		var room = helper.GetRoom(roomId);
 		room.Number = model.Number;
 		room.Name = model.Name;
-		ctx.Rooms.Update(room);
-		ctx.SaveChanges();
-		return new ReturnModel(StatusCode(StatusCodes.Status200OK))
-		{
+		_ = ctx.Rooms.Update(room);
+		_ = ctx.SaveChanges();
+		return new ReturnModel(StatusCode(StatusCodes.Status200OK)) {
 			Data = room.ToPublicRoom(),
 			Message = "Raum erfolgreich editiert."
 		};
@@ -120,21 +109,18 @@ public class roomsController : ControllerBase
 	/// <returns>ReturnModel mit Statusnachricht und PublicRoom in 'Data', wenn erfolgreich.</returns>
 	[HttpPatch("{roomId}/activate")]
 	[Authorize(Roles = "Admin")]
-	public ReturnModel Activate(long roomId)
-	{
-		if (!helper.DoesRoomExist(roomId))
-		{
-			return new ReturnModel(new StatusCodeResult(404))
-			{
+	public ReturnModel Activate(long roomId) {
+		if(!helper.DoesRoomExist(roomId)) {
+			return new ReturnModel(new StatusCodeResult(404)) {
 				Message = "Raum wurde nicht gefunden."
 			};
 		}
-		Room room = helper.GetRoom(roomId);
+
+		var room = helper.GetRoom(roomId);
 		room.Active = true;
-		ctx.Rooms.Update(room);
-		ctx.SaveChanges();
-		return new ReturnModel(new StatusCodeResult(201))
-		{
+		_ = ctx.Rooms.Update(room);
+		_ = ctx.SaveChanges();
+		return new ReturnModel(new StatusCodeResult(201)) {
 			Data = room.ToPublicRoom(),
 			Message = "Raum erfolgreich aktiviert!"
 		};
@@ -148,21 +134,18 @@ public class roomsController : ControllerBase
 	[HttpPatch("{roomId}/deactivate")]
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
-	public ReturnModel Deactivate(long roomId)
-	{
-		if (!helper.DoesRoomExist(roomId))
-		{
-			return new ReturnModel(new StatusCodeResult(404))
-			{
+	public ReturnModel Deactivate(long roomId) {
+		if(!helper.DoesRoomExist(roomId)) {
+			return new ReturnModel(new StatusCodeResult(404)) {
 				Message = "Raum wurde nicht gefunden."
 			};
 		}
-		Room room = helper.GetRoom(roomId);
+
+		var room = helper.GetRoom(roomId);
 		room.Active = false;
-		ctx.Rooms.Update(room);
-		ctx.SaveChanges();
-		return new ReturnModel(new StatusCodeResult(200))
-		{
+		_ = ctx.Rooms.Update(room);
+		_ = ctx.SaveChanges();
+		return new ReturnModel(new StatusCodeResult(200)) {
 			Data = room.ToPublicRoom(),
 			Message = "Raum erfolgreich deaktiviert!"
 		};
