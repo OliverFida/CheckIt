@@ -13,7 +13,6 @@ jobs:
             working-directory: backend
     runs-on: ubuntu-latest
     steps:
-    - run: cd backend
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
