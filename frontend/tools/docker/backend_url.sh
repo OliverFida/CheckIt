@@ -1,1 +1,0 @@
-echo "$CHECKIT_BACKEND_URL" > /www/backendurl.json

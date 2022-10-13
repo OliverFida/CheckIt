@@ -1,0 +1,1 @@
+echo "$CHECKIT_BACKEND_CONFIG" > /www/backend_config.json
