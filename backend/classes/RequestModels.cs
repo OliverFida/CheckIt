@@ -195,6 +195,12 @@ namespace awl_raumreservierung
 		public string Username { get; set; }
 
 /// <summary>
+/// Schüleranzahl
+/// </summary>
+/// <value></value>
+		public int? StudentCount {get; set;}
+
+/// <summary>
 /// 
 /// </summary>
 /// <param name="username"></param>
@@ -226,6 +232,13 @@ namespace awl_raumreservierung
 		/// </summary>
 		/// <value></value>
 		public string? Note { get; set; }
+
+		
+/// <summary>
+/// Schüleranzahl
+/// </summary>
+/// <value></value>
+		public int StudenCount {get; set;}
 	}
 
 	/// <summary>

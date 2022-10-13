@@ -16,7 +16,8 @@ namespace awl_raumreservierung
 		/// <summary>
 		///
 		/// </summary>
-		public checkITContext() { }
+		public checkITContext() { 
+		}
 
 		/// <summary>
 		///
@@ -44,53 +45,13 @@ namespace awl_raumreservierung
 		public virtual DbSet<User> Users { get; set; } = null!;
 
 		/// <summary>
-		///
-		/// </summary>
-		/// <param name="optionsBuilder"></param>
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			if (!optionsBuilder.IsConfigured)
-			{
-				optionsBuilder.UseSqlite($"Datasource={Globals.AppBuilder.Configuration["Database:Path"]}");
-			}
-		}
-
-		/// <summary>
-		///
+		/// 
 		/// </summary>
 		/// <param name="modelBuilder"></param>
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			modelBuilder.Entity<Booking>(entity =>
-			{
-				entity.HasIndex(e => e.Id, "IX_Bookings_ID").IsUnique();
-
-				entity.Property(e => e.Id).HasColumnName("ID");
-
-				entity.Property(e => e.UserId).HasColumnName("UserID");
-			});
-
-			modelBuilder.Entity<Room>(entity =>
-			{
-				entity.ToTable("Room");
-
-				entity.HasIndex(e => e.Id, "IX_Room_ID").IsUnique();
-
-				entity.Property(e => e.Id).HasColumnName("ID");
-			});
-
-			modelBuilder.Entity<User>(entity =>
-			{
-				entity.ToTable("User");
-
-				entity.HasIndex(e => e.Id, "IX_User_ID").IsUnique();
-
-				entity.Property(e => e.Id).HasColumnName("ID");
-			});
-
-			OnModelCreatingPartial(modelBuilder);
+		 protected override void OnModelCreating(ModelBuilder modelBuilder) {
+			// Admin seeden
+			modelBuilder.Entity<User>().HasData(new User { Username = "admin", Firstname = "Admin", Lastname = "Benutzer", Lastchange = DateTime.MinValue, Passwd = "admin", Role = UserRole.Admin, Id = 1, Active = true });
 		}
 
-		partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-	}
+}
 }

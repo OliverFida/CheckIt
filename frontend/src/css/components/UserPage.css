@@ -1,0 +1,13 @@
+table.useredit th {
+    text-align: left;
+}
+
+table.userprofile td {
+    padding: 10px 10px;
+    width: 50%;
+    vertical-align: middle;
+}
+
+.bookingNotes {
+    max-height: 200px;
+}

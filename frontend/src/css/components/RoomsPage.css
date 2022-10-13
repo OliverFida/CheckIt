@@ -1,0 +1,11 @@
+table.rooms th {
+    text-align: left;
+}
+
+table.rooms td {
+    vertical-align: middle;
+}
+
+td.deactivated {
+    background-color: grey;
+}

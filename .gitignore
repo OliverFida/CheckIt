@@ -406,3 +406,5 @@ checkit.db
 /backend/obj
 backend/out/checkit_release.tgz
 backend_
+/backend/checkit.db-wal
+/backend/checkit.db-shm

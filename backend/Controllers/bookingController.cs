@@ -132,7 +132,8 @@ public class bookingsController : ControllerBase
 					UserId = userId,
 					CreateTime = DateTime.Now,
 					CreatedBy = User.GetUser(helper)?.Id,
-					Note = model.Note
+					Note = model.Note,
+					StudentCount = model.StudentCount
 				};
 			ctx.Bookings.Add(book);
 
@@ -229,6 +230,7 @@ public class bookingsController : ControllerBase
 		}
 		booking.Note = model.Note;
 		booking.EndTime = model.EndTime;
+		booking.StudentCount = model.StudenCount;
 		ctx.Bookings.Update(booking);
 		ctx.SaveChanges();
 		return new ReturnModel(new StatusCodeResult(201)) { Data = booking.ToPublicBooking(helper), Message = "Buchung erfolgreich bearbeitet!" };
