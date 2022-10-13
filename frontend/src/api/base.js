@@ -1,17 +1,11 @@
 import axios from 'axios';
 
-const SERVER_CONF = {
-    PROTOCOL: "https",
-    ADDRESS: "10.0.5.91",
-    // ADDRESS: "localhost",
-    PORT: "7061"
-};
+var SERVER_CONF = {};
 
-// const SERVER_CONF = {
-//     PROTOCOL: "http",
-//     ADDRESS: "10.0.3.19",
-//     PORT: "5000"
-// };
+const init = async () => {
+    SERVER_CONF = await (await fetch('./backend_config.json')).json();
+};
+init();
 
 async function apiRequest(path, method, data){
     var returnVal = null;
