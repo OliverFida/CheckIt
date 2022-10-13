@@ -95,12 +95,62 @@ function checkIsOwn(booking){
     return false;
 }
 
+function getEndDateFromDuration(startDate, duration){
+    var date = moment(startDate);
+
+    // Parse startString
+    var startString = startDate.format('HH:mm');
+
+    // Find start lesson
+    var startLesson = timesMap.find(e => e.start === startString);
+
+    // Calc end lesson key
+    var endLessonKey = startLesson.key + parseInt(duration) - 1;
+    
+    // Find end lesson
+    var endLesson = timesMap.find(e => e.key === endLessonKey);
+
+    // Parse endString
+    var endHours = endLesson.end.substring(0, 2);
+    var endMinutes = endLesson.end.substring(3, 5);
+    
+    // Set date
+    date.set('hours', endHours);
+    date.set('minutes', endMinutes);
+
+    return date;
+}
+
+function getDurationFromDates(startDate, endDate){
+    var duration;
+
+    // Parse startString
+    var startString = startDate.format('HH:mm');
+
+    // Find start lesson
+    var startLesson = timesMap.find(e => e.start === startString);
+
+    // Parse endString
+    var endString = endDate.format('HH:mm');
+
+    // Find end lesson
+    var endLesson = timesMap.find(e => e.end === endString);
+
+    // Calculate duration
+    duration = endLesson.key - startLesson.key + 1;
+    
+    return duration;
+}
+
 var exports = {
     getNewStartDate,
     getNewEndDate,
     checkLessonOver,
     findBooking,
+    getStartDateFromUtc,
     getEndDateFromUtc,
-    checkIsOwn
+    checkIsOwn,
+    getEndDateFromDuration,
+    getDurationFromDates
 };
 export default exports;

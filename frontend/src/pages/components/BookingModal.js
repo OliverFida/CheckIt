@@ -18,23 +18,28 @@ export default function BookingModal(){
         setState(hpContext.bookings.selected);
     }, [hpContext.uiControl.bookingModal]);
 
+    // Nach dem laden des Status
     useEffect(() => {
         if(state === null) return;
 
+        var startDate, endDate, duration;
+
         if(state.mode === "new" && state.booking === null){
-            var startDate = BookingHelper.getNewStartDate(hpContext, state.day, {key: state.lesson});
-            var endDate = BookingHelper.getNewEndDate(startDate);
+            startDate = BookingHelper.getNewStartDate(hpContext, state.day, {key: state.lesson});
+            endDate = BookingHelper.getNewEndDate(startDate);
             
-            var newBooking = {startTime: startDate.toJSON(), endTime: endDate.toJSON(), note: "", studentCount: 15};
+            var newBooking = {startTime: startDate.toJSON(), endTime: endDate.toJSON(), note: "", studentCount: 15, duration: 1};
             
             setState({...state, booking: newBooking});
         }
         
         if(state.mode === "edit" || state.mode === "view"){
-            var endDate = BookingHelper.getEndDateFromUtc(state.booking.endTime);
+            startDate = BookingHelper.getStartDateFromUtc(state.booking.startTime);
+            endDate = BookingHelper.getEndDateFromUtc(state.booking.endTime);
+            duration = BookingHelper.getDurationFromDates(startDate, endDate);
 
             if(endDate.toJSON() !== state.booking.endTime){
-                setState({...state, booking: {...state.booking, endTime: endDate.toJSON()}});
+                setState({...state, booking: {...state.booking, endTime: endDate.toJSON(), duration: duration}});
             }
         }
     }, [state]);
@@ -48,13 +53,17 @@ export default function BookingModal(){
     };
 
     const onSubmit = async () => {
+        var startDate, endDate;
+        
+        startDate = BookingHelper.getStartDateFromUtc(state.booking.startTime);
+        endDate = BookingHelper.getEndDateFromDuration(startDate, state.booking.duration);
+
         if(state.mode === "new"){
-            await BookingsAPI.book(hpContext.roomSelection.id, state.booking.startTime, state.booking.endTime, state.booking.note, state.booking.studentCount);
+            await BookingsAPI.book(hpContext.roomSelection.id, startDate.toJSON(), endDate.toJSON(), state.booking.note, state.booking.studentCount);
         }
         
         if(state.mode === "edit"){
-            console.log(state.booking.note);
-            await BookingsAPI.editBooking(state.booking.id, state.booking.endTime, state.booking.note);
+            await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note);
         }
 
         await setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingModal: false}, bookings:{...hpContext.bookings, selected: null, reload: true}});
@@ -67,7 +76,7 @@ export default function BookingModal(){
             </Modal.Header>
             <Modal.Body>
                 <RoomDisplay />
-                {/* <DurationPicker state={state} setState={setState} /> */}
+                <DurationPicker state={state} setState={setState} />
                 {/* <StudentsPicker state={state} setState={setState} /> */}
                 <NoteField state={state} setState={setState} />
             </Modal.Body>
@@ -92,18 +101,18 @@ function RoomDisplay(){
 }
 
 function DurationPicker({state, setState}){
-    const onChange = async () => {
-
+    const onChange = async (e) => {
+        setState({...state, booking:{...state.booking, duration: e.target.value}});
     };
 
     return(
         <Form.Group className="mb-3" controlId="bookingDuration">
             <Form.Label>Dauer</Form.Label>
-            <Form.Select defaultValue={1} onChange={onChange} disabled={false}>
+            <Form.Select value={state?.booking?.duration ? state.booking.duration : 1} onChange={onChange} disabled={false}>
                 <option value="1">1 Stunde</option>
-                <option value="2">2 Stunde</option>
-                <option value="3">3 Stunde</option>
-                <option value="4">4 Stunde</option>
+                <option value="2">2 Stunden</option>
+                <option value="3">3 Stunden</option>
+                <option value="4">4 Stunden</option>
             </Form.Select>
         </Form.Group>
     );
