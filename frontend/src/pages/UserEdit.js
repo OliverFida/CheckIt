@@ -5,6 +5,8 @@ import AppNavBar from './components/AppNavBar';
 import AppNavUserEdit from './components/AppNavUserEdit';
 import UserEditModal from './components/UserEditModal';
 import UserEditContextProvider, {UserEditContext} from '../contexts/UserEditContext';
+
+
 // Style imports
 import '../css/components/UserPage.css';
 // Api imports
@@ -35,6 +37,7 @@ function UserEditBody(){
                                 <th>Benutzername</th>                        
                                 <th>Vorname</th>
                                 <th>Nachname</th>
+                                <th>Rolle</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -70,6 +73,7 @@ function UserEditRow(){
                 <td valign='middle' key={`user${user.username}`}>{user.username}</td>
                 <td valign='middle' key={`user${user.firstName}`}>{user.firstName}</td>
                 <td valign='middle' key={`user${user.lastname}`}>{user.lastname}</td>
+                <td valign='middle' key={`user_role${user.role}`}>{user.role}</td>
                 <td>
                     <ButtonGroup>
                         <Button onClick={() => {onEdit(user)}} className="my-1 me-1" size="sm">
