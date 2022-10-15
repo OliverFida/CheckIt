@@ -61,7 +61,7 @@ public class adminController : ControllerBase {
 					Username = model.Username,
 					Firstname = model.FirstName,
 					Lastname = model.LastName,
-					Passwd = model.Password,
+					PlainTextPassword = model.Password,
 					Lastchange = DateTime.Now,
 					Role = model.Role,
 					Active = true
@@ -251,7 +251,7 @@ public class adminController : ControllerBase {
 			var isAdmin = User.IsInRole("Admin");
 			var user = helper.GetUser(username);
 
-			user.Passwd = model.Password;
+			user.PlainTextPassword = model.Password;
 			user.Lastchange = DateTime.Now;
 			ctx.Users.Update(user);
 			ctx.SaveChanges();

@@ -4,7 +4,14 @@ using System;
 #nullable disable
 
 namespace awl_raumreservierung.Migrations {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class Init : Migration {
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="migrationBuilder"></param>
 		protected override void Up(MigrationBuilder migrationBuilder) {
 			migrationBuilder.CreateTable(
 				 name: "Bookings",
@@ -48,7 +55,10 @@ namespace awl_raumreservierung.Migrations {
 				 },
 				 constraints: table => table.PrimaryKey("PK_Users", x => x.Id));
 		}
-
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="migrationBuilder"></param>
 		protected override void Down(MigrationBuilder migrationBuilder) {
 			migrationBuilder.DropTable(
 				 name: "Bookings");

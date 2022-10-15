@@ -82,6 +82,7 @@ namespace awl_raumreservierung {
 		/// </summary>
 		/// <value></value>
 		public string Password { get; set; } = null!;
+
 	}
 
 	/// <summary>

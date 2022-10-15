@@ -17,7 +17,7 @@ namespace awl_raumreservierung.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
 
-            modelBuilder.Entity("awl_raumreservierung.Booking", b =>
+            modelBuilder.Entity("awl_raumreservierung.db.Booking", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace awl_raumreservierung.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("awl_raumreservierung.Room", b =>
+            modelBuilder.Entity("awl_raumreservierung.db.Room", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,7 +72,7 @@ namespace awl_raumreservierung.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("awl_raumreservierung.User", b =>
+            modelBuilder.Entity("awl_raumreservierung.db.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -118,7 +118,7 @@ namespace awl_raumreservierung.Migrations
                             Firstname = "Admin",
                             Lastchange = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Lastname = "Benutzer",
-                            Passwd = "admin",
+                            Passwd = "$2a$11$YfH.ZTiaAw36LLbXxTTDs.yVIreaGcEZ9lQsIjwAotpuCBPY7GVyW",
                             Role = 1,
                             Username = "admin"
                         });

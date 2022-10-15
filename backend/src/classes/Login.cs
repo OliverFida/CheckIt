@@ -20,7 +20,10 @@ namespace awl_raumreservierung.classes {
 			}
 
 			// User mit username holen
-			return user switch { { Active: false } => LoginMessage.InactiveUser, { Passwd: var pw, Role: var role } when pw == password => role == UserRole.Admin ? LoginMessage.SuccessAsAdmin : LoginMessage.Success, { Passwd: var pw } when pw == password => LoginMessage.Success,
+			return user switch { 
+				{ Active: false } => LoginMessage.InactiveUser,
+				{ Role: UserRole.Admin } when user.IsPasswordCorrect(password) => LoginMessage.SuccessAsAdmin, 
+				{ Role: UserRole.User } when user.IsPasswordCorrect(password)  => LoginMessage.Success,
 				_ => LoginMessage.InvalidCredentials
 			};
 		}

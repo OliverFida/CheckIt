@@ -64,7 +64,7 @@ public class userController : ControllerBase
 		try {
 			var user = User.GetUser(helper);
 
-			user.Passwd = model.Password;
+			user.PlainTextPassword = model.Password;
 
 			ctx.Users.Update(user);
 			ctx.SaveChanges();

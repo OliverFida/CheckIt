@@ -46,9 +46,9 @@ namespace awl_raumreservierung {
 		/// 
 		/// </summary>
 		/// <param name="modelBuilder"></param>
-		protected override void OnModelCreating(ModelBuilder modelBuilder) =>
+		protected override void OnModelCreating(ModelBuilder modelBuilder) {
 			// Admin seeden
-			modelBuilder.Entity<User>().HasData(new User { Username = "admin", Firstname = "Admin", Lastname = "Benutzer", Lastchange = DateTime.MinValue, Passwd = "admin", Role = UserRole.Admin, Id = 1, Active = true });
-
+			modelBuilder.Entity<User>().HasData(new User { Username = "admin", Firstname = "Admin", Lastname = "Benutzer", Lastchange = DateTime.MinValue, Passwd = BCrypt.Net.BCrypt.HashPassword("admin"), Role = UserRole.Admin, Id = 1, Active = true });
+		}
 	}
 }
