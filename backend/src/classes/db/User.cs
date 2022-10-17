@@ -1,21 +1,28 @@
-﻿namespace awl_raumreservierung.db {
+﻿using BC = BCrypt.Net.BCrypt;
+
+namespace awl_raumreservierung.db {
 	/// <summary>
 	///
 	/// </summary>
 	public partial class User {
 		private string username = null!;
+		private string passwd = null!;
 
 		/// <summary>
 		/// User-ID
 		/// </summary>
 		/// <value></value>
-		public long Id { get; set; }
+		public long Id {
+			get; set;
+		}
 
 		/// <summary>
 		/// Username
 		/// </summary>
 		/// <value></value>
-		public string Username { get => username.ToLower(); set => username = value.ToLower(); }
+		public string Username {
+			get => username.ToLower(); set => username = value.ToLower();
+		}
 		/// <summary>
 		/// Vorname
 		/// </summary>
@@ -32,31 +39,47 @@
 		/// Passwort
 		/// </summary>
 		/// <value></value>
-		public string Passwd { get; set; } = null!;
+		public string Passwd { get => passwd; set => passwd = value; }
+
+		/// <summary>
+		/// Bietet das Setzen des Passwords an, es wird automatisch gehasht
+		/// </summary>
+		/// <returns></returns>
+		public string PlainTextPassword {
+			set => passwd = BC.HashPassword(value);
+		}
 
 		/// <summary>
 		/// Letzer Logon
 		/// </summary>
 		/// <value></value>
-		public DateTime? Lastlogon { get; set; }
+		public DateTime? Lastlogon {
+			get; set;
+		}
 
 		/// <summary>
 		/// Letzte Datenänderung
 		/// </summary>
 		/// <value></value>
-		public DateTime? Lastchange { get; set; }
+		public DateTime? Lastchange {
+			get; set;
+		}
 
 		/// <summary>
 		/// Ist User aktiv
 		/// </summary>
 		/// <value></value>
-		public bool Active { get; set; }
+		public bool Active {
+			get; set;
+		}
 
 		/// <summary>
 		/// Userrolle
 		/// </summary>
 		/// <value></value>
-		public UserRole Role { get; set; }
+		public UserRole Role {
+			get; set;
+		}
 
 		/// <summary>
 		/// 
@@ -65,6 +88,13 @@
 			_ = DateTime.SpecifyKind(Lastlogon ?? DateTime.Now, DateTimeKind.Utc);
 			_ = DateTime.SpecifyKind(Lastchange ?? DateTime.Now, DateTimeKind.Utc);
 		}
+
+		/// <summary>
+		/// Vrifiziert das Passwort eines Nutzers
+		/// </summary>
+		/// <param name="password">Plaintext-Passwort, das geprüft werden soll</param>
+		/// <returns></returns>
+		public bool IsPasswordCorrect(string password) => BC.Verify(password, Passwd);
 	}
 
 	/// <summary>

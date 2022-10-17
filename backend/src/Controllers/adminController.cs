@@ -1,6 +1,6 @@
+using awl_raumreservierung.core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using awl_raumreservierung.core;
 
 namespace awl_raumreservierung.Controllers;
 
@@ -10,8 +10,7 @@ namespace awl_raumreservierung.Controllers;
 [ApiController]
 [Route("[controller]")]
 #pragma warning disable IDE1006 // Naming Styles
-public class adminController : ControllerBase
-{
+public class adminController : ControllerBase {
 	private readonly ILogger<adminController> _logger;
 
 	private readonly checkITContext ctx;
@@ -22,8 +21,7 @@ public class adminController : ControllerBase
 	/// </summary>
 	/// <param name="logger"></param>
 	/// <param name="_context"></param>
-	public adminController(ILogger<adminController> logger, checkITContext _context)
-	{
+	public adminController(ILogger<adminController> logger, checkITContext _context) {
 		_logger = logger;
 		ctx = _context;
 		helper = new Helpers(ctx);
@@ -38,26 +36,20 @@ public class adminController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(400)]
 	[ProducesResponseType(201)]
-	public ReturnModel Put(CreateUserModel model)
-	{
-		try
-		{
-			if (model.Username.IsNullOrWhiteSpace())
-			{
+	public ReturnModel Put(CreateUserModel model) {
+		try {
+			if(model.Username.IsNullOrWhiteSpace()) {
 				Response.StatusCode = StatusCodes.Status404NotFound;
-				return new ReturnModel()
-				{
+				return new ReturnModel() {
 					Status = 400,
 					StatusMessage = "error",
 					Message = "Das Feld Benutzername darf nicht leer sein!"
 				};
 			}
 
-			if (helper.DoesUserExist(model.Username))
-			{
+			if(helper.DoesUserExist(model.Username)) {
 				Response.StatusCode = StatusCodes.Status400BadRequest;
-				return new ReturnModel()
-				{
+				return new ReturnModel() {
 					Status = 400,
 					StatusMessage = "error",
 					Message = "Ein Benutzer mit diesem Benutzernamen existiert bereits!"
@@ -65,12 +57,11 @@ public class adminController : ControllerBase
 			}
 
 			ctx.Add(
-				new User
-				{
+				new User {
 					Username = model.Username,
 					Firstname = model.FirstName,
 					Lastname = model.LastName,
-					Passwd = model.Password,
+					PlainTextPassword = model.Password,
 					Lastchange = DateTime.Now,
 					Role = model.Role,
 					Active = true
@@ -80,9 +71,7 @@ public class adminController : ControllerBase
 			Response.StatusCode = StatusCodes.Status201Created;
 
 			return new ReturnModel() { Message = $"Benutzer {model.Username} erfolgreich angelegt!", Data = helper.GetUser(model.Username ?? "").ToPublicUser() };
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -98,20 +87,17 @@ public class adminController : ControllerBase
 	[ProducesResponseType(404)]
 	[ProducesResponseType(400)]
 	[ProducesResponseType(200)]
-	public ReturnModel UpdateUser(string username, UpdateUserModel model)
-	{
-		try
-		{
-			if (!helper.DoesUserExist(username))
-			{
+	public ReturnModel UpdateUser(string username, UpdateUserModel model) {
+		try {
+			if(!helper.DoesUserExist(username)) {
 				Response.StatusCode = 404;
-				return new ReturnModel
-				{
+				return new ReturnModel {
 					Status = 404,
 					StatusMessage = "error",
 					Message = "Benutzer konnte nicht gefunden werden!"
 				};
 			}
+
 			var user = helper.GetUser(username);
 
 			user.Firstname = model.FirstName;
@@ -124,9 +110,7 @@ public class adminController : ControllerBase
 
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel() { Message = $"Benutzer {username} erfolgreich bearbeitet!", Data = user.ToPublicUser() };
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -140,12 +124,9 @@ public class adminController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(400)]
 	[ProducesResponseType(200)]
-	public ReturnModel Delete(string username)
-	{
-		try
-		{
-			if (username == User.GetUsername())
-			{
+	public ReturnModel Delete(string username) {
+		try {
+			if(username == User.GetUsername()) {
 				throw new ArgumentException("User kann sich nicht selbst deaktivieren.");
 			}
 
@@ -156,9 +137,7 @@ public class adminController : ControllerBase
 
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel() { Message = $"Benutzer {username} erfolgreich gelöscht!" };
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -172,24 +151,19 @@ public class adminController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(400)]
 	[ProducesResponseType(200)]
-	public ReturnModel Post(string username)
-	{
-		try
-		{
+	public ReturnModel Post(string username) {
+		try {
 			var user = helper.GetUser(username);
 
 			helper.SetUserStatus(user, true);
 
 			Response.StatusCode = StatusCodes.Status200OK;
-			return new ReturnModel()
-			{
+			return new ReturnModel() {
 				Status = 200,
 				Message = $"Benutzer {username} wurde aktiviert!",
 				Data = user.ToPublicUser()
 			};
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -203,12 +177,9 @@ public class adminController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(400)]
 	[ProducesResponseType(200)]
-	public ReturnModel PostDeactivate(string username)
-	{
-		try
-		{
-			if (username == User.GetUsername())
-			{
+	public ReturnModel PostDeactivate(string username) {
+		try {
+			if(username == User.GetUsername()) {
 				throw new ArgumentException("User kann sich nicht selbst deaktivieren.");
 			}
 
@@ -217,15 +188,12 @@ public class adminController : ControllerBase
 			helper.SetUserStatus(user, false);
 
 			Response.StatusCode = StatusCodes.Status200OK;
-			return new ReturnModel()
-			{
+			return new ReturnModel() {
 				Status = 200,
 				Message = $"Benutzer {username} wurde deaktiviert!",
 				Data = user.ToPublicUser()
 			};
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -238,15 +206,11 @@ public class adminController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(200)]
 	[ProducesResponseType(500)]
-	public PublicUser[] Get()
-	{
-		try
-		{
+	public PublicUser[] Get() {
+		try {
 			var users = ctx.Users.Select(u => u.ToPublicUser()).ToArray();
 			return users;
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			_logger.LogError("Fehler aufgetreten: ", ex);
 			Response.StatusCode = StatusCodes.Status500InternalServerError;
 			return Array.Empty<PublicUser>();
@@ -261,14 +225,10 @@ public class adminController : ControllerBase
 	[Authorize(Roles = "Admin")]
 	[ProducesResponseType(200)]
 	[ProducesResponseType(500)]
-	public Dictionary<int, string> GetRoles()
-	{
-		try
-		{
+	public Dictionary<int, string> GetRoles() {
+		try {
 			return Enum.GetValues(typeof(UserRole)).Cast<UserRole>().ToDictionary(t => (int)(object)t, t => t.ToString());
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			_logger.LogError("Fehler aufgetreten: ", ex);
 			Response.StatusCode = StatusCodes.Status500InternalServerError;
 			return new Dictionary<int, string>();
@@ -286,22 +246,18 @@ public class adminController : ControllerBase
 	[ProducesResponseType(200)]
 	[ProducesResponseType(404)]
 	[ProducesResponseType(400)]
-	public ReturnModel ChangePassword(string username, PasswordModel model)
-	{
-		try
-		{
+	public ReturnModel ChangePassword(string username, PasswordModel model) {
+		try {
 			var isAdmin = User.IsInRole("Admin");
 			var user = helper.GetUser(username);
 
-			user.Passwd = model.Password;
+			user.PlainTextPassword = model.Password;
 			user.Lastchange = DateTime.Now;
 			ctx.Users.Update(user);
 			ctx.SaveChanges();
 			Response.StatusCode = StatusCodes.Status200OK;
 			return new ReturnModel() { Message = $"Passwort von Benutzer {username} erfolgreich geändert!" };
-		}
-		catch (Exception ex)
-		{
+		} catch(Exception ex) {
 			return this.GetErrorModel(ex);
 		}
 	}
@@ -311,8 +267,7 @@ public class adminController : ControllerBase
 	/// </summary>
 	[HttpPatch("/bookings/yeet")]
 	[Authorize(Roles = "Admin")]
-	public void DeleteBookings()
-	{
+	public void DeleteBookings() {
 		ctx.Bookings.RemoveRange(ctx.Bookings);
 		ctx.SaveChanges();
 	}

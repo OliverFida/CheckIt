@@ -1,3 +1,5 @@
+![Backend](https://github.com/OliverFIda/awl-raumreservierung/actions/workflows/dotnet.yml/badge.svg) ![Frontend](https://github.com/OliverFIda/awl-raumreservierung/actions/workflows/node.js.yml/badge.svg)
+
 # AWL Raumreservierung
 
 ## Externe Links
