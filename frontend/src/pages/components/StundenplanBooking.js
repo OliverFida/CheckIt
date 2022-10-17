@@ -15,6 +15,7 @@ export default function StundenplanBooking({day, lesson}){
         var endDate = BookingHelper.getNewEndDate(startDate);
 
         var lessonOver = BookingHelper.checkLessonOver(endDate);
+        if(hpContext.roomSelection.inactive) lessonOver = true;
         var booking = BookingHelper.findBooking(hpContext, startDate, endDate);
 
         if(booking){
