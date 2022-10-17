@@ -14,11 +14,11 @@ export default function StundenplanHead(){
     useEffect(() => {
         var dateMonday = moment().weekday(1).add(hpContext.weekSelection.offset, 'weeks');
         
-        var weekDayNames = ["MO", "DI", "MI", "DO", "FR", "SA"];
+        var weekDayNames = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
         var newElements = [];
         for(var day = 1; day <= amountDays; day++){
             var tempDate = moment(dateMonday).add(day - 1, 'days');
-            newElements.push(<th key={`th_${day}`}>{weekDayNames[day - 1]} {tempDate.format("DD.MM.YYYY")}</th>);
+            newElements.push(<th key={`th_${day}`}>{weekDayNames[day - 1]}<br /><span className="muted">{tempDate.format("DD.MM.YYYY")}</span></th>);
         }
         setElements(newElements);
     }, [hpContext.weekSelection.offset]);
