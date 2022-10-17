@@ -63,7 +63,7 @@ export default function BookingModal(){
         }
         
         if(state.mode === "edit"){
-            await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note);
+            await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note, state.booking.studentCount);
         }
 
         await setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingModal: false}, bookings:{...hpContext.bookings, selected: null, reload: true}});
@@ -130,7 +130,7 @@ function StudentsPicker({state, setState}){
     return(
         <Form.Group className="mb-3" controlId="bookingStudents">
             <Form.Label>Schüler</Form.Label>
-            <Form.Control type="number" defaultValue={state?.booking?.studentCount} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false} />
+            <Form.Control type="number" defaultValue={`${state?.booking?.studentCount}`} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false} />
         </Form.Group>
     );
 }

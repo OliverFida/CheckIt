@@ -19,10 +19,11 @@ async function book(roomId, startTime, endTime, note, studentCount){
   });
 }
 
-async function editBooking(id, endTime, note){
+async function editBooking(id, endTime, note, studentCount){
   await base.apiRequest(`bookings/${id}`, "PATCH", {
     "endTime": endTime,
-    "note": note
+    "note": note,
+    "studentCount": studentCount
   });
 }
 
