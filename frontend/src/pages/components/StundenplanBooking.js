@@ -7,7 +7,7 @@ import BookingHelper from '../../helpers/bookingHelper';
 
 export default function StundenplanBooking({day, lesson}){
     const {hpContext, setHpContext} = useContext(HomePageContext);
-    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", user: null, booking: null});
+    const [state, setState] = useState({variant: 'light', disabled: false, onClick: null, text: "", booking: null});
     
     // Update when bookings or weekOffset change
     useEffect(() => {
@@ -22,12 +22,12 @@ export default function StundenplanBooking({day, lesson}){
             var isOwn = BookingHelper.checkIsOwn(booking);
 
             if(isOwn){
-                setState({...state, variant: 'success', disabled: lessonOver, onClick: () => {onClick("edit", booking)}, text: "Gebucht", user: null});
+                setState({...state, variant: 'success', disabled: lessonOver, onClick: () => {onClick("edit", booking)}, text: "Gebucht", booking: booking});
             }else{
-                setState({...state, variant: 'danger', disabled: lessonOver, onClick: () => {onClick("view", booking)}, text: "Gebucht von", user: `${booking.user.firstName} ${booking.user.lastname}`});
+                setState({...state, variant: 'danger', disabled: lessonOver, onClick: () => {onClick("view", booking)}, text: "Gebucht von", booking: booking});
             }
         }else{
-            setState({...state, variant: 'light', disabled: lessonOver, onClick: () => {onClick("new", null)}, text: "Buchen", user: null});
+            setState({...state, variant: 'light', disabled: lessonOver, onClick: () => {onClick("new", null)}, text: "Buchen", booking: null});
         }
     }, [hpContext.bookings.bookings, hpContext.weekSelection.offset]);
 
@@ -38,8 +38,11 @@ export default function StundenplanBooking({day, lesson}){
     return(
         <td>
             <Button className='buchenBtn' variant={state.variant} disabled={state.disabled} onClick={state.onClick}>
-                {state.text}<br />
-                {state.user}
+                {state.text}
+                {state.booking ? <br /> : null}
+                {state.booking ? `von ${state.booking.user.firstName} ${state.booking.user.lastname}` : null}
+                {state.booking ? <br /> : null}
+                {state.booking ? `[${state.booking?.studentCount} Schüler]` : null}
             </Button>
         </td>
     )

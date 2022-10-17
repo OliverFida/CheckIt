@@ -77,7 +77,7 @@ export default function BookingModal(){
             <Modal.Body>
                 <RoomDisplay />
                 <DurationPicker state={state} setState={setState} />
-                {/* <StudentsPicker state={state} setState={setState} /> */}
+                <StudentsPicker state={state} setState={setState} />
                 <NoteField state={state} setState={setState} />
             </Modal.Body>
             {hpContext.bookings.selected?.mode === "view" ? null : <Modal.Footer>
@@ -101,6 +101,8 @@ function RoomDisplay(){
 }
 
 function DurationPicker({state, setState}){
+    const {hpContext, setHpContext} = useContext(HomePageContext);
+
     const onChange = async (e) => {
         setState({...state, booking:{...state.booking, duration: e.target.value}});
     };
@@ -108,7 +110,7 @@ function DurationPicker({state, setState}){
     return(
         <Form.Group className="mb-3" controlId="bookingDuration">
             <Form.Label>Dauer</Form.Label>
-            <Form.Select value={state?.booking?.duration ? state.booking.duration : 1} onChange={onChange} disabled={false}>
+            <Form.Select value={state?.booking?.duration ? state.booking.duration : 1} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false}>
                 <option value="1">1 Stunde</option>
                 <option value="2">2 Stunden</option>
                 <option value="3">3 Stunden</option>
@@ -119,14 +121,16 @@ function DurationPicker({state, setState}){
 }
 
 function StudentsPicker({state, setState}){
-    const onChange = async () => {
+    const {hpContext, setHpContext} = useContext(HomePageContext);
 
+    const onChange = async (e) => {
+        await setState({...state, booking:{...state.booking, studentCount: parseInt(e.target.value)}});
     };
 
     return(
         <Form.Group className="mb-3" controlId="bookingStudents">
             <Form.Label>Schüler</Form.Label>
-            <Form.Control type="number" defaultValue={15} onChange={onChange} disabled={false} />
+            <Form.Control type="number" defaultValue={state?.booking?.studentCount} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false} />
         </Form.Group>
     );
 }
