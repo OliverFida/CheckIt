@@ -16,8 +16,11 @@ async function apiRequest(path, method, data){
     })
     .then((response) => {
         returnVal = response;
+    })
+    .catch((error) => {
+        returnVal = error;
     });
-
+    
     return returnVal;
 }
 var exports = {
