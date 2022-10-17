@@ -26,7 +26,7 @@ export default function StundenplanBody(){
         async function doAsync(){
             if(hpContext.roomSelection.id === null) return; //TODO: Double reloading
             await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: true}});
-            var temp = await BookingsAPI.getBookings(hpContext.roomSelection.id, moment().weekday(1).toJSON(), moment().weekday(acContext.bookings.days).add(acContext.bookings.weeksFuture - 1, 'weeks').toJSON());
+            var temp = await BookingsAPI.getBookings(hpContext.roomSelection.id, moment().weekday(1).subtract(acContext.bookings.weeksPast, "weeks").toJSON(), moment().weekday(acContext.bookings.days).add(acContext.bookings.weeksFuture, 'weeks').toJSON());
             await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: false}, bookings: {...hpContext.bookings, reload: false, bookings: temp}});
         }
         doAsync();
