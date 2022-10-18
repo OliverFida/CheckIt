@@ -12,7 +12,7 @@ services:
     restart: always
 
   checkit_backend: # Konfigurationssektion für das Backend
-    image: "ghcr.io/oliverfida/checkit_frontend:latest"
+    image: "ghcr.io/oliverfida/checkit_backend:latest"
     ports:
       - "5000:5000" # Erste Zahl ist der zu benutzende Backendport
     environment:
