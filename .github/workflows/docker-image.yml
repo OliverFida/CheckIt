@@ -20,9 +20,13 @@ jobs:
       run: dotnet restore
       working-directory: backend
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -c release --no-restore
       working-directory: backend
-    
+        
+    - name: Build the Docker image
+      working-directory: backend
+      run: docker build . --file Dockerfile --tag checkit_backend:$(date +%s)
+      
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -36,10 +40,7 @@ jobs:
       working-directory: frontend
       env:
         CI: false
-    
-    - name: Build the Docker image
-      working-directory: backend
-      run: docker build . --file Dockerfile --tag checkit_frontend:$(date +%s)
+
     - name: Build the Docker image
       working-directory: frontend
       run: docker build . --file Dockerfile --tag checkit_backend:$(date +%s)
