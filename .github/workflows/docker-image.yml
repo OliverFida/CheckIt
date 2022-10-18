@@ -1,0 +1,19 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      working-directory: backend
+      run: docker build . --file Dockerfile --tag checkit_frontend:$(date +%s)
+    - name: Build the Docker image
+      working-directory: frontend
+      run: docker build . --file Dockerfile --tag checkit_backend:$(date +%s)
