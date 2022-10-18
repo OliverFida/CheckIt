@@ -9,14 +9,17 @@ export default function APIStatus(){
     const {acContext, setAcContext} = useContext(AppConfigContext);
 
     useEffect(() => {
-        setInterval(async () => {
-            await getStatus();
+        var temp = setInterval(async () => {
+            var response = await getStatus();
+            if(!response) clearInterval(temp);
         }, 2000);
     }, []);
     
     const getStatus = async () => {
         var response = await APIBase.ping();
+
         await setAcContext({...acContext, service:{...acContext.service, available: response}});
+        return response;
     };
 
     return(
