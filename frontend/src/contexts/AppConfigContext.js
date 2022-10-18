@@ -13,17 +13,18 @@ export default function AppConfigContextProvider({children}){
 
     useEffect(() => {
         async function doAsync(){
-            var appConfig = await (await fetch("./application_config.json")).json();
-
-            setAcContext({
-                ...acContext,
-                bookings:{
-                    ...acContext.bookings,
-                    days: appConfig.SATURDAY ? 6 : 5,
-                    weeksPast: appConfig.WEEKS_PAST,
-                    weeksFuture: appConfig.WEEKS_FUTURE
-                }
-            });
+            try{
+                var appConfig = await (await fetch("./application_config.json")).json();
+                setAcContext({
+                    ...acContext,
+                    bookings:{
+                        ...acContext.bookings,
+                        days: appConfig.SATURDAY ? 6 : 5,
+                        weeksPast: appConfig.WEEKS_PAST,
+                        weeksFuture: appConfig.WEEKS_FUTURE
+                    }
+                });
+            }catch(e){}
         }
         doAsync();
     }, []);

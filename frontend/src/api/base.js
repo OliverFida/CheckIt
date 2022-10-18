@@ -2,7 +2,16 @@ import axios from 'axios';
 
 
 async function apiRequest(path, method, data){
-    var SERVER_CONF = await (await fetch('./backend_config.json')).json();
+    var SERVER_CONF;
+    try{
+        SERVER_CONF = await (await fetch('./backend_config.json')).json();
+    }catch(e){
+        SERVER_CONF = {
+            PROTOCOL: 'http',
+            ADDRESS: 'localhost',
+            PORT: '5131'
+        };
+    }
     var returnVal = null;
     
     var token = await localStorage.getItem('loginToken');
