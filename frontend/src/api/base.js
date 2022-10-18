@@ -1,17 +1,19 @@
 import axios from 'axios';
 
+var SERVER_CONF = {
+    PROTOCOL: 'http',
+    ADDRESS: 'localhost',
+    PORT: '5131'
+};
 
-async function apiRequest(path, method, data){
-    var SERVER_CONF;
+async function init(){
     try{
         SERVER_CONF = await (await fetch('./backend_config.json')).json();
-    }catch(e){
-        SERVER_CONF = {
-            PROTOCOL: 'http',
-            ADDRESS: 'localhost',
-            PORT: '5131'
-        };
-    }
+    }catch(e){}
+}
+init();
+
+async function apiRequest(path, method, data){
     var returnVal = null;
     
     var token = await localStorage.getItem('loginToken');
@@ -32,7 +34,15 @@ async function apiRequest(path, method, data){
     
     return returnVal;
 }
+
+async function ping(){
+    var response = await apiRequest('system/version', 'GET', null, false);
+    if(response.status === 200) return true;
+    return false;
+}
+
 var exports = {
-    apiRequest
+    apiRequest,
+    ping
 };
 export default exports;

@@ -2,6 +2,8 @@
 import React from 'react';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import ToastContextProvider from './contexts/ToastContext';
+import AppConfigContextProvider from './contexts/AppConfigContext';
+import APIStatus from './pages/components/APIStatus';
 // Style imports
 import 'bootstrap/dist/css/bootstrap.min.css';
 // Page imports
@@ -15,19 +17,22 @@ import UserEdit from './pages/UserEdit';
 export default function App() {
   return (
     <div id="App"> 
-        <ToastContextProvider>    
-          <BrowserRouter basename='/'>
-            <Routes>
-              <Route exact path='/' element={<Navigate to='/login' />} />
-              <Route path='/login' element={<LoginProtectedRoute reverse><LoginPage /></LoginProtectedRoute>} />
-              <Route path='/rooms' element={<RoomsPage />}/>
-            <Route path='/noperm' element={<NoPersmissionsPage />} />
-              <Route path='/home' element={<LoginProtectedRoute><HomePage /></LoginProtectedRoute>} />
-              <Route path='/user' element={<LoginProtectedRoute><UserPage /></LoginProtectedRoute>} />
-              <Route path='/user-edit' element={<AdminProtectedRoute><UserEdit /></AdminProtectedRoute>} />
-              <Route path='*' element={<Navigate to="/home" />} />
-            </Routes>
-          </BrowserRouter>
+        <ToastContextProvider>   
+          <AppConfigContextProvider>
+            <APIStatus />
+            <BrowserRouter basename='/'>
+              <Routes>
+                <Route exact path='/' element={<Navigate to='/login' />} />
+                <Route path='/login' element={<LoginProtectedRoute reverse><LoginPage /></LoginProtectedRoute>} />
+                <Route path='/rooms' element={<RoomsPage />}/>
+              <Route path='/noperm' element={<NoPersmissionsPage />} />
+                <Route path='/home' element={<LoginProtectedRoute><HomePage /></LoginProtectedRoute>} />
+                <Route path='/user' element={<LoginProtectedRoute><UserPage /></LoginProtectedRoute>} />
+                <Route path='/user-edit' element={<AdminProtectedRoute><UserEdit /></AdminProtectedRoute>} />
+                <Route path='*' element={<Navigate to="/home" />} />
+              </Routes>
+            </BrowserRouter>
+          </AppConfigContextProvider> 
         </ToastContextProvider>
     </div>
   );

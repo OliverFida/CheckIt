@@ -26,6 +26,7 @@ function RoomDropDown(){
     }, []);
 
     useEffect(() => {
+        if(rooms === null || rooms === undefined || rooms.length <= 0) return;
         setElements(rooms.map(room => <NavDropdown.Item key={`room_${room.number}`} onClick={() => {onRoomSelect(room.number, room.name, room.id, room.active ? false : true)}}>{room.name} [{room.number}]</NavDropdown.Item>));
     }, [rooms]);
     

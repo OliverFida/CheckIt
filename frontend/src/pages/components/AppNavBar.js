@@ -1,6 +1,6 @@
 // Component imports
 import React from 'react';
-import {Navbar, Nav, Stack, Button} from 'react-bootstrap';
+import {Navbar, Stack, Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AppNavUser from './AppNavUser';
 import Logo from '../../assets/checkit-logo.png';
@@ -12,7 +12,7 @@ export default function AppNavBar({children}){
 
     const onHome = () => {
         navigate("/home");
-    }
+    };
 
     return(
         <Navbar bg='light' expand='lg' style={{paddingLeft: '20px', paddingRight: '20px'}}>
