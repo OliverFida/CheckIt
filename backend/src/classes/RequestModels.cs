@@ -216,7 +216,7 @@ namespace awl_raumreservierung {
 		/// Schüleranzahl
 		/// </summary>
 		/// <value></value>
-		public int StudenCount { get; set; }
+		public int StudentCount { get; set; }
 	}
 
 	/// <summary>
