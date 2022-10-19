@@ -8,8 +8,8 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME_BACKEND: checkit_backend
-  IMAGE_NAME_FRONTEND: checkit_frontend
+  IMAGE_NAME_BACKEND: oliverfida/checkit_backend
+  IMAGE_NAME_FRONTEND: oliverfida/checkit_frontend
 
 jobs:
 
