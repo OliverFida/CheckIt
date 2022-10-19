@@ -9,24 +9,32 @@ namespace awl_raumreservierung {
 		/// ID
 		/// </summary>
 		/// <value></value>
-		public int Id { get; set; }
+		public int Id {
+			get; set;
+		}
 
 		/// <summary>
 		/// Raumnummer
 		/// </summary>
 		/// <value></value>
-		public string? Number { get; set; }
+		public string? Number {
+			get; set;
+		}
 
 		/// <summary>
 		/// Raumname
 		/// </summary>
 		/// <value></value>
-		public string? Name { get; set; }
+		public string? Name {
+			get; set;
+		}
 		/// <summary>
 		/// Raumstatus
 		/// </summary>
 		/// <value></value>
-		public bool Active { get; set; }
+		public bool Active {
+			get; set;
+		}
 
 		/// <summary>
 		///

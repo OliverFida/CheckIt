@@ -6,7 +6,6 @@ namespace awl_raumreservierung.db {
 	/// </summary>
 	public partial class User {
 		private string username = null!;
-		private string passwd = null!;
 
 		/// <summary>
 		/// User-ID
@@ -39,14 +38,14 @@ namespace awl_raumreservierung.db {
 		/// Passwort
 		/// </summary>
 		/// <value></value>
-		public string Passwd { get => passwd; set => passwd = value; }
+		public string Passwd { get; set; } = null!;
 
 		/// <summary>
 		/// Bietet das Setzen des Passwords an, es wird automatisch gehasht
 		/// </summary>
 		/// <returns></returns>
 		public string PlainTextPassword {
-			set => passwd = BC.HashPassword(value);
+			set => Passwd = BC.HashPassword(value);
 		}
 
 		/// <summary>

@@ -9,49 +9,65 @@ namespace awl_raumreservierung {
 		/// ID
 		/// </summary>
 		/// <value></value>
-		public long Id { get; set; }
+		public long Id {
+			get; set;
+		}
 
 		/// <summary>
 		/// Startzeit in Serverzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime StartTime { get; set; }
+		public DateTime StartTime {
+			get; set;
+		}
 
 		/// <summary>
 		/// Endzeit in Serverzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get; set; }
+		public DateTime EndTime {
+			get; set;
+		}
 
 		/// <summary>
 		/// Raum
 		/// </summary>
 		/// <value></value>
-		public PublicRoom Room { get; set; }
+		public PublicRoom Room {
+			get; set;
+		}
 
 		/// <summary>
 		/// Bucher
 		/// </summary>
 		/// <value></value>
-		public PublicUser User { get; set; }
+		public PublicUser User {
+			get; set;
+		}
 
 		/// <summary>
 		/// Erstellungsdatum in Serverzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime CreateTime { get; set; }
+		public DateTime CreateTime {
+			get; set;
+		}
 
 		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
-		public string? Note { get; set; }
+		public string? Note {
+			get; set;
+		}
 
 		/// <summary>
 		/// Anzahl der Schüler
 		/// </summary>
 		/// <value></value>
-		public int? StudentCount { get; set; }
+		public int? StudentCount {
+			get; set;
+		}
 
 		/// <summary>
 		///

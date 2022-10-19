@@ -1,10 +1,8 @@
-namespace awl_raumreservierung.classes
-{
+namespace awl_raumreservierung.classes {
 	/// <summary>
 	/// Loginklasse
 	/// </summary>
-	public static class Login
-	{
+	public static class Login {
 		/// <summary>
 		/// Prüft den Login eines Nutzers
 		/// </summary>
@@ -12,22 +10,16 @@ namespace awl_raumreservierung.classes
 		/// <param name="password">Gehashtes Passwort</param>
 		/// <param name="ctx">DB-Context</param>
 		/// <returns></returns>
-		public static LoginMessage CheckLogin(string username, string password, checkITContext ctx)
-		{
+		public static LoginMessage CheckLogin(string username, string password, checkITContext ctx) {
 			var user = ctx.Users.Where(u => u.Username.ToLower() == username.ToLower()).FirstOrDefault();
 
-			if (user != null)
-			{
+			if(user != null) {
 				user.Lastlogon = DateTime.Now;
 				ctx.SaveChanges();
 			}
 
 			// User mit username holen
-			return user switch
-			{
-				{ Active: false } => LoginMessage.InactiveUser,
-				{ Role: UserRole.Admin } when user.IsPasswordCorrect(password) => LoginMessage.SuccessAsAdmin,
-				{ Role: UserRole.User } when user.IsPasswordCorrect(password) => LoginMessage.Success,
+			return user switch { { Active: false } => LoginMessage.InactiveUser, { Role: UserRole.Admin } when user.IsPasswordCorrect(password) => LoginMessage.SuccessAsAdmin, { Role: UserRole.User } when user.IsPasswordCorrect(password) => LoginMessage.Success,
 				_ => LoginMessage.InvalidCredentials
 			};
 		}
@@ -35,8 +27,7 @@ namespace awl_raumreservierung.classes
 		/// <summary>
 		/// Mögliche Loginrückgabemeldungen
 		/// </summary>
-		public enum LoginMessage
-		{
+		public enum LoginMessage {
 			/// Ungültige Anmeldedaten
 			InvalidCredentials,
 
