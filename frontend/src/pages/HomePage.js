@@ -1,5 +1,5 @@
 // Component imports
-import React from 'react';
+import React, {useContext} from 'react';
 import {Stack} from 'react-bootstrap';
 import AppNavBar from './components/AppNavBar';
 import AppNavBooking from './components/AppNavBooking';
@@ -7,12 +7,13 @@ import Stundenplan from './components/Stundenplan';
 import HomePageContextProvider from '../contexts/HomePageContext';
 import BookingModal, {BookingDeleteModal} from './components/BookingModal';
 import {HomePageDebugger} from './components/Debugger';
+import { HomePageContext } from '../contexts/HomePageContext';
 
 export default function HomePage(){
     return(
         <HomePageContextProvider>
             <Stack direction='vertical'>
-                <AppNavBar>
+                <AppNavBar middle={<RoomDisplay />}>
                     <AppNavBooking />
                 </AppNavBar>
                 <Stundenplan />
@@ -23,3 +24,11 @@ export default function HomePage(){
         </HomePageContextProvider>
     );
 };
+
+function RoomDisplay(){
+    const {hpContext, setHpContext} = useContext(HomePageContext);
+
+    return(
+        <h3>{hpContext.roomSelection.name} [{hpContext.roomSelection.number}]</h3>
+    );
+}

@@ -7,7 +7,7 @@ import Logo from '../../assets/checkit-logo.png';
 // Style imports
 import '../../css/components/AppNavBar.css';
 
-export default function AppNavBar({children}){
+export default function AppNavBar({middle, children}){
     const navigate = useNavigate();
 
     const onHome = () => {
@@ -24,9 +24,14 @@ export default function AppNavBar({children}){
                         {localStorage.getItem('loginToken') !== null ? <Button variant='ghost' onClick={onHome}>Buchungen</Button> : null}
                     </Stack>
                 </Navbar.Brand>
-                <Stack direction='horizontal' style={{gap: '10px'}}>
-                    {children}
-                    {localStorage.getItem('loginToken') !== null ? <AppNavUser /> : null}
+                <Stack direction='horizontal' style={{width: '50vw', justifyContent: 'space-between'}}>
+                    <Stack direction='horizontal' style={{gap: '10px'}}>
+                        {middle}
+                    </Stack>
+                    <Stack direction='horizontal' style={{gap: '10px'}}>
+                        {children}
+                        {localStorage.getItem('loginToken') !== null ? <AppNavUser /> : null}
+                    </Stack>
                 </Stack>
             </Stack>
         </Navbar>

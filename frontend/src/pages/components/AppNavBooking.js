@@ -40,7 +40,7 @@ function RoomDropDown(){
     };
 
     return(
-        <NavDropdown title={hpContext.roomSelection.name ? `${hpContext.roomSelection.name} [${hpContext.roomSelection.number}]` : "Raum"} align="end">
+        <NavDropdown title="Raumauswahl" align="end">
             {elements}
         </NavDropdown>
     );
