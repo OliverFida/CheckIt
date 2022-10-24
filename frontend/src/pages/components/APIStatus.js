@@ -12,7 +12,7 @@ export default function APIStatus(){
         var temp = setInterval(async () => {
             var response = await getStatus();
             if(!response) clearInterval(temp);
-        }, 2000);
+        }, 5000);
     }, []);
     
     const getStatus = async () => {

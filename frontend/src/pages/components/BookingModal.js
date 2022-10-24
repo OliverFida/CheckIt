@@ -28,7 +28,7 @@ export default function BookingModal(){
             startDate = BookingHelper.getNewStartDate(hpContext, state.day, {key: state.lesson});
             endDate = BookingHelper.getNewEndDate(startDate);
             
-            var newBooking = {startTime: startDate.toJSON(), endTime: endDate.toJSON(), note: "", studentCount: 15, duration: 1};
+            var newBooking = {startTime: startDate.toJSON(), endTime: endDate.toJSON(), note: "", studentCount: 15, duration: 1, user:{username: localStorage.getItem('loginUsername')}};
             
             setState({...state, booking: newBooking});
         }
@@ -76,6 +76,7 @@ export default function BookingModal(){
             </Modal.Header>
             <Modal.Body>
                 <RoomDisplay />
+                <UserPicker state={state} setState={setState} />
                 <DurationPicker state={state} setState={setState} />
                 <StudentsPicker state={state} setState={setState} />
                 <NoteField state={state} setState={setState} />
@@ -96,6 +97,24 @@ function RoomDisplay(){
         <Form.Group className="mb-3" controlId="bookingRoom">
             <Form.Label>Raum</Form.Label>
             <Form.Control type="text" defaultValue={`${hpContext.roomSelection.name} [${hpContext.roomSelection.number}]`} disabled={true} />
+        </Form.Group>
+    );
+}
+
+function UserPicker({state, setState}){
+    const {hpContext, setHpContext} = useContext(HomePageContext);
+
+    const onChange = async (e) => {
+        setState({...state, booking:{...state.booking, user:{...state.booking.user, username: e.target.value}}});
+    };
+
+    return(
+        <Form.Group className="mb-3" controlId="bookingUser">
+            <Form.Label>Benutzer</Form.Label>
+            <Form.Control value={state?.booking ? state.booking.user.username : ""} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false}>
+                {/* <option value="admin">Admin Benutzer</option>
+                <option value="oli">Oliver Fida</option> */}
+            </Form.Control>
         </Form.Group>
     );
 }

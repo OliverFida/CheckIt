@@ -14,8 +14,33 @@ async function init(){
 init();
 
 async function apiRequest(path, method, data){
+    var username = await localStorage.getItem('loginUsername');
+    var refreshToken = await localStorage.getItem('loginRefreshToken');
+
+    if(refreshToken !== null && refreshToken !== undefined && path !== "login" && path !== "system/version"){
+        var refreshResponse = await sendRequest('login', 'POST', {
+            username: username,
+            password: refreshToken
+        });
+
+        if(refreshResponse.status === 200){
+            await localStorage.setItem('loginToken', refreshResponse.data.value.stringToken);
+            if(refreshResponse.data.value.role === 'Admin'){
+                await localStorage.setItem('loginAdmin', true);
+            }else{
+                await localStorage.setItem('loginAdmin', false);
+            }
+        }else{
+            await localStorage.clear();
+        }
+    }
+
+    return await sendRequest(path, method, data);
+}
+
+async function sendRequest(path, method, data){
     var returnVal = null;
-    
+
     var token = await localStorage.getItem('loginToken');
     await axios({
         url: `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`,
@@ -36,7 +61,8 @@ async function apiRequest(path, method, data){
 }
 
 async function ping(){
-    var response = await apiRequest('system/version', 'GET', null, false);
+    var response = await apiRequest('system/version', 'GET', null);
+    
     if(response.status === 200) return true;
     return false;
 }
