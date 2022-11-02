@@ -70,6 +70,10 @@ export default function BookingModal(){
         await setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingModal: false}, bookings:{...hpContext.bookings, selected: null, reload: true}});
     };
 
+    const onAsAdmin = async () => {
+        setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {...hpContext.bookings.selected, mode: "edit"}}});
+    }
+
     return(
         <Modal show={hpContext.uiControl.bookingModal} onHide={onCancel} centered>
             <Modal.Header closeButton>
@@ -87,6 +91,9 @@ export default function BookingModal(){
                 {hpContext.bookings.selected?.mode === "edit" ? <Button variant='danger' onClick={onDelete}>Löschen</Button> : null}
                 <Button variant='primary' onClick={onSubmit}>{hpContext.bookings.selected?.mode === "new" ? "Buchen" : "Speichern"}</Button>
             </Modal.Footer>}
+            {hpContext.bookings.selected?.mode === "view" && localStorage.getItem('loginAdmin') === "true" ? <Modal.Footer>
+                <Button variant='primary' onClick={onAsAdmin}>Als Admin bearbeiten</Button>
+            </Modal.Footer> : null}
         </Modal>
     );
 };
