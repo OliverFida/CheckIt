@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using awl_raumreservierung;
 
@@ -10,9 +11,10 @@ using awl_raumreservierung;
 namespace awl_raumreservierung.Migrations
 {
     [DbContext(typeof(checkITContext))]
-    partial class checkITContextModelSnapshot : ModelSnapshot
+    [Migration("20221025051818_AdminPWMD5")]
+    partial class AdminPWMD5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.9");

@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const DEV = true;
+
 var SERVER_CONF = {
     PROTOCOL: 'http',
     ADDRESS: 'localhost',
@@ -42,8 +44,16 @@ async function sendRequest(path, method, data){
     var returnVal = null;
 
     var token = await localStorage.getItem('loginToken');
+
+    var url;
+    if(DEV){
+        url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`;
+    }else{
+        url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/api/${path}`;
+    }
+
     await axios({
-        url: `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`,
+        url: url,
         method: method,
         data: data,
         headers: {
