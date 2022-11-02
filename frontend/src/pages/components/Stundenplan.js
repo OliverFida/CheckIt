@@ -12,13 +12,16 @@ export default function Stundenplan(){
     const {hpContext} = useContext(HomePageContext);
     
     return(
-        <Stack direction='vertical'>
-            <LoadingSpinner loading={hpContext.uiControl.bookingsLoading}>
-                <Table className='stundenplan'>
-                    <StundenplanHead />
-                    <StundenplanBody />
-                </Table>
-            </LoadingSpinner>
-        </Stack>
+        hpContext.roomSelection.id ? 
+            <Stack direction='vertical'>
+                <LoadingSpinner loading={hpContext.uiControl.bookingsLoading}>
+                    <Table className='stundenplan'>
+                        <StundenplanHead />
+                        <StundenplanBody />
+                    </Table>
+                </LoadingSpinner>
+            </Stack>
+        :
+            null
     );
 };

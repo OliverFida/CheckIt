@@ -29,6 +29,12 @@ function RoomDisplay(){
     const {hpContext, setHpContext} = useContext(HomePageContext);
 
     return(
-        <h3>{hpContext.roomSelection.name} [{hpContext.roomSelection.number}]</h3>
+        <h3>{
+            hpContext.roomSelection.id ? 
+                `${hpContext.roomSelection.name} [${hpContext.roomSelection.number}]`
+        :
+            `Kein Raum gewählt!`
+        }
+        </h3>
     );
 }
