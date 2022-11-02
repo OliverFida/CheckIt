@@ -6,6 +6,7 @@ import { HomePageContext } from '../../contexts/HomePageContext';
 import '../../css/components/BookingModal.css';
 // API imports
 import BookingsAPI from '../../api/bookings';
+import AdminAPI from '../../api/admin';
 // Helper imports
 import BookingHelper from '../../helpers/bookingHelper';
 
@@ -59,7 +60,7 @@ export default function BookingModal(){
         endDate = BookingHelper.getEndDateFromDuration(startDate, state.booking.duration);
 
         if(state.mode === "new"){
-            await BookingsAPI.book(hpContext.roomSelection.id, startDate.toJSON(), endDate.toJSON(), state.booking.note, state.booking.studentCount);
+            await BookingsAPI.book(hpContext.roomSelection.id, startDate.toJSON(), endDate.toJSON(), state.booking.note, state.booking.studentCount, state.booking.user.username);
         }
         
         if(state.mode === "edit"){
@@ -76,7 +77,7 @@ export default function BookingModal(){
             </Modal.Header>
             <Modal.Body>
                 <RoomDisplay />
-                <UserPicker state={state} setState={setState} />
+                {localStorage.getItem('loginAdmin') === "true" && hpContext.bookings.selected?.mode === "new" ? <UserPicker state={state} setState={setState} /> : null}
                 <DurationPicker state={state} setState={setState} />
                 <StudentsPicker state={state} setState={setState} />
                 <NoteField state={state} setState={setState} />
@@ -103,6 +104,21 @@ function RoomDisplay(){
 
 function UserPicker({state, setState}){
     const {hpContext, setHpContext} = useContext(HomePageContext);
+    const [elements, setElements] = useState([]);
+
+    useEffect(() => {
+        async function doAsync(){
+            var response = await AdminAPI.getUsers();
+            var users = Array.from(response.data).filter(user => user.active === true);
+            
+            var temp = [];
+            users.forEach(user => {
+                temp.push(<option key={`option-${user.username}`} value={user.username}>{user.firstName} {user.lastname}</option>);
+            });
+            setElements(temp);
+        }   
+        doAsync();
+    }, []);
 
     const onChange = async (e) => {
         setState({...state, booking:{...state.booking, user:{...state.booking.user, username: e.target.value}}});
@@ -111,10 +127,9 @@ function UserPicker({state, setState}){
     return(
         <Form.Group className="mb-3" controlId="bookingUser">
             <Form.Label>Benutzer</Form.Label>
-            <Form.Control value={state?.booking ? state.booking.user.username : ""} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false}>
-                {/* <option value="admin">Admin Benutzer</option>
-                <option value="oli">Oliver Fida</option> */}
-            </Form.Control>
+            <Form.Select onChange={onChange} disabled={hpContext.bookings.selected?.mode === "new" ? false : true}>
+                {elements}
+            </Form.Select>
         </Form.Group>
     );
 }
