@@ -8,21 +8,22 @@ async function getBookings(roomId, startDate, endDate){
   return response.data;
 }
 
-async function book(roomId, startTime, endTime, note, studentCount){
+async function book(roomId, startTime, endTime, note, studentCount, username){
   await base.apiRequest("bookings", "PUT", {
     roomID: roomId,
     startTime: startTime,
     endTime: endTime,
     note: note,
-    username: localStorage.getItem("loginUsername"),
+    username: username,
     studentCount: studentCount
   });
 }
 
-async function editBooking(id, endTime, note){
+async function editBooking(id, endTime, note, studentCount){
   await base.apiRequest(`bookings/${id}`, "PATCH", {
     "endTime": endTime,
-    "note": note
+    "note": note,
+    "studentCount": studentCount
   });
 }
 

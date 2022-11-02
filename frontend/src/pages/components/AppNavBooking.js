@@ -26,20 +26,21 @@ function RoomDropDown(){
     }, []);
 
     useEffect(() => {
-        setElements(rooms.map(room => room.active ? <NavDropdown.Item key={`room_${room.number}`} onClick={() => {onRoomSelect(room.number, room.name, room.id)}}>{room.name} [{room.number}]</NavDropdown.Item> : null));
+        if(rooms === null || rooms === undefined || rooms.length <= 0) return;
+        setElements(rooms.map(room => <NavDropdown.Item key={`room_${room.number}`} onClick={() => {onRoomSelect(room.number, room.name, room.id, room.active ? false : true)}}>{room.name} [{room.number}]</NavDropdown.Item>));
     }, [rooms]);
     
-    useEffect(() => {
-        if(rooms.length > 0) onRoomSelect(rooms[0].number, rooms[0].name, rooms[0].id);
-    }, [elements]);
+    // useEffect(() => {
+    //     if(rooms.length > 0) onRoomSelect(rooms[0].number, rooms[0].name, rooms[0].id);
+    // }, [elements]);
 
-    const onRoomSelect = (number, name, id) => {
+    const onRoomSelect = (number, name, id, inactive) => {
         if(hpContext.roomSelection.id === id) return;
-        setHpContext({...hpContext, roomSelection: {...hpContext.roomSelection, number: number, name: name, id: id}});
+        setHpContext({...hpContext, roomSelection: {...hpContext.roomSelection, number: number, name: name, id: id, inactive: inactive}});
     };
 
     return(
-        <NavDropdown title={hpContext.roomSelection.name ? `${hpContext.roomSelection.name} [${hpContext.roomSelection.number}]` : "Raum"} align="end">
+        <NavDropdown title="Raumauswahl" align="end">
             {elements}
         </NavDropdown>
     );

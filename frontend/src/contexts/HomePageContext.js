@@ -12,7 +12,8 @@ export default function HomePageContextProvider({children}){
         roomSelection: {
             id: null,
             number: null,
-            name: null
+            name: null,
+            inactive: false
         },
         weekSelection: {
             offset: 0
