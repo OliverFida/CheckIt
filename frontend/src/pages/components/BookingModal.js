@@ -64,7 +64,6 @@ export default function BookingModal(){
         }
         
         if(state.mode === "edit"){
-            console.log()
             await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note, state.booking.studentCount);
         }
 
