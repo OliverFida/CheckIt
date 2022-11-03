@@ -64,6 +64,7 @@ export default function BookingModal(){
         }
         
         if(state.mode === "edit"){
+            console.log()
             await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note, state.booking.studentCount);
         }
 
@@ -72,6 +73,7 @@ export default function BookingModal(){
 
     const onAsAdmin = async () => {
         setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {...hpContext.bookings.selected, mode: "edit"}}});
+        setState({...state, mode: "edit"});
     }
 
     return(
@@ -171,7 +173,7 @@ function StudentsPicker({state, setState}){
     return(
         <Form.Group className="mb-3" controlId="bookingStudents">
             <Form.Label>Schüler</Form.Label>
-            <Form.Control type="number" defaultValue={`${state?.booking?.studentCount}`} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false} />
+            <Form.Control type="number" value={`${state?.booking?.studentCount}`} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false} />
         </Form.Group>
     );
 }

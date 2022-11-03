@@ -20,6 +20,7 @@ async function book(roomId, startTime, endTime, note, studentCount, username){
 }
 
 async function editBooking(id, endTime, note, studentCount){
+  console.log(id, note, studentCount);
   await base.apiRequest(`bookings/${id}`, "PATCH", {
     "endTime": endTime,
     "note": note,
