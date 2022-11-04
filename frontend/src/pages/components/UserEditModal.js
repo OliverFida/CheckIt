@@ -30,35 +30,54 @@ export default function UserEditModal(){
         setRoleElements(roles.map(role => <option key={`option_${role}`} value={role}>{role}</option>));
     }, [roles]);
 
+    const sendToast = async (toastElement) => {
+        var temp = toastContext.toasts;
+
+        temp.push(toastElement);
+
+        setToastContext({...toastContext, toasts: temp});
+    }
+
     const onCancel = () => {
         setUeContext({...ueContext, uiControl:{...ueContext.uiControl, userModal: false}, users:{...ueContext.users, selected: null}});
     };
 
     const onSubmit = async () => {
+        var response, newPw;
         if(ueContext.uiControl.modalMode === "new"){
-            await AdminAPI.addUser(state.username, state.firstName, state.lastname, state.role);
-        }else if(ueContext.uiControl.modalMode === "edit"){
-            await AdminAPI.editUser(state.username, state.firstName, state.lastname, state.role);
-        }else if(ueContext.uiControl.modalMode === "resetPW"){
-            var newPw = UserEditHelper.generatePassword();
+            newPw = UserEditHelper.generatePassword();
 
-            var response = await AdminAPI.resetPassword(state.username, newPw);
-            if(response.status === 200){
-                var temp = toastContext.toasts;
-
-                temp.push(<InfoToast preventAutoHide={true}>Passwort zurückgesetzt!<br />
-                Das Passwort lautet: {newPw}</InfoToast>);
-
-                setToastContext({...toastContext, toasts: temp});
+            response = await AdminAPI.addUser(state.username, newPw, state.firstName, state.lastname, state.role);
+            if(response.status === 201){
+                sendToast(<InfoToast preventAutoHide={true}>Benutzer erstellt!<br />
+                Das Passwort lautet: {newPw}</InfoToast>)
             }else{
-                var temp = toastContext.toasts;
+                sendToast(<ErrorToast>Benutzer konnte nicht erstellt werden!</ErrorToast>);
+            }
+        }else if(ueContext.uiControl.modalMode === "edit"){
+            response = await AdminAPI.editUser(state.username, state.firstName, state.lastname, state.role);
+            if(response.status === 200){
+                sendToast(<InfoToast>{response.data.message}</InfoToast>);
+            }else{
+                sendToast(<ErrorToast>Benutzer konnte nicht geändert werden!</ErrorToast>);
+            }
+        }else if(ueContext.uiControl.modalMode === "resetPW"){
+            newPw = UserEditHelper.generatePassword();
 
-                temp.push(<ErrorToast>{response.response.data.message}</ErrorToast>);
-
-                setToastContext({...toastContext, toasts: temp});
+            response = await AdminAPI.resetPassword(state.username, newPw);
+            if(response.status === 200){
+                sendToast(<InfoToast preventAutoHide={true}>Passwort zurückgesetzt!<br />
+                Das Passwort lautet: {newPw}</InfoToast>);
+            }else{
+                sendToast(<ErrorToast>{response.response.data.message}</ErrorToast>);
             }
         }else if(ueContext.uiControl.modalMode === "delete"){
-            await AdminAPI.deleteUser(state.username);
+            response = await AdminAPI.deleteUser(state.username);
+            if(response.status === 200){
+                sendToast(<InfoToast>{response.data.message}</InfoToast>);
+            }else{
+                sendToast(<ErrorToast>Benutzer konnte nicht gelöscht werden!</ErrorToast>);
+            }
         }
         setUeContext({...ueContext, uiControl:{...ueContext.uiControl, userModal: false}, users:{...ueContext.users, selected: null, reload: true}});
     };

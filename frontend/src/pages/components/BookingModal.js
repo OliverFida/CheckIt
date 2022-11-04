@@ -2,6 +2,8 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {Modal, Form, Button} from 'react-bootstrap';
 import { HomePageContext } from '../../contexts/HomePageContext';
+import { ToastContext } from '../../contexts/ToastContext';
+import {InfoToast, ErrorToast} from './Toasts';
 // Style imports
 import '../../css/components/BookingModal.css';
 // API imports
@@ -12,6 +14,7 @@ import BookingHelper from '../../helpers/bookingHelper';
 
 export default function BookingModal(){
     const {hpContext, setHpContext} = useContext(HomePageContext);
+    const {toastContext, setToastContext} = useContext(ToastContext);
     const [state, setState] = useState(null);
 
     // Bei Änderung der Visibility die aktuelle Selection in den Status laden
@@ -45,6 +48,14 @@ export default function BookingModal(){
         }
     }, [state]);
 
+    const sendToast = async (toastElement) => {
+        var temp = toastContext.toasts;
+
+        temp.push(toastElement);
+
+        setToastContext({...toastContext, toasts: temp});
+    };
+
     const onCancel = async () => {
         setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingModal: false}, bookings:{...hpContext.bookings, selected: null}});
     };
@@ -59,12 +70,25 @@ export default function BookingModal(){
         startDate = BookingHelper.getStartDateFromUtc(state.booking.startTime);
         endDate = BookingHelper.getEndDateFromDuration(startDate, state.booking.duration);
 
+        var response;
         if(state.mode === "new"){
-            await BookingsAPI.book(hpContext.roomSelection.id, startDate.toJSON(), endDate.toJSON(), state.booking.note, state.booking.studentCount, state.booking.user.username);
+            response = await BookingsAPI.book(hpContext.roomSelection.id, startDate.toJSON(), endDate.toJSON(), state.booking.note, state.booking.studentCount, state.booking.user.username);
+            
+            if(response.status === 201){
+                sendToast(<InfoToast>{response.data.message}</InfoToast>);
+            }else{
+                sendToast(<ErrorToast>{response.response.data.message}</ErrorToast>);
+            }
         }
         
         if(state.mode === "edit"){
-            await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note, state.booking.studentCount);
+            response = await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note, state.booking.studentCount);
+
+            if(response.status === 200){
+                sendToast(<InfoToast>{response.data.message}</InfoToast>);
+            }else{
+                sendToast(<ErrorToast>{response.response.data.message}</ErrorToast>);
+            }
         }
 
         await setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingModal: false}, bookings:{...hpContext.bookings, selected: null, reload: true}});
@@ -194,13 +218,27 @@ function NoteField({state, setState}){
 
 export function BookingDeleteModal(){
     const {hpContext, setHpContext} = useContext(HomePageContext);
+    const {toastContext, setToastContext} = useContext(ToastContext);
+
+    const sendToast = async (toastElement) => {
+        var temp = toastContext.toasts;
+
+        temp.push(toastElement);
+
+        setToastContext({...toastContext, toasts: temp});
+    }
 
     const onAbort = () => {
         setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingModal: true, bookingDeleteModal: false}});
     };
 
     const onSubmit = async () => {
-        await BookingsAPI.del(hpContext.bookings.selected.booking.id);
+        var response = await BookingsAPI.del(hpContext.bookings.selected.booking.id);
+        if(response.status === 200){
+            sendToast(<InfoToast>{response.data.message}</InfoToast>);
+        }else{
+            sendToast(<ErrorToast>Buchung konnte nicht gelöscht werden!</ErrorToast>);
+        }
 
         await setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingDeleteModal: false}, bookings: {...hpContext.bookings, selected: null, reload: true}});
     };

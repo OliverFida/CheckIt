@@ -4,6 +4,8 @@ import {Stack, Button, Form, Modal, Row, Col, Table} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AppNavBar from './components/AppNavBar';
 import UserPageContextProvider, {UserPageContext} from '../contexts/UserPageContext';
+import { ToastContext } from '../contexts/ToastContext';
+import {InfoToast, ErrorToast, WarningToast} from './components/Toasts';
 import moment from 'moment';
 // Style imports
 import '../css/components/UserPage.css';
@@ -81,7 +83,16 @@ function UserPageContent(){
 function ChangePasswordModal(){
     const navigate = useNavigate();
     const {upContext, setUpContext} = useContext(UserPageContext);
+    const {toastContext, setToastContext} = useContext(ToastContext);
     const [values, setValues] = useState({password: "", repeat: ""});
+
+    const sendToast = async (toastElement) => {
+        var temp = toastContext.toasts;
+
+        temp.push(toastElement);
+
+        setToastContext({...toastContext, toasts: temp});
+    };
 
     const onChange = (e) => {
         setValues({...values, [e.target.name]: e.target.value});
@@ -89,11 +100,20 @@ function ChangePasswordModal(){
 
     const onSubmit = () => {
         async function doAsync(){
-            if(values.password === values.repeat) await UserAPI.changePassword(values.password);
-
-            onCancel();
-            localStorage.clear();
-            navigate("/login");
+            if(values.password === values.repeat){
+                var response = await UserAPI.changePassword(values.password);
+                if(response.status === 200){
+                    sendToast(<InfoToast>{response.data.message}</InfoToast>);
+                    
+                    onCancel();
+                    localStorage.clear();
+                    navigate("/login");
+                }else{
+                    sendToast(<ErrorToast>Passwort konnte nicht geändert werden!</ErrorToast>);
+                }
+            }else{
+                sendToast(<WarningToast>Die Passwörter stimmen nicht überein!</WarningToast>);
+            }
         }
         doAsync();
     };

@@ -25,7 +25,7 @@ export default function APIStatus(){
     return(
         <>
         {acContext.service.available ? null : 
-        <Modal show={!acContext.service.available}>
+        <Modal show={!acContext.service.available} centered>
             <Modal.Header>
                 <Modal.Title>Service Information</Modal.Title>
             </Modal.Header>

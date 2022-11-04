@@ -9,7 +9,7 @@ async function getBookings(roomId, startDate, endDate){
 }
 
 async function book(roomId, startTime, endTime, note, studentCount, username){
-  await base.apiRequest("bookings", "PUT", {
+  var response = await base.apiRequest("bookings", "PUT", {
     roomID: roomId,
     startTime: startTime,
     endTime: endTime,
@@ -17,18 +17,21 @@ async function book(roomId, startTime, endTime, note, studentCount, username){
     username: username,
     studentCount: studentCount
   });
+  return response;
 }
 
 async function editBooking(id, endTime, note, studentCount){
-  await base.apiRequest(`bookings/${id}`, "PATCH", {
+  var response = await base.apiRequest(`bookings/${id}`, "PATCH", {
     "endTime": endTime,
     "note": note,
     "studentCount": studentCount
   });
+  return response;
 }
 
 async function del(bookingId){
-  await base.apiRequest(`bookings/${bookingId}`, "DELETE", null);
+  var response = await base.apiRequest(`bookings/${bookingId}`, "DELETE", null);
+  return response;
 }
 
 var exports = {

@@ -2,11 +2,14 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal, Form} from 'react-bootstrap';
 import { RoomsContext } from '../../contexts/RoomsContext';
+import { ToastContext } from '../../contexts/ToastContext';
+import { InfoToast, ErrorToast } from './Toasts';
 // API imports
 import RoomsAPI from '../../api/rooms';
 
 export default function RoomModal(){
     const {roomsContext, setRoomsContext} = useContext(RoomsContext);
+    const {toastContext, setToastContext} = useContext(ToastContext);
     const [state, setState] = useState(null);
 
     useEffect(() => {
@@ -15,18 +18,43 @@ export default function RoomModal(){
         if(roomsContext.rooms.selected !== null) setState(roomsContext.rooms.selected);
     }, [roomsContext.uiControl.roomModal]);
 
+    const sendToast = async (toastElement) => {
+        var temp = toastContext.toasts;
+
+        temp.push(toastElement);
+
+        setToastContext({...toastContext, toasts: temp});
+    };
+
     const onCancel = () => {
         setRoomsContext({...roomsContext, uiControl:{...roomsContext.uiControl, roomModal: false}, rooms:{...roomsContext.rooms, selected: null}});
     };
 
     const onSubmit = () => {
         async function doAsync(){
+            var response;
             if(roomsContext.uiControl.modalMode === "delete"){
-                await RoomsAPI.deleteRoom(state.id);
+                response = await RoomsAPI.deleteRoom(state.id);
+                if(response.status === 200){
+                    sendToast(<InfoToast>{response.data.message}</InfoToast>);
+                }else{
+                    sendToast(<ErrorToast>Raum konnte nicht gelöscht werden!</ErrorToast>);                    
+                }
             }else if(roomsContext.uiControl.modalMode === "edit"){
-                await RoomsAPI.editRoom(state.id, state.number, state.name);
+                response = await RoomsAPI.editRoom(state.id, state.number, state.name);
+                if(response.status === 200){
+                    sendToast(<InfoToast>{response.data.message}</InfoToast>);                    
+                }else{
+                    sendToast(<ErrorToast>Raum konnte nicht geändert werden!</ErrorToast>);                    
+                }
             }else{
-                await RoomsAPI.addRoom(state.number, state.name);
+                response = await RoomsAPI.addRoom(state.number, state.name);
+                if(response.status === 200){
+                    sendToast(<InfoToast>{response.data.message}</InfoToast>);                    
+                }else{
+                    sendToast(<ErrorToast>Raum konnte nicht erstellt werden!</ErrorToast>);                   
+                    
+                }
             }
             setRoomsContext({...roomsContext, uiControl:{...roomsContext.uiControl, roomModal: false}, rooms: {...roomsContext.rooms, selected: null, reload: true}});
         }

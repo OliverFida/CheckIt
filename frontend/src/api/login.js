@@ -9,12 +9,15 @@ async function login(username, password){
     if(response.status === 200){
         localStorage.setItem("loginUsername", username);
         localStorage.setItem("loginToken", response.data.value.stringToken);
-        localStorage.setItem("loginAdmin", response.data.value.role === "Admin" ? true : false);
-        response = await base.apiRequest(`user/${username}`);
+        
+        response = await base.apiRequest(`user/${username}`, "GET", null);
         if(response.status === 200){
             localStorage.setItem("loginFirstName", response.data.firstName);
             localStorage.setItem("loginLastName", response.data.lastname);
+            localStorage.setItem("loginAdmin", response.data.role === "Admin" ? true : false);
             localStorage.setItem("loginRefreshToken", passwordHash);
+        }else{
+            localStorage.clear();
         }
     }
 

@@ -5,6 +5,8 @@ import AppNavBar from './components/AppNavBar';
 import AppNavUserEdit from './components/AppNavUserEdit';
 import UserEditModal from './components/UserEditModal';
 import UserEditContextProvider, {UserEditContext} from '../contexts/UserEditContext';
+import { ToastContext } from '../contexts/ToastContext';
+import { InfoToast, ErrorToast } from './components/Toasts';
 
 
 // Style imports
@@ -53,6 +55,7 @@ function UserEditBody(){
 
 function UserEditRow(){
     const {ueContext, setUeContext} = useContext(UserEditContext);
+    const {toastContext, setToastContext} = useContext(ToastContext);
     const [elements, setElements] = useState([]);
     const [users, setUsers] = useState([]);
     
@@ -98,6 +101,14 @@ function UserEditRow(){
            ));
     }, [users]);
 
+    const sendToast = async (toastElement) => {
+        var temp = toastContext.toasts;
+
+        temp.push(toastElement);
+
+        setToastContext({...toastContext, toasts: temp});
+    };
+
     const onEdit = (user) => {
         setUeContext({...ueContext, uiControl:{...ueContext.uiControl, userModal: true, modalMode: "edit"}, users:{...ueContext.users, selected: user}});
     };
@@ -107,7 +118,12 @@ function UserEditRow(){
     };
     
     const onDeactivateUser = async (user, state) => {
-        await AdminAPI.setUserActive(user.username, state);
+        var response = await AdminAPI.setUserActive(user.username, state);
+        if(response.status === 200){
+            sendToast(<InfoToast>Benutzer {state ? "aktiviert" : "deaktiviert"}!</InfoToast>);
+        }else{
+            sendToast(<ErrorToast>Benutzer konnte nicht {state ? "aktiviert" : "deaktiviert"} werden!</ErrorToast>);
+        }
         setUeContext({...ueContext, users:{...ueContext.users, reload: true}});
     };
 
