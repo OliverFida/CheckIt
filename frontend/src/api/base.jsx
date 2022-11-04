@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-const DEV = false;
 var SERVER_CONF = null;
 
 async function init(){
@@ -39,7 +38,7 @@ async function sendRequest(path, method, data){
     var returnVal = null;
 
     var url;
-    if(DEV){
+    if(import.meta.env.DEV){
         url = `https://localhost:7061/${path}`;
     }else{
         if(SERVER_CONF){
