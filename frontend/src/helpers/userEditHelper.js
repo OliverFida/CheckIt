@@ -1,4 +1,4 @@
-const possiblePasswordChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?.,-_#";
+const possiblePasswordChars = "abcdefghijklmnopqrstuvwxyz0123456789";
 
 function generatePassword(){
     const pwLength = 8;
