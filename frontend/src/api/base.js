@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const DEV = false;
+const DEV = true;
 
 var SERVER_CONF = null;
 
@@ -39,18 +39,18 @@ async function apiRequest(path, method, data){
 async function sendRequest(path, method, data){
     var returnVal = null;
 
-    var token = await localStorage.getItem('loginToken');
-
     var url;
     if(DEV){
         url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`;
     }else{
         if(SERVER_CONF){
-            url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/api/${path}`;
+            url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`;
         }else{
             url = `/api/${path}`;
         }
     }
+
+    var token = await localStorage.getItem('loginToken');
 
     await axios({
         url: url,
