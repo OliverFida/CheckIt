@@ -411,3 +411,4 @@ backend_
 frontend/out/checkit_frontend_release.tgz
 *.tgz
 *.docker
+/frontend/dist
