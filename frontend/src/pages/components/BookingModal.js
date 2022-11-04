@@ -6,6 +6,7 @@ import { HomePageContext } from '../../contexts/HomePageContext';
 import '../../css/components/BookingModal.css';
 // API imports
 import BookingsAPI from '../../api/bookings';
+import AdminAPI from '../../api/admin';
 // Helper imports
 import BookingHelper from '../../helpers/bookingHelper';
 
@@ -28,7 +29,7 @@ export default function BookingModal(){
             startDate = BookingHelper.getNewStartDate(hpContext, state.day, {key: state.lesson});
             endDate = BookingHelper.getNewEndDate(startDate);
             
-            var newBooking = {startTime: startDate.toJSON(), endTime: endDate.toJSON(), note: "", studentCount: 15, duration: 1};
+            var newBooking = {startTime: startDate.toJSON(), endTime: endDate.toJSON(), note: "", studentCount: 15, duration: 1, user:{username: localStorage.getItem('loginUsername')}};
             
             setState({...state, booking: newBooking});
         }
@@ -59,15 +60,20 @@ export default function BookingModal(){
         endDate = BookingHelper.getEndDateFromDuration(startDate, state.booking.duration);
 
         if(state.mode === "new"){
-            await BookingsAPI.book(hpContext.roomSelection.id, startDate.toJSON(), endDate.toJSON(), state.booking.note, state.booking.studentCount);
+            await BookingsAPI.book(hpContext.roomSelection.id, startDate.toJSON(), endDate.toJSON(), state.booking.note, state.booking.studentCount, state.booking.user.username);
         }
         
         if(state.mode === "edit"){
-            await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note);
+            await BookingsAPI.editBooking(state.booking.id, endDate.toJSON(), state.booking.note, state.booking.studentCount);
         }
 
         await setHpContext({...hpContext, uiControl:{...hpContext.uiControl, bookingModal: false}, bookings:{...hpContext.bookings, selected: null, reload: true}});
     };
+
+    const onAsAdmin = async () => {
+        setHpContext({...hpContext, bookings: {...hpContext.bookings, selected: {...hpContext.bookings.selected, mode: "edit"}}});
+        setState({...state, mode: "edit"});
+    }
 
     return(
         <Modal show={hpContext.uiControl.bookingModal} onHide={onCancel} centered>
@@ -76,8 +82,9 @@ export default function BookingModal(){
             </Modal.Header>
             <Modal.Body>
                 <RoomDisplay />
+                {localStorage.getItem('loginAdmin') === "true" && hpContext.bookings.selected?.mode === "new" ? <UserPicker state={state} setState={setState} /> : null}
                 <DurationPicker state={state} setState={setState} />
-                {/* <StudentsPicker state={state} setState={setState} /> */}
+                <StudentsPicker state={state} setState={setState} />
                 <NoteField state={state} setState={setState} />
             </Modal.Body>
             {hpContext.bookings.selected?.mode === "view" ? null : <Modal.Footer>
@@ -85,6 +92,9 @@ export default function BookingModal(){
                 {hpContext.bookings.selected?.mode === "edit" ? <Button variant='danger' onClick={onDelete}>Löschen</Button> : null}
                 <Button variant='primary' onClick={onSubmit}>{hpContext.bookings.selected?.mode === "new" ? "Buchen" : "Speichern"}</Button>
             </Modal.Footer>}
+            {hpContext.bookings.selected?.mode === "view" && localStorage.getItem('loginAdmin') === "true" ? <Modal.Footer>
+                <Button variant='primary' onClick={onAsAdmin}>Als Admin bearbeiten</Button>
+            </Modal.Footer> : null}
         </Modal>
     );
 };
@@ -100,7 +110,41 @@ function RoomDisplay(){
     );
 }
 
+function UserPicker({state, setState}){
+    const {hpContext, setHpContext} = useContext(HomePageContext);
+    const [elements, setElements] = useState([]);
+
+    useEffect(() => {
+        async function doAsync(){
+            var response = await AdminAPI.getUsers();
+            var users = Array.from(response.data).filter(user => user.active === true);
+            
+            var temp = [];
+            users.forEach(user => {
+                temp.push(<option key={`option-${user.username}`} value={user.username}>{user.firstName} {user.lastname}</option>);
+            });
+            setElements(temp);
+        }   
+        doAsync();
+    }, []);
+
+    const onChange = async (e) => {
+        setState({...state, booking:{...state.booking, user:{...state.booking.user, username: e.target.value}}});
+    };
+
+    return(
+        <Form.Group className="mb-3" controlId="bookingUser">
+            <Form.Label>Benutzer</Form.Label>
+            <Form.Select onChange={onChange} disabled={hpContext.bookings.selected?.mode === "new" ? false : true}>
+                {elements}
+            </Form.Select>
+        </Form.Group>
+    );
+}
+
 function DurationPicker({state, setState}){
+    const {hpContext, setHpContext} = useContext(HomePageContext);
+
     const onChange = async (e) => {
         setState({...state, booking:{...state.booking, duration: e.target.value}});
     };
@@ -108,7 +152,7 @@ function DurationPicker({state, setState}){
     return(
         <Form.Group className="mb-3" controlId="bookingDuration">
             <Form.Label>Dauer</Form.Label>
-            <Form.Select value={state?.booking?.duration ? state.booking.duration : 1} onChange={onChange} disabled={false}>
+            <Form.Select value={state?.booking?.duration ? state.booking.duration : 1} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false}>
                 <option value="1">1 Stunde</option>
                 <option value="2">2 Stunden</option>
                 <option value="3">3 Stunden</option>
@@ -119,14 +163,16 @@ function DurationPicker({state, setState}){
 }
 
 function StudentsPicker({state, setState}){
-    const onChange = async () => {
+    const {hpContext, setHpContext} = useContext(HomePageContext);
 
+    const onChange = async (e) => {
+        await setState({...state, booking:{...state.booking, studentCount: parseInt(e.target.value)}});
     };
 
     return(
         <Form.Group className="mb-3" controlId="bookingStudents">
             <Form.Label>Schüler</Form.Label>
-            <Form.Control type="number" defaultValue={15} onChange={onChange} disabled={false} />
+            <Form.Control type="number" value={`${state?.booking?.studentCount}`} onChange={onChange} disabled={hpContext.bookings.selected?.mode === "view" ? true : false} />
         </Form.Group>
     );
 }

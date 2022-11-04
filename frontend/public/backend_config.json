@@ -1,5 +1,5 @@
 {
-    "PROTOCOL": "http",
+    "PROTOCOL": "https",
     "ADDRESS": "localhost",
-    "PORT": "5131"
+    "PORT": "7061"
 }

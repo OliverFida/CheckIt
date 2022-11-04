@@ -11,7 +11,7 @@ services:
     #   - CHECKIT_BACKEND_PROTOCOL="http" # Protokoll, mit dem das Backend vom Frontend angesprochen wird
     #   - CHECKIT_BACKEND_PORT="5000" # Port, an dem das Backend erreichbar ist. Muss mit dem Port in der Backensektion übereinstimmen.
     #   - CHECKIT_BACKEND_ADDRESS="localhost" # Adresse des Backends, alle üblichen Formate (IP, Hostname, etc.) werden akzeptiert
-   
+    
     restart: always
 
   checkit_backend: # Konfigurationssektion für das Backend

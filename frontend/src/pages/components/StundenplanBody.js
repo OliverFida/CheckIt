@@ -1,17 +1,17 @@
 // Component imports
 import React, {useState, useEffect, useContext} from 'react';
 import { HomePageContext } from '../../contexts/HomePageContext';
+import { AppConfigContext } from '../../contexts/AppConfigContext';
 import StundenplanBooking from './StundenplanBooking';
 import moment from 'moment';
 // API imports
 import timesMap from '../../api/timesMap.json';
 import BookingsAPI from '../../api/bookings';
 
-const amountWeeks = 10;
-const amountDays = 6; // TODO Samstag nach Config
 
 export default function StundenplanBody(){
     const {hpContext, setHpContext} = useContext(HomePageContext);
+    const {acContext, setAcContext} = useContext(AppConfigContext);
     const [elements, setElements] = useState([]);
     
     useEffect(() => {
@@ -21,17 +21,17 @@ export default function StundenplanBody(){
         });
         setElements(newElements);
     }, []);
-
+    
     useEffect(() => {
         async function doAsync(){
             if(hpContext.roomSelection.id === null) return; //TODO: Double reloading
             await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: true}});
-            var temp = await BookingsAPI.getBookings(hpContext.roomSelection.id, moment().weekday(1).toJSON(), moment().weekday(amountDays).add(amountWeeks - 1, 'weeks').toJSON());
+            var temp = await BookingsAPI.getBookings(hpContext.roomSelection.id, moment().weekday(1).subtract(acContext.bookings.weeksPast, "weeks").toJSON(), moment().weekday(acContext.bookings.days).add(acContext.bookings.weeksFuture, 'weeks').toJSON());
             await setHpContext({...hpContext, uiControl: {...hpContext.uiControl, bookingsLoading: false}, bookings: {...hpContext.bookings, reload: false, bookings: temp}});
         }
         doAsync();
     }, [hpContext.roomSelection.id, hpContext.bookings.reload]);
-
+    
     return(
         <tbody>
             {elements}
@@ -40,11 +40,12 @@ export default function StundenplanBody(){
 }
 
 function StundenplanRow({lesson}){
+    const {acContext, setAcContext} = useContext(AppConfigContext);
     const [elements, setElements] = useState([]);
 
     useEffect(() => {
         var newElements = [];
-        for(var day = 1; day <= amountDays; day++){
+        for(var day = 1; day <= acContext.bookings.days; day++){
             if(lesson.key !== "break"){
                 newElements.push(<StundenplanBooking key={`booking_${day}_${lesson.key}`} day={day} lesson={lesson} />);
             }else{
@@ -52,7 +53,7 @@ function StundenplanRow({lesson}){
             }
         }
         setElements(newElements);
-    }, []);
+    }, [acContext.bookings.days]);
 
     return(
         <tr>

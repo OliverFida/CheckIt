@@ -2,11 +2,16 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Modal, Form} from 'react-bootstrap';
 import { UserEditContext } from '../../contexts/UserEditContext';
+import {ToastContext} from '../../contexts/ToastContext';
+import { ErrorToast, InfoToast } from './Toasts';
 // API imports
 import AdminAPI from '../../api/admin';
+// Helper imports
+import UserEditHelper from '../../helpers/userEditHelper';
 
 export default function UserEditModal(){
     const {ueContext, setUeContext} = useContext(UserEditContext);
+    const {toastContext, setToastContext} = useContext(ToastContext);
     const [state, setState] = useState(null);
     const [roles, setRoles] = useState(["User", "Admin"]);
     const [roleElements, setRoleElements] = useState([]);
@@ -35,7 +40,23 @@ export default function UserEditModal(){
         }else if(ueContext.uiControl.modalMode === "edit"){
             await AdminAPI.editUser(state.username, state.firstName, state.lastname, state.role);
         }else if(ueContext.uiControl.modalMode === "resetPW"){
-            await AdminAPI.resetPassword(state.username);
+            var newPw = UserEditHelper.generatePassword();
+
+            var response = await AdminAPI.resetPassword(state.username, newPw);
+            if(response.status === 200){
+                var temp = toastContext.toasts;
+
+                temp.push(<InfoToast preventAutoHide={true}>Passwort zurückgesetzt!<br />
+                Das Passwort lautet: {newPw}</InfoToast>);
+
+                setToastContext({...toastContext, toasts: temp});
+            }else{
+                var temp = toastContext.toasts;
+
+                temp.push(<ErrorToast>{response.response.data.message}</ErrorToast>);
+
+                setToastContext({...toastContext, toasts: temp});
+            }
         }else if(ueContext.uiControl.modalMode === "delete"){
             await AdminAPI.deleteUser(state.username);
         }

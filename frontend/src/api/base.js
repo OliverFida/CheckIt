@@ -1,13 +1,59 @@
 import axios from 'axios';
 
+const DEV = false;
+
+var SERVER_CONF = {
+    PROTOCOL: 'http',
+    ADDRESS: 'localhost',
+    PORT: '5131'
+};
+
+async function init(){
+    try{
+        SERVER_CONF = await (await fetch('./backend_config.json')).json();
+    }catch(e){}
+}
+init();
 
 async function apiRequest(path, method, data){
-    var SERVER_CONF = await (await fetch('./backend_config.json')).json();
+    var username = await localStorage.getItem('loginUsername');
+    var refreshToken = await localStorage.getItem('loginRefreshToken');
+
+    if(refreshToken !== null && refreshToken !== undefined && path !== "login" && path !== "system/version"){
+        var refreshResponse = await sendRequest('login', 'POST', {
+            username: username,
+            password: refreshToken
+        });
+
+        if(refreshResponse.status === 200){
+            await localStorage.setItem('loginToken', refreshResponse.data.value.stringToken);
+            if(refreshResponse.data.value.role === 'Admin'){
+                await localStorage.setItem('loginAdmin', true);
+            }else{
+                await localStorage.setItem('loginAdmin', false);
+            }
+        }else{
+            await localStorage.clear();
+        }
+    }
+
+    return await sendRequest(path, method, data);
+}
+
+async function sendRequest(path, method, data){
     var returnVal = null;
-    
+
     var token = await localStorage.getItem('loginToken');
+
+    var url;
+    if(DEV){
+        url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`;
+    }else{
+        url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/api/${path}`;
+    }
+
     await axios({
-        url: `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`,
+        url: url,
         method: method,
         data: data,
         headers: {
@@ -16,11 +62,23 @@ async function apiRequest(path, method, data){
     })
     .then((response) => {
         returnVal = response;
+    })
+    .catch((error) => {
+        returnVal = error;
     });
-
+    
     return returnVal;
 }
+
+async function ping(){
+    var response = await apiRequest('system/version', 'GET', null);
+    
+    if(response.status === 200) return true;
+    return false;
+}
+
 var exports = {
-    apiRequest
+    apiRequest,
+    ping
 };
 export default exports;

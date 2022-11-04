@@ -8,6 +8,11 @@
     text-align: center;
 }
 
+.stundenplan th .muted{
+    color: #666;
+    font-size: 14px;
+}
+
 .rowTitle{
     display: flex;
     flex-direction: column;
@@ -15,7 +20,7 @@
 }
 
 .stundenplan td{
-    height: 80px;
+    height: 105px;
 }
 
 .buchenBtn{

@@ -1,4 +1,5 @@
 import base from './base';
+import md5 from 'md5';
 
 async function getUsers(){
     return await base.apiRequest('admin/users', "GET", null);
@@ -22,9 +23,10 @@ async function editUser(username, firstName, lastName, role){
     });
 }
 
-async function resetPassword(username){
+async function resetPassword(username, password){
+    var passwordHash = md5(password);
     return await base.apiRequest(`admin/user/${username}/password`, "PATCH", {
-        "password": "awl"
+        "password": passwordHash
     });
 }
 
