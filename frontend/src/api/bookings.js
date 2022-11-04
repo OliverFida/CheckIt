@@ -21,15 +21,17 @@ async function book(roomId, startTime, endTime, note, studentCount, username){
 }
 
 async function editBooking(id, endTime, note, studentCount){
-  await base.apiRequest(`bookings/${id}`, "PATCH", {
+  var response = await base.apiRequest(`bookings/${id}`, "PATCH", {
     "endTime": endTime,
     "note": note,
     "studentCount": studentCount
   });
+  return response;
 }
 
 async function del(bookingId){
-  await base.apiRequest(`bookings/${bookingId}`, "DELETE", null);
+  var response = await base.apiRequest(`bookings/${bookingId}`, "DELETE", null);
+  return response;
 }
 
 var exports = {
