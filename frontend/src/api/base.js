@@ -28,8 +28,8 @@ async function apiRequest(path, method, data){
             }else{
                 await localStorage.setItem('loginAdmin', false);
             }
-        }else{
-            await localStorage.clear();
+        // }else{
+        //     await localStorage.clear();
         }
     }
 

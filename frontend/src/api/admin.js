@@ -5,13 +5,14 @@ async function getUsers(){
     return await base.apiRequest('admin/users', "GET", null);
 }
 
-async function addUser(username, firstName, lastName, role){
+async function addUser(username, password, firstName, lastName, role){
+    var passwordHash = md5(password);
     return await base.apiRequest('admin/user', "PUT", {
         "username": username,
         "firstName": firstName,
         "lastname": lastName,
         "role": role,
-        "password": "awl"
+        "password": passwordHash
     });
 }
 
