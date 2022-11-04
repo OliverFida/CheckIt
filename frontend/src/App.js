@@ -2,6 +2,7 @@
 import React from 'react';
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import ToastContextProvider from './contexts/ToastContext';
+import Toasts from './pages/components/Toasts';
 import AppConfigContextProvider from './contexts/AppConfigContext';
 import APIStatus from './pages/components/APIStatus';
 // Style imports
@@ -33,6 +34,7 @@ export default function App() {
               </Routes>
             </BrowserRouter>
           </AppConfigContextProvider> 
+          <Toasts />
         </ToastContextProvider>
     </div>
   );

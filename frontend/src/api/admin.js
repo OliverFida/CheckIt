@@ -23,8 +23,8 @@ async function editUser(username, firstName, lastName, role){
     });
 }
 
-async function resetPassword(username){
-    var passwordHash = md5("awl");
+async function resetPassword(username, password){
+    var passwordHash = md5(password);
     return await base.apiRequest(`admin/user/${username}/password`, "PATCH", {
         "password": passwordHash
     });

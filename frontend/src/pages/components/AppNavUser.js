@@ -1,10 +1,12 @@
 // Component imports
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavDropdown} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import LoginAPI from '../../api/login';
+import {ToastContext} from '../../contexts/ToastContext';
 
 export default function AppNavUser(){
+    const {toastContext, setToastContext} = useContext(ToastContext);
     const navigate = useNavigate();
     
     const clickProfile = () => {
@@ -12,6 +14,7 @@ export default function AppNavUser(){
     };
 
     const onLogout = () => {
+        setToastContext({...toastContext, toasts: []});
         LoginAPI.logout();
         navigate("/login");
     };
