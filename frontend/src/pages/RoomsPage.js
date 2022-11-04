@@ -4,6 +4,8 @@ import {Stack, Button, Table, Row, Col, Card, ButtonGroup} from 'react-bootstrap
 import AppNavBar from './components/AppNavBar';
 import AppNavRooms from './components/AppNavRooms';
 import RoomsContextProvider, {RoomsContext} from '../contexts/RoomsContext';
+import { ToastContext } from '../contexts/ToastContext';
+import {InfoToast, ErrorToast} from './components/Toasts';
 import RoomModal from './components/RoomModal';
 // Style imports
 import '../css/components/RoomsPage.css';
@@ -50,6 +52,7 @@ function RoomBody(){
 
 function RoomRows(){
     const {roomsContext, setRoomsContext} = useContext(RoomsContext);
+    const {toastContext, setToastContext} = useContext(ToastContext);
     const [rooms, setRooms] = useState(null);
     const [elements, setElements] = useState([]);
     
@@ -87,17 +90,28 @@ function RoomRows(){
         ));
     }, [rooms]);
     
+    const sendToast = async (toastElement) => {
+        var temp = toastContext.toasts;
+
+        temp.push(toastElement);
+
+        setToastContext({...toastContext, toasts: temp});
+    };
+
     const onSelect = (room, mode) => {
         setRoomsContext({...roomsContext, uiControl:{...roomsContext.uiControl, roomModal: true, modalMode: mode}, rooms:{...roomsContext.rooms, selected: room}});
     };
 
     const onActivate = async (room, state) => {
-        await RoomsAPI.setActive(room.id, state);
+        var response = await RoomsAPI.setActive(room.id, state);
+        if(response.status === 200){
+            sendToast(<InfoToast>{response.data.message}</InfoToast>);
+        }else{
+            sendToast(<ErrorToast>Raum konnte nicht {state ? "aktiviert" : "deaktiviert"} werden!</ErrorToast>);
+        }
         setRoomsContext({...roomsContext, rooms:{...roomsContext.rooms, reload: true}});
     };
     
-   
-
     return(
         <>
             {elements}
