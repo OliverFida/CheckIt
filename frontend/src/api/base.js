@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const DEV = true;
+const DEV = false;
 
 var SERVER_CONF = {
     PROTOCOL: 'http',
