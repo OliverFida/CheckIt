@@ -10,30 +10,39 @@ namespace awl_raumreservierung.db {
 		/// Raum-ID
 		/// </summary>
 		/// <value></value>
-		public long Id { get; set; }
+		public long Id {
+			get; set;
+		}
 
 		/// <summary>
 		/// Raumnummer
 		/// </summary>
 		/// <value></value>
-		public string? Number { get; set; }
+		public string? Number {
+			get; set;
+		}
 
 		/// <summary>
 		/// Name
 		/// </summary>
 		/// <value></value>
-		public string? Name { get; set; }
+		public string? Name {
+			get; set;
+		}
 
 		/// <summary>
 		/// Aktivstatus
 		/// </summary>
 		/// <value></value>
-		public bool Active { get; set; }
+		public bool Active {
+			get; set;
+		}
 
 		/// <summary>
 		///
 		/// </summary>
-		public Room() { }
+		public Room() {
+		}
 
 		/// <summary>
 		///

@@ -5,10 +5,13 @@ services:
     container_name: "checkit_frontend"
     ports:
     - "80:8080" # Erste Zahl ist der zu benutzende Backendport
-    # environment:
+    
+    # Ab nächster Zeile auskommentieren, falls Backendconfig benutzt werden soll
+    # environment: 
     #   - CHECKIT_BACKEND_PROTOCOL="http" # Protokoll, mit dem das Backend vom Frontend angesprochen wird
     #   - CHECKIT_BACKEND_PORT="5000" # Port, an dem das Backend erreichbar ist. Muss mit dem Port in der Backensektion übereinstimmen.
     #   - CHECKIT_BACKEND_ADDRESS="localhost" # Adresse des Backends, alle üblichen Formate (IP, Hostname, etc.) werden akzeptiert
+    
     restart: always
 
   checkit_backend: # Konfigurationssektion für das Backend
@@ -21,5 +24,3 @@ services:
       - ./checkit.db:/data/checkit.db # Der Teil vor ":" ist der Pfad zur Datenbankdatei
     container_name: "checkit_backend"
     restart: always
-
-#docker login ghrc.io -u oliverfida -p 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

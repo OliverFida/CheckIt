@@ -9,60 +9,79 @@
 		/// Booking-ID
 		/// </summary>
 		/// <value></value>
-		public long Id { get; set; }
+		public long Id {
+			get; set;
+		}
 
 		/// <summary>
 		/// Startzeit
 		/// </summary>
 		/// <value></value>
-		public DateTime StartTime { get; set; }
+		public DateTime StartTime {
+			get; set;
+		}
 
 		/// <summary>
 		/// Endzeit, eine Sekunde wird abgezogen.
 		/// </summary>
 		/// <value></value>
-		public DateTime EndTime { get => endTime; set => endTime = value.Subtract(new TimeSpan(0, 0, 1)); }
+		public DateTime EndTime {
+			get => endTime; set => endTime = value.Subtract(new TimeSpan(0, 0, 1));
+		}
 
 		/// <summary>
 		/// Raum-ID
 		/// </summary>
 		/// <value></value>
-		public long Room { get; set; }
+		public long Room {
+			get; set;
+		}
 
 		/// <summary>
 		/// ID des Bucher
 		/// </summary>
 		/// <value></value>
-		public long UserId { get; set; }
+		public long UserId {
+			get; set;
+		}
 
 		/// <summary>
 		/// Erstellungsdatum
 		/// </summary>
 		/// <value></value>
-		public DateTime CreateTime { get; set; }
+		public DateTime CreateTime {
+			get; set;
+		}
 
 		/// <summary>
 		/// Ersteller
 		/// </summary>
 		/// <value></value>
-		public long? CreatedBy { get; set; }
+		public long? CreatedBy {
+			get; set;
+		}
 
 		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
-		public string? Note { get; set; }
+		public string? Note {
+			get; set;
+		}
 
 		/// <summary>
 		/// Anzahl der Schüler
 		/// </summary>
 		/// <value></value>
-		public int? StudentCount { get; set; }
+		public int? StudentCount {
+			get; set;
+		}
 
 		/// <summary>
 		///
 		/// </summary>
-		public Booking() { }
+		public Booking() {
+		}
 
 		/// <summary>
 		///

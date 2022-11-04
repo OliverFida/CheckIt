@@ -2,7 +2,7 @@
 
 ## Allgemeines
 
-_Check-it_ besteht aus zwei Komponenten: `checkit_backend` und `checkit_frontend`, welche jeweils das Front- und Backend bereitstellen.
+_Check-it_ besteht aus zwei Komponenten: `checkit_backend` (das „Backend“) und `checkit_frontend` (das „Frontend“), welche jeweils das Front- und Backend bereitstellen.
 `checkit_backend` basiert auf .NET 6.0 mit ASP.NET Core. `checkit_frontend` auf Clientseitiger HTML-JS-Basis.
 
 ## Voraussetzungen
@@ -29,6 +29,16 @@ _Check-it_ besteht aus zwei Komponenten: `checkit_backend` und `checkit_frontend
 	* .NET 6.0 Runtime
 	* ASP.NET Core Runtime
 	
+#### Ports
+
+| Service          | Port |
+|------------------|------|
+| checkit_frontend | 80   |
+| checkit_backend  | 5000 |
+| ssh              |      |
+Der Port für das Frontend muss von Clients aus erreichbar sein.
+\*Werden Frontend und Backend auf seperat installiert,  muss ebenfalls der Port für das Backend erreichbar sein.
+
 ## Installation
 
 ### Image
@@ -47,19 +57,10 @@ Auf dem Image ist SSH aktiviert. Der Standardbenutzer ist `checkit` mit Passwort
 	* `checkit.db` - SQLite-Datenbank mit den gespeicherten Daten von Check-it (wird bei ).
 	* `docker-compose.yaml` - Docker-Compose-File, hier können Ports und DB-Pfade des konfiguriert werden.
 
-#### Ports
-
-| Service          | Port |
-|------------------|------|
-| checkit_frontend | 80   |
-| checkit_backend  | 5000 |
-| ssh              |      |
-
-Sowohl der Port für `checkit_frontend` und `checkit_backend` muss von Clients aus erreichbar sein.
 
 ### Manuelle Installation
 
-#### checkit_fronend
+#### checkit_frontend
 
 Ein eingerichteter Webserver wird vorausgesetzt
 1. Bereitgestelltes Archiv entpacken
@@ -74,12 +75,17 @@ Ein eingerichteter Webserver wird vorausgesetzt
 
 ## Update
 
-### checkit_backend
+Updates werden können über das Internet heruntergeladen werden oder als Archiv bereitgestellt sein.
 
-Updates werden als Archiv bereitgestellt.
+### Übers Internet
+
+1. Im Ordner der docker-compose.yaml `docker compose pull && docker compose up -d ` ausführen.
+
+### Mittels Archiv
+
 1. Archiv entpacken.
 2. install.sh ausführen.
-3. Den Container aktualisieren und den Dienst neustarten (in `/home/checkit/checkit` den Befehl `docker-compose down && docker-compose up -d` ausführen).
+3. Den Container aktualisieren und den Dienst neustarten (in `/home/checkit/checkit` den Befehl `docker-compose up -d` ausführen).
 
 ## Konfiguration
 
@@ -105,9 +111,11 @@ Unter `services` - `checkit_backend` - `ports` die erste Zahl auf den Wunschport
 
 Unter `services` - `checkit_backend` - `volumes` den Pfad vor `:/data/checkit.db` auf den Wunschpfad ändern. Z.B. `~/ordner/checkit.db:/data/checkit.db` lässt den Dienst die Datenbank unter `~/ordner/checkit.db`speichern.
 
-##### Backendverbindung
+##### Backendverbindung (optional)
 
-Unter `services` - `checkit_backend` - `environment` die Werte von `CHECKIT_BACKEND_PORT`, `CHECKIT_BACKEND_PROTOCOL` und `CHECKIT_BACKEND_ADDRESS` ändern. Dieser Port myuIst das Backend z.B. über http://192.168.1.20:5000 erreichbar, muss die Konfiguration folgendermaßen aussehen:
+Die folgende Konfiguration ist nur notwendig, falls Backend und Frontend seperat (auf verschiedenen Servern) installiert werden. In der Standard-Konfiguration können diese Felder auskommentiert bleiben.
+
+Unter `services` - `checkit_backend` - `environment` die Werte von `CHECKIT_BACKEND_PORT`, `CHECKIT_BACKEND_PROTOCOL` und `CHECKIT_BACKEND_ADDRESS` ändern. Soll das Backend z.B. über http://192.168.1.20:5000 erreichbar, muss die Konfiguration folgendermaßen aussehen:
 ```yaml
 - CHECKIT\_BACKEND\_PROTOCOL="http"  
 - CHECKIT\_BACKEND\_PORT="5000"

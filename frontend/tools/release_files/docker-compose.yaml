@@ -5,8 +5,8 @@ services:
     container_name: "checkit_frontend"
     ports:
     - "80:8080"
-    environment:
-      - CHECKIT_BACKEND_PROTOCOL="http"
-      - CHECKIT_BACKEND_PORT="5000"
-      - CHECKIT_BACKEND_ADDRESS="10.0.2.11"
+    # environment:
+    #   - CHECKIT_BACKEND_PROTOCOL="http"
+    #   - CHECKIT_BACKEND_PORT="5000"
+    #   - CHECKIT_BACKEND_ADDRESS="10.0.2.11"
     restart: always

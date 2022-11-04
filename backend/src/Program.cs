@@ -36,7 +36,7 @@ builder.Services
 			 ValidIssuer = builder.Configuration["Jwt:Issuer"],
 			 ValidAudience = builder.Configuration["Jwt:Audience"],
 			 IssuerSigningKey = new SymmetricSecurityKey(
-					Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])
+					Encoding.UTF8.GetBytes(Guid.NewGuid().ToString() + Guid.NewGuid().ToString() + Guid.NewGuid().ToString())
 			  ),
 			 ValidateIssuer = true,
 			 ValidateAudience = true,
@@ -89,7 +89,7 @@ using(var scope = app.Services.CreateScope()) {
 // Configure the HTTP request pipeline.
 if(app.Environment.IsDevelopment()) {
 	app.UseSwagger();
-	app.UseSwaggerUI();
+	_ = app.UseSwaggerUI();
 }
 
 app.UseCors(

@@ -28,25 +28,33 @@ namespace awl_raumreservierung {
 		/// Statuscode
 		/// </summary>
 		/// <value></value>
-		public int Status { get; set; }
+		public int Status {
+			get; set;
+		}
 
 		/// <summary>
 		/// HTTP-Statusmessage
 		/// </summary>
 		/// <value></value>
-		public string StatusMessage { get; set; }
+		public string StatusMessage {
+			get; set;
+		}
 
 		/// <summary>
 		/// Lesbare Nachricht
 		/// </summary>
 		/// <value></value>
-		public string Message { get; set; }
+		public string Message {
+			get; set;
+		}
 
 		/// <summary>
 		/// Zusätzliche Daten
 		/// </summary>
 		/// <value></value>
-		public object? Data { get; set; }
+		public object? Data {
+			get; set;
+		}
 	}
 
 	/// <summary>
@@ -75,7 +83,9 @@ namespace awl_raumreservierung {
 		/// Rolle
 		/// </summary>
 		/// <value></value>
-		public UserRole Role { get; set; }
+		public UserRole Role {
+			get; set;
+		}
 
 		/// <summary>
 		/// Password
@@ -93,13 +103,17 @@ namespace awl_raumreservierung {
 		/// Username
 		/// </summary>
 		/// <value></value>
-		public string Username { get; set; }
+		public string Username {
+			get; set;
+		}
 
 		/// <summary>
 		/// Passwort
 		/// </summary>
 		/// <value></value>
-		public string Password { get; set; }
+		public string Password {
+			get; set;
+		}
 
 		/// <summary>
 		///
@@ -132,7 +146,9 @@ namespace awl_raumreservierung {
 		/// Rolle
 		/// </summary>
 		/// <value></value>
-		public UserRole Role { get; set; }
+		public UserRole Role {
+			get; set;
+		}
 	}
 
 	/// <summary>
@@ -146,7 +162,9 @@ namespace awl_raumreservierung {
 		/// Raum-ID
 		/// </summary>
 		/// <value></value>
-		public int RoomID { get; set; }
+		public int RoomID {
+			get; set;
+		}
 
 		/// <summary>
 		/// Startzeit
@@ -170,19 +188,25 @@ namespace awl_raumreservierung {
 		/// Notiz
 		/// </summary>
 		/// <value></value>
-		public string? Note { get; set; }
+		public string? Note {
+			get; set;
+		}
 
 		/// <summary>
 		/// Notiz
 		/// </summary>
 		/// <value></value>
-		public string Username { get; set; }
+		public string Username {
+			get; set;
+		}
 
 		/// <summary>
 		/// Schüleranzahl
 		/// </summary>
 		/// <value></value>
-		public int? StudentCount { get; set; }
+		public int? StudentCount {
+			get; set;
+		}
 
 		/// <summary>
 		/// 
@@ -210,13 +234,17 @@ namespace awl_raumreservierung {
 		/// Notiz
 		/// </summary>
 		/// <value></value>
-		public string? Note { get; set; }
+		public string? Note {
+			get; set;
+		}
 
 		/// <summary>
 		/// Schüleranzahl
 		/// </summary>
 		/// <value></value>
-		public int StudentCount { get; set; }
+		public int StudentCount {
+			get; set;
+		}
 	}
 
 	/// <summary>
@@ -227,13 +255,17 @@ namespace awl_raumreservierung {
 		/// Raumnummer
 		/// </summary>
 		/// <value></value>
-		public string Number { get; set; }
+		public string Number {
+			get; set;
+		}
 
 		/// <summary>
 		/// /// Raumname
 		/// </summary>
 		/// <value></value>
-		public string Name { get; set; }
+		public string Name {
+			get; set;
+		}
 
 		/// <summary>
 		/// 
@@ -249,7 +281,9 @@ namespace awl_raumreservierung {
 		/// Aktivstatus
 		/// </summary>
 		/// <value></value>
-		public bool Active { get; set; }
+		public bool Active {
+			get; set;
+		}
 	}
 
 	/// <summary>
@@ -266,7 +300,9 @@ namespace awl_raumreservierung {
 		/// Enddatum der Abfrage, default das Ende der Woche von Startdate
 		/// </summary>
 		/// <returns></returns>
-		public DateTime? EndDate { get; set; }
+		public DateTime? EndDate {
+			get; set;
+		}
 	}
 
 	/// <summary>
@@ -278,7 +314,9 @@ namespace awl_raumreservierung {
 		/// </summary>
 		/// <value></value>
 		[Required]
-		public string Password { get; set; }
+		public string Password {
+			get; set;
+		}
 
 		/// <summary>
 		///

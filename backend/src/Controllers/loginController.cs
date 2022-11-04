@@ -59,11 +59,17 @@ public class loginController : ControllerBase
 		Response.StatusCode = statuscode;
 
 		if(res == Login.LoginMessage.InactiveUser) {
-			return Results.BadRequest(new { value = string.Empty, message = "Benutzerkonto deaktiviert! Kontaktieren Sie einen Administrator." });
+			return Results.BadRequest(new {
+				value = string.Empty,
+				message = "Benutzerkonto deaktiviert! Kontaktieren Sie einen Administrator."
+			});
 		}
 
 		if(res == Login.LoginMessage.InvalidCredentials) {
-			return Results.BadRequest(new { value = string.Empty, message = "Ungültige Benutzerdaten angegeben!" });
+			return Results.BadRequest(new {
+				value = string.Empty,
+				message = "Ungültige Benutzerdaten angegeben!"
+			});
 		}
 
 		if(res is Login.LoginMessage.Success or Login.LoginMessage.SuccessAsAdmin) {
