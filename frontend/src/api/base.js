@@ -2,11 +2,7 @@ import axios from 'axios';
 
 const DEV = false;
 
-var SERVER_CONF = {
-    PROTOCOL: 'http',
-    ADDRESS: 'localhost',
-    PORT: '5131'
-};
+var SERVER_CONF = null;
 
 async function init(){
     try{
@@ -49,7 +45,11 @@ async function sendRequest(path, method, data){
     if(DEV){
         url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`;
     }else{
-        url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/api/${path}`;
+        if(SERVER_CONF){
+            url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/api/${path}`;
+        }else{
+            url = `/api/${path}`;
+        }
     }
 
     await axios({
