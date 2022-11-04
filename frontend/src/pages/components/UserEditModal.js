@@ -55,7 +55,12 @@ export default function UserEditModal(){
                 sendToast(<ErrorToast>Benutzer konnte nicht erstellt werden!</ErrorToast>);
             }
         }else if(ueContext.uiControl.modalMode === "edit"){
-            await AdminAPI.editUser(state.username, state.firstName, state.lastname, state.role);
+            response = await AdminAPI.editUser(state.username, state.firstName, state.lastname, state.role);
+            if(response.status === 200){
+                sendToast(<InfoToast>{response.data.message}</InfoToast>);
+            }else{
+                sendToast(<ErrorToast>Benutzer konnte nicht geändert werden!</ErrorToast>);
+            }
         }else if(ueContext.uiControl.modalMode === "resetPW"){
             newPw = UserEditHelper.generatePassword();
 
@@ -67,7 +72,12 @@ export default function UserEditModal(){
                 sendToast(<ErrorToast>{response.response.data.message}</ErrorToast>);
             }
         }else if(ueContext.uiControl.modalMode === "delete"){
-            await AdminAPI.deleteUser(state.username);
+            response = await AdminAPI.deleteUser(state.username);
+            if(response.status === 200){
+                sendToast(<InfoToast>{response.data.message}</InfoToast>);
+            }else{
+                sendToast(<ErrorToast>Benutzer konnte nicht gelöscht werden!</ErrorToast>);
+            }
         }
         setUeContext({...ueContext, uiControl:{...ueContext.uiControl, userModal: false}, users:{...ueContext.users, selected: null, reload: true}});
     };
