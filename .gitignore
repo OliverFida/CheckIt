@@ -411,3 +411,5 @@ backend_
 frontend/out/checkit_frontend_release.tgz
 *.tgz
 *.docker
+/vite_frontend/node_modules
+/vite_frontend/dist
