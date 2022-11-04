@@ -17,6 +17,7 @@ export default function Toasts(){
 export function CustomToast({title, preventAutoHide, children}){
     const [state, setState] = useState(false);
     const autoHide = preventAutoHide ? false : true;
+    const randomKey = Math.floor(Math.random() * 1000);
 
     useEffect(() => {
         setState(true);
@@ -27,7 +28,7 @@ export function CustomToast({title, preventAutoHide, children}){
     };
 
     return(
-        <Toast show={state} onClose={onClose} delay={6000} autohide={autoHide} key="children">
+        <Toast show={state} onClose={onClose} delay={4000} autohide={autoHide} key={`children-${randomKey}`}>
             <Toast.Header>
                 <strong className="me-auto">
                     {title}

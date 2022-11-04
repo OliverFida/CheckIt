@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const DEV = false;
-
+const DEV = true;
 var SERVER_CONF = null;
 
 async function init(){
@@ -41,7 +40,7 @@ async function sendRequest(path, method, data){
 
     var url;
     if(DEV){
-        url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`;
+        url = `https://localhost:7061/${path}`;
     }else{
         if(SERVER_CONF){
             url = `${SERVER_CONF.PROTOCOL}://${SERVER_CONF.ADDRESS}:${SERVER_CONF.PORT}/${path}`;
